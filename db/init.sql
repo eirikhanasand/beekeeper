@@ -5,7 +5,7 @@ BEGIN
     END IF;
 END $$;
 
-\c osvdb
+\c beekeeper
 
 DO $$
 DECLARE
@@ -19,8 +19,31 @@ BEGIN
     END IF;
 END $$;
 
+-- Contexts
+CREATE TABLE IF NOT EXISTS contexts (
+    name TEXT PRIMARY KEY
+);
+
+-- Namespace
+CREATE TABLE IF NOT EXISTS namespaces (
+    name TEXT PRIMARY KEY,
+    FOREIGN KEY (name) REFERENCES contexts(name)
+);
+
+-- Pods
+CREATE TABLE IF NOT EXISTS pods (
+    name TEXT PRIMARY KEY,
+    FOREIGN KEY (name) REFERENCES namespaces(name)
+);
+
 -- Logs
 CREATE TABLE IF NOT EXISTS logs (
-    name TEXT PRIMARY KEY,
-    event TEXT NOT NULL
-)
+    id TEXT NOT NUlL,
+    event TEXT NOT NULL,
+    type TEXT NOT NULL,
+    app TEXT,
+    pod TEXT,
+    timestamp TIMESTAMP NOT NULL DEFAULT NOW(),
+    FOREIGN KEY (name) REFERENCES namespaces(name),
+    PRIMARY KEY (name, id)
+);

@@ -18,7 +18,7 @@ COPY package*.json ./
 
 # Installs dependencies
 RUN npm install
-RUN npm install fastify dotenv @fastify/cors
+RUN npm install fastify dotenv @fastify/cors pg @types/pg
 
 # Copies source code
 COPY . .
