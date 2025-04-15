@@ -18,7 +18,7 @@ COPY package*.json ./
 
 # Installs dependencies
 RUN npm install
-RUN npm install fastify dotenv firebase-admin cors @types/cors redis
+RUN npm install fastify dotenv @fastify/cors
 
 # Copies source code
 COPY . .
