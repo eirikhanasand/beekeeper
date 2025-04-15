@@ -1,0 +1,50 @@
+services:
+  # postgres:
+  #   image: postgres:15
+  #   container_name: lsm_database
+  #   restart: always
+  #   environment:
+  #     POSTGRES_USER: ${DB_USER:-beekeeper}
+  #     POSTGRES_PASSWORD: ${DB_PASSWORD}
+  #     POSTGRES_DB: ${DB:-beekeeper}
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #     - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+  #   ports:
+  #     - "5432:5432"
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U beekeeper -d beekeeper"]
+  #     interval: 5s
+  #     retries: 5
+
+  api:
+    container_name: api
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    command: npm start
+    # depends_on:
+    #   - postgres
+    environment:
+      DB_PASSWORD: ${DB_PASSWORD}
+    # healthcheck:
+    #   test: ["CMD-SHELL", "[ \"$(cat /tmp/health_status 2>/dev/null)\" = \"healthy\" ] && wget -qO- http://localhost:8080/api ]"]
+    #   interval: 5s
+    #   retries: 5
+  
+  frontend:
+    container_name: frontend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    environment:
+      - API_URL=http://api:8080/api
+
+# volumes:
+#   postgres_data:
