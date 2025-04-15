@@ -14,7 +14,7 @@ import { FastifyReply, FastifyRequest } from 'fastify'
  */
 export async function getIndexHandler(req: FastifyRequest, res: FastifyReply) {
     const routes = req.server.printRoutes({ commonPrefix: false })
-    res.send({ message: `Welcome to the API!\n\nValid endpoints are:\n\n${routes}` })
+    res.send(`Welcome to the API!\n\nValid endpoints are:\n\n${routes}`)
 }
 
 /**
