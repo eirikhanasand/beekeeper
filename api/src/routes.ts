@@ -2,8 +2,8 @@
 import { 
     getIndexHandler, 
     getHealthHandler,
-    getCallback,
-    getLogin,
+    // getCallback,
+    // getLogin,
     getVersion
 } from './handlers/get'
 
@@ -35,8 +35,8 @@ export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPlug
     // GET handlers
     fastify.get("/", getIndexHandler)
     fastify.get('/health', getHealthHandler)
-    fastify.get('/login', getLogin)
-    fastify.get('/callback', getCallback)
+    // fastify.get('/login', getLogin)
+    // fastify.get('/callback', getCallback)
     fastify.get('/version', getVersion)
 
     // POST handlers

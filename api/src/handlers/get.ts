@@ -1,11 +1,10 @@
 import config from "../../package.json"
 import { FastifyReply, FastifyRequest } from 'fastify'
-import { BASE_URL, CLIENT_ID, CLIENT_SECRET, EXAM_URL, REDIRECT_URI } from "../config"
 
 // OAuth2 Endpoints for Authentik
-const AUTH_URL = `${BASE_URL}/application/o/authorize/`
-const TOKEN_URL = `${BASE_URL}/application/o/token/`
-const USERINFO_URL = `${BASE_URL}/application/o/userinfo/`
+// const AUTH_URL = `${BASE_URL}/application/o/authorize/`
+// const TOKEN_URL = `${BASE_URL}/application/o/token/`
+// const USERINFO_URL = `${BASE_URL}/application/o/userinfo/`
 
 
 /**
@@ -106,82 +105,82 @@ export async function getHealthHandler(_: FastifyRequest, res: FastifyReply) {
 // }
 
 // Redirects to Authentik for login
-export function getLogin(_: FastifyRequest, res: FastifyReply) {
-    const state = Math.random().toString(36).substring(5)
-    const authQueryParams = new URLSearchParams({
-        client_id: CLIENT_ID as string,
-        redirect_uri: REDIRECT_URI as string,
-        response_type: 'code',
-        scope: 'openid profile email',
-        state: state,
-    }).toString()
+// export function getLogin(_: FastifyRequest, res: FastifyReply) {
+//     const state = Math.random().toString(36).substring(5)
+//     const authQueryParams = new URLSearchParams({
+//         client_id: CLIENT_ID as string,
+//         redirect_uri: REDIRECT_URI as string,
+//         response_type: 'code',
+//         scope: 'openid profile email',
+//         state: state,
+//     }).toString()
 
-    res.redirect(`${AUTH_URL}?${authQueryParams}`)
-}
+//     res.redirect(`${AUTH_URL}?${authQueryParams}`)
+// }
 
 /**
  * Callback route to exchange code for token
  * @param req Request
  * @param res Response
  */
-export async function getCallback(req: FastifyRequest, res: FastifyReply): Promise<any> {
-    const { code } = req.query as any
+// export async function getCallback(req: FastifyRequest, res: FastifyReply): Promise<any> {
+//     const { code } = req.query as any
 
-    if (!code) {
-        return res.status(400).send('No authorization code found.')
-    }
+//     if (!code) {
+//         return res.status(400).send('No authorization code found.')
+//     }
     
-    try {
-        // Exchanges callback code for access token
-        const tokenResponse = await fetch(TOKEN_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams({
-                client_id: CLIENT_ID as string,
-                client_secret: CLIENT_SECRET as string,
-                code: code as string,
-                redirect_uri: REDIRECT_URI as string,
-                grant_type: 'authorization_code',
-            }).toString()
-        })
+//     try {
+//         // Exchanges callback code for access token
+//         const tokenResponse = await fetch(TOKEN_URL, {
+//             method: 'POST',
+//             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+//             body: new URLSearchParams({
+//                 client_id: CLIENT_ID as string,
+//                 client_secret: CLIENT_SECRET as string,
+//                 code: code as string,
+//                 redirect_uri: REDIRECT_URI as string,
+//                 grant_type: 'authorization_code',
+//             }).toString()
+//         })
 
-        const tokenResponseBody = await tokenResponse.text()
+//         const tokenResponseBody = await tokenResponse.text()
      
-        if (!tokenResponse.ok) {
-            return res.status(500).send(`Failed to obtain token: ${tokenResponseBody}`)
-        }
+//         if (!tokenResponse.ok) {
+//             return res.status(500).send(`Failed to obtain token: ${tokenResponseBody}`)
+//         }
 
-        const token = JSON.parse(tokenResponseBody)
+//         const token = JSON.parse(tokenResponseBody)
 
-        // Fetches user info using access token
-        const userInfoResponse = await fetch(USERINFO_URL, {
-            headers: { Authorization: `Bearer ${token.access_token}` }
-        })
+//         // Fetches user info using access token
+//         const userInfoResponse = await fetch(USERINFO_URL, {
+//             headers: { Authorization: `Bearer ${token.access_token}` }
+//         })
 
-        if (!userInfoResponse.ok) {
-            const userInfoError = await userInfoResponse.text()
-            return res.status(500).send(`No user info found: ${userInfoError}`)
-        }
+//         if (!userInfoResponse.ok) {
+//             const userInfoError = await userInfoResponse.text()
+//             return res.status(500).send(`No user info found: ${userInfoError}`)
+//         }
 
-        const userInfo = await userInfoResponse.json()
+//         const userInfo = await userInfoResponse.json()
 
-        const redirectUrl = new URL(`${EXAM_URL}/login`)
-        const params = new URLSearchParams({
-            id: userInfo.sub,
-            name: userInfo.name,
-            email: userInfo.email,
-            groups: userInfo.groups.join(','),
-            access_token: token.access_token
-        })
+//         const redirectUrl = new URL(`${EXAM_URL}/login`)
+//         const params = new URLSearchParams({
+//             id: userInfo.sub,
+//             name: userInfo.name,
+//             email: userInfo.email,
+//             groups: userInfo.groups.join(','),
+//             access_token: token.access_token
+//         })
 
-        redirectUrl.search = params.toString()
-        return res.redirect(redirectUrl.toString())
-    } catch (err: unknown) {
-        const error = err as Error
-        console.error('Error during OAuth2 flow:', error.message)
-        return res.status(500).send('Authentication failed')
-    }
-}
+//         redirectUrl.search = params.toString()
+//         return res.redirect(redirectUrl.toString())
+//     } catch (err: unknown) {
+//         const error = err as Error
+//         console.error('Error during OAuth2 flow:', error.message)
+//         return res.status(500).send('Authentication failed')
+//     }
+// }
 
 export function getVersion(_: FastifyRequest, res: FastifyReply): any {
     return res.send(config.version)
