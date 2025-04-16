@@ -32,6 +32,10 @@ export function RightIcon() {
         }
     }, [loggedIn])
 
+    if (!loggedIn) {
+        return <></>
+    }
+
     return (
         <Link 
             href={href} 
@@ -69,18 +73,6 @@ export function MiddleIcon({ setActive }: MiddleIconProps) {
             className='grid place-self-center w-[4vh] h-[4vh] relative' 
             onClick={handleClick}
         >
-            <Image src={icon} alt="logo" fill={true} />
-        </Link>
-    )
-}
-
-// Displays the scoreboard icon
-export function LeftIcon() {
-    const href = "/scoreboard"
-    const icon = "/images/scoreboard.svg"
-
-    return (
-        <Link href={href} className='grid place-self-center w-[3.5vh] h-[3.5vh] relative'>
             <Image src={icon} alt="logo" fill={true} />
         </Link>
     )

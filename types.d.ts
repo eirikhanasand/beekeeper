@@ -21,7 +21,7 @@ type ServiceAsList = {
     context: string
     name: string
     status: string
-    service_status: string
+    service_status: 'operational' | 'degraded' | 'down'
     age: string
 }
 

@@ -1,4 +1,5 @@
 import { ServiceStatus } from "@parent/interfaces"
+import { ReactNode } from "react"
 
 type PulseProps = {
     status: ServiceStatus
@@ -7,9 +8,10 @@ type PulseProps = {
     innerWidth?: string
     innerHeight?: string
     active?: false
+    children?: ReactNode
 }
 
-export default function Pulse({ status, outerWidth, outerHeight, innerWidth, innerHeight, active }: PulseProps) {
+export default function Pulse({ status, outerWidth, outerHeight, innerWidth, innerHeight, active, children }: PulseProps) {
     const color = {
         operational: 'bg-green-500',
         degraded: 'bg-yellow-500',
@@ -26,7 +28,9 @@ export default function Pulse({ status, outerWidth, outerHeight, innerWidth, inn
             {/* Pulsating outer ring */}
             {active !== false ? <div className={`absolute inline-flex h-full w-full rounded-full ${color} opacity-75 animate-ping`} /> : <></>}
             {/* Solid center circle */}
-            <div className={`relative inline-flex rounded-full ${InnerWidth} ${InnerHeight} ${color}`} />
+            <div className={`relative inline-flex rounded-full ${InnerWidth} ${InnerHeight} ${color}`}>
+                {children}
+            </div>
         </div>
     )
 }

@@ -26,9 +26,9 @@ export default async function Header({path}: HeaderProps) {
             <div className={`grid ${cols} gap-2 justify-items-center pb-2`}>
                 {contexts.map((context) => <Context 
                     key={context}
-                    context={context} 
-                    service={service} 
-                    activeContext={activeContext} 
+                    context={context || 'prod'} 
+                    service={service || 'global'} 
+                    activeContext={activeContext || 'prod'} 
                 />)}
             </div>
             <ServiceHeader />
