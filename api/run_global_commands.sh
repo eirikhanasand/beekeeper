@@ -7,9 +7,6 @@ PSQL="psql -h postgres -U $DB_USER -d $DB -t -c"
 export PGPASSWORD=$DB_PASSWORD
 export DOCTL_ACCESS_TOKEN=$DOCTL_TOKEN
 
-echo "PGPASSWORD: $PGPASSWORD"
-echo "DOCTL_ACCESS_TOKEN: $DOCTL_ACCESS_TOKEN"
-
 commands=$($PSQL "SELECT name, command FROM global_commands;")
 
 echo "$commands" | while IFS='|' read -r name command; do
