@@ -1,0 +1,13 @@
+import { FastifyReply, FastifyRequest } from "fastify"
+import run from "../../db.js"
+
+export default async function getLocalCommands(_: FastifyRequest, res: FastifyReply) {
+    try {
+        const commands = await run(`SELECT * FROM local_commands`, [])
+
+        return res.send(commands.rows)
+    } catch (error) {
+        console.error(`Database error: ${JSON.stringify(error)}`)
+        return res.status(500).send({ error: "Internal Server Error" })
+    }
+}

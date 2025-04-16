@@ -18,33 +18,43 @@ services:
       retries: 5
 
   api:
-    container_name: api
+    container_name: api 
+    image: beekeeper-api
     build:
       context: ./api
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
-    command: npm start
-    # depends_on:
-    #   - postgres
-    environment:
-      DB_PASSWORD: ${DB_PASSWORD}
-    # healthcheck:
-    #   test: ["CMD-SHELL", "[ \"$(cat /tmp/health_status 2>/dev/null)\" = \"healthy\" ] && wget -qO- http://localhost:8080/api ]"]
-    #   interval: 5s
-    #   retries: 5
-  
-  frontend:
-    container_name: frontend
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
+    command: sh -c "./init.sh && npm start"
     depends_on:
-      - api
+      - postgres
     environment:
-      - API_URL=http://api:8080/api
+      API_URL: https://exam-api.login.no/api
+      BROWSER_API_URL: https://exam-api.login.no/api
+      DOCTL_TOKEN: ${DOCTL_TOKEN}
+      PRIVATE_TOKEN: ${PRIVATE_TOKEN}
+      DB: ${DB}
+      DB_HOST: ${DB_HOST}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/api"]
+      interval: 5s
+      retries: 5
+  
+  # frontend:
+  #   container_name: frontend
+  #   image: beekeeper-frontend
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - api
+  #   environment:
+  #     - API_URL=http://api:8080/api
 
 volumes:
   postgres_data:

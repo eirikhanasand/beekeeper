@@ -1,9 +1,10 @@
 import { API, BROWSER_API } from "@parent/constants"
 
-// Fetches the scoreboard from the server
-export async function getScoreBoard() {
+export default async function getContexts(location: 'server' | 'client'): Promise<ServiceAsList[] | string> {
+    const url = location === 'server' ? `${API}/contexts` : `${BROWSER_API}/contexts`
+
     try {
-        const response = await fetch(`${API}/scoreboard`, {
+        const response = await fetch(url, {
             next: { revalidate: 10 },
             method: 'GET',
             headers: {
@@ -17,8 +18,9 @@ export async function getScoreBoard() {
             throw Error(data.error)
         }
     
-        return await response.json()
-    } catch (error: unknown) {
+        const services = await response.json()
+        return services
+    } catch (error) {
         const err = error as Error
         return err.message
     }

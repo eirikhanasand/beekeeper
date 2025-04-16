@@ -1,6 +1,6 @@
 'use client'
 
-import { getServices } from "@/utils/fetch"
+import getNamespaces from "@/utils/fetch/getNamespaces"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 
@@ -11,7 +11,7 @@ export default function Edit() {
 
     useEffect(() => {
         (async() => {
-            const newServices = await getServices('client')
+            const newServices = await getNamespaces('client')
 
             if (typeof newServices === 'string') {
                 setError(newServices)
@@ -33,11 +33,11 @@ export default function Edit() {
                     <div className="w-full grid space-y-2">
                         {services.map((service) => (
                             <Link
-                                href={`/edit/${service.id}`}
-                                key={service.id}
+                                href={`/edit/${service.name}`}
+                                key={service.name}
                                 className="text-lg bg-light w-full rounded-md p-2"
                             >
-                                {service.id}
+                                {service.name}
                             </Link>
                         ))}
                     </div>
@@ -56,7 +56,7 @@ export default function Edit() {
             <div className="flex flex-rows">
                 <Link 
                     onClick={handleReview} 
-                    className="text-base rounded-md self-center bg-light px-2"
+                    className="text-base rounded-md self-center bg-light px-4"
                     href={""}>
                         Edit
                 </Link>

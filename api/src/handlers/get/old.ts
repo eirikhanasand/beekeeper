@@ -1,30 +1,7 @@
-import config from "../../package.json"
-import { FastifyReply, FastifyRequest } from 'fastify'
-
 // OAuth2 Endpoints for Authentik
 // const AUTH_URL = `${BASE_URL}/application/o/authorize/`
 // const TOKEN_URL = `${BASE_URL}/application/o/token/`
 // const USERINFO_URL = `${BASE_URL}/application/o/userinfo/`
-
-
-/**
- * Base information about the api if the route was not specified
- * @param req FastifyRequest, used to fetch the valid routes
- * @param res FastifyReply, used to send the response to the user
- */
-export async function getIndexHandler(req: FastifyRequest, res: FastifyReply) {
-    const routes = req.server.printRoutes({ commonPrefix: false })
-    res.send(`Welcome to the API!\n\nValid endpoints are:\n\n${routes}`)
-}
-
-/**
- * Health check for the API
- * @param _ FastifyRequest, not used
- * @param res FastifyReply, used to send the response to the user
- */
-export async function getHealthHandler(_: FastifyRequest, res: FastifyReply) {
-    res.send(200)
-}
 
 /**
  * Fetches all comments for the given item
@@ -182,6 +159,3 @@ export async function getHealthHandler(_: FastifyRequest, res: FastifyReply) {
 //     }
 // }
 
-export function getVersion(_: FastifyRequest, res: FastifyReply): any {
-    return res.send(config.version)
-}

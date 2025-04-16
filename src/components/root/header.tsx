@@ -4,6 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 import Edit from "./edit"
+import Global from "./global"
 
 export default function Header() {
     const path = usePathname()
@@ -42,6 +43,7 @@ function ServiceHeader() {
         <div className="flex flex-cols gap-2">
             <h1 className="text-lg">Services</h1>
             <Edit />
+            <Global />
         </div>
     )
 }

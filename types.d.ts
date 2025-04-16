@@ -17,7 +17,11 @@ type Service = {
 }
 
 type ServiceAsList = {
-    id: string
+    context: string
+    name: string
+    status: string
+    service_status: string
+    age: string
 }
 
 type Card = {
@@ -63,4 +67,13 @@ type RegisterUser = {
     id: string
     name: string
     username: string
+}
+
+type Log = {
+    id: string
+    name: string
+    event: string
+    status: string
+    command: string 
+    timestamp: string
 }

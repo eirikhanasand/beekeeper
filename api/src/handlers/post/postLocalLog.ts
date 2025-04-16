@@ -1,0 +1,34 @@
+import { FastifyReply, FastifyRequest } from "fastify"
+import run from "../../db.js"
+
+type PostLocalLogBody = { 
+    context: string
+    name: string
+    event: string
+    command: string
+    app: string
+    pod: string
+    status: string
+}
+
+export default async function postLocalLog(req: FastifyRequest, res: FastifyReply) {
+    const { context, name, event, command, app, pod, status } = req.body as PostLocalLogBody || {}
+    if (!context || !name || !event || !command || !status) {
+        return res.status(400).send({ error: "Missing context, name, event, command, app, pod or status." })
+    }
+
+    try {
+        console.log(`Adding to local log: context=${context} name=${name}, event=${event}, command=${command}, status=${status}, app=${app}, pod=${pod}`)
+
+        await run(
+            `INSERT INTO local_log (context, name, event, command, app, pod, status) 
+             SELECT $1, $2, $3, $4, $5, $6, $7;`, 
+            [context, name, event, command, app || null, pod || null, status]
+        )
+
+        return res.send({ message: `Successfully added event ${event} to the log for namespace ${name} in context ${context}.` })
+    } catch (error) {
+        console.error(`Database error: ${JSON.stringify(error)}`)
+        return res.status(500).send({ error: "Internal Server Error" })
+    }
+}
