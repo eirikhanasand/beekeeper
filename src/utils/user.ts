@@ -1,7 +1,6 @@
 'use client'
 
-import { BROWSER_API } from "@parent/constants"
-import getItem, { removeItem } from "./localStorage"
+import { removeItem } from "./localStorage"
 
 // Function to logout the user
 export async function sendLogout(): Promise<Boolean | string> {

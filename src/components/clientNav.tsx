@@ -5,7 +5,7 @@ import { sendLogout } from "@utils/user"
 import Image from "next/image"
 import Link from "next/link"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
-import { Burger } from "./sidebar"
+import { Burger } from "./burger"
 import ThemeSwitch from "./theme/themeSwitch"
 
 type MiddleIconProps = {

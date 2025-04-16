@@ -1,15 +1,14 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import ToolTips from './root/toolTips'
-import Sidebar from './sidebar'
+import Menu from './menu'
 import { RightSide } from './clientNav'
 import ArrowOutward from '@components/svg/arrowOutward'
 
-// Displays the header
 export default function Navbar() {
     return (
         <div className='flex justify-between bg-black h-full w-full md:px-[1rem] gap-2 overflow-hidden'>
-            <Sidebar />
+            <Menu />
             <ToolTips />
             {/* logo */}
             <div className='flex items-center h-[3rem] md:w-[10rem]'>

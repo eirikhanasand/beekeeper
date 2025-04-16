@@ -1,5 +1,5 @@
 import React from 'react'
-import ServiceList from '@/components/root/services'
+import Services from '@/components/root/services'
 
 // Main component of the program, holds the main page and the user can navigate
 // to different pages from here
@@ -7,7 +7,7 @@ export default async function Home() {
     return (
         <div className='grid grid-cols-10 gap-2 w-full h-full max-h-full'>
             <div className='hidden rounded-xl lg:grid col-span-3 sm:col-span-2 max-h-[calc((100vh-var(--h-navbar))-1rem)]'>
-                <ServiceList />
+                <Services  />
             </div>
             <div className='col-span-10 lg:col-span-8 max-h-full overflow-auto'>
                 <div className="w-full rounded-xl grid grid-cols-6 xl:grid-cols-8 gap-2 h-full max-h-full">

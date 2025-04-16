@@ -25,7 +25,7 @@ export default function Log({log}: LogProps) {
                 </div>
             </div>
             <div className="ml-[1rem] pl-2">
-                {log.event.split('\n').map((line) => <h1 className="text-almostbright text-sm">{line}</h1>)}
+                {log.event.split('\n').map((line, index) => <h1 key={index} className="text-almostbright text-sm">{line}</h1>)}
             </div>
         </div>
     )

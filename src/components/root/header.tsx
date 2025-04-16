@@ -1,40 +1,51 @@
-'use client'
-
 import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { useEffect, useState } from "react"
 import Edit from "./edit"
 import Global from "./global"
+import getFormattedContexts from "@/utils/fetch/getFormattedContexts"
+import getSegmentedPathname from "@/utils/fetch/pathname"
 
-export default function Header() {
-    const path = usePathname()
-    const service = path.split('/')[2] || ''
-    const [isStudy, setIsStudy] = useState(path.includes('study') || path.includes('files'))
+type HeaderProps = {
+    path: string
+}
 
-    useEffect(() => {
-        setIsStudy(path.includes('study') || path.includes('files'))
-    }, [path])
+type ContextProps = {
+    context: string
+    service: string
+    activeContext: string
+}
+
+export default async function Header({path}: HeaderProps) {
+    const segmentedPathname = getSegmentedPathname(path)
+    const contexts = await getFormattedContexts()
+    const service = segmentedPathname[2] || ''
+    const activeContext = segmentedPathname[1]
+    const cols = `grid-cols-${contexts.length}`
 
     return (
         <div className="bg-darker p-2 rounded-xl">
-            <div className="grid grid-cols-2 gap-2 justify-items-center pb-2">
-                <Link
-                    href={service ? `/service/${service}` : '/'}
-                    className={`${isStudy ? "bg-normal" : "bg-light"} w-full rounded-lg w-full px-2 content-center text-almostbright flex text-lg`}
-                >
-                    <h1 className="xl:mr-1">≡</h1>
-                    <h1 className="hidden xl:grid text-base place-self-center">Prod</h1>
-                </Link>
-                <Link
-                    href={`/service/dev/${service}`}
-                    className={`${isStudy ? "bg-light" : "bg-normal"} w-full rounded-lg px-2 text-almostbright flex text-lg`}
-                >
-                    <h1 className="xl:mr-1">✎</h1>
-                    <h1 className="hidden xl:grid text-base place-self-center">Dev</h1>
-                </Link>
+            <div className={`grid ${cols} gap-2 justify-items-center pb-2`}>
+                {contexts.map((context) => <Context 
+                    key={context}
+                    context={context} 
+                    service={service} 
+                    activeContext={activeContext} 
+                />)}
             </div>
             <ServiceHeader />
         </div>
+    )
+}
+
+function Context({context, service, activeContext}: ContextProps) {
+    const active = context.toLowerCase() === activeContext.toLowerCase()
+    return (
+        <Link
+            href={`/service/${context.toLowerCase()}/${service ? service : 'global'}`}
+            className={`${active && service === 'global' ? 'cursor-not-allowed' : ''} ${active ? "bg-normal" : "bg-light"} w-full rounded-lg w-full px-2 content-center text-almostbright flex text-lg`}
+        >
+            <h1 className="xl:mr-1">≡</h1>
+            <h1 className="hidden xl:grid text-base place-self-center">{context}</h1>
+        </Link>
     )
 }
 

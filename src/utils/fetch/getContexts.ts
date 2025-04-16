@@ -1,6 +1,6 @@
 import { API, BROWSER_API } from "@parent/constants"
 
-export default async function getContexts(location: 'server' | 'client'): Promise<ServiceAsList[] | string> {
+export default async function getContexts(location: 'server' | 'client'): Promise<ServiceAsList[]> {
     const url = location === 'server' ? `${API}/contexts` : `${BROWSER_API}/contexts`
 
     try {
@@ -21,7 +21,7 @@ export default async function getContexts(location: 'server' | 'client'): Promis
         const services = await response.json()
         return services
     } catch (error) {
-        const err = error as Error
-        return err.message
+        console.error(error)
+        return []
     }
 }

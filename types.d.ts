@@ -1,6 +1,7 @@
 type ServiceProps = {
     service: ServiceAsList
-    currentPath: string
+    segmentedPathname: string[]
+    context: string
 }
 
 type Editing = {
@@ -76,4 +77,11 @@ type Log = {
     status: string
     command: string 
     timestamp: string
+}
+
+type Context = {
+    name: string
+    cluster: string
+    authinfo: string
+    namespace: string
 }
