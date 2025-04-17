@@ -30,4 +30,11 @@ kubectl config get-contexts | sed 's/^\*//' | tail -n +2 | while read -r line; d
 done
 
 echo "🐝 Contexts and namespaces added to the BeeKeeper."
+
+crond -b
+
+echo "🐝 Started cron."
 echo "🐝 BeeKeeper initiated."
+
+npm start
+
