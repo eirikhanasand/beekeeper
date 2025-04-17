@@ -13,6 +13,11 @@ type ENV = {
     DB_MAX_CONN: string
     DB_IDLE_TIMEOUT_MS: string
     DB_TIMEOUT_MS: string
+    CLIENT_ID: string
+    CLIENT_SECRET: string
+    REDIRECT_URI: string
+    BASE_URL: string
+    BEEKEEPER_URL: string
 }
 
 dotenv.config({path: '../.env'})
@@ -30,6 +35,11 @@ const {
     DB_HOST,
     DB_USER,
     DB_PASSWORD,
+    CLIENT_ID,
+    CLIENT_SECRET,
+    REDIRECT_URI,
+    BASE_URL,
+    BEEKEEPER_URL
 } = process.env as unknown as ENV
 if (!DOCTL_TOKEN
     || !PRIVATE_TOKEN
@@ -37,9 +47,18 @@ if (!DOCTL_TOKEN
     || !DB_HOST
     || !DB_USER
     || !DB_PASSWORD
+    || !CLIENT_ID
+    || !CLIENT_SECRET
+    || !REDIRECT_URI
+    || !BASE_URL
+    || !BEEKEEPER_URL
 ) {
     throw new Error("Missing one or more environment variables.")
 }
+
+const AUTH_URL = `${BASE_URL}/application/o/authorize/`
+const TOKEN_URL = `${BASE_URL}/application/o/token/`
+const USERINFO_URL = `${BASE_URL}/application/o/userinfo/`
 
 const config = {
     DB_PORT,
@@ -54,6 +73,13 @@ const config = {
     DB_HOST,
     DB_USER,
     DB_PASSWORD,
+    CLIENT_ID,
+    CLIENT_SECRET,
+    REDIRECT_URI,
+    AUTH_URL,
+    TOKEN_URL,
+    USERINFO_URL,
+    BEEKEEPER_URL
 }
 
 export default config

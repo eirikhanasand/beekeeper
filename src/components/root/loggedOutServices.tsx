@@ -30,7 +30,7 @@ export default async function LoggedOutServices() {
                 <div className="bg-darker p-2 rounded-xl w-full h-[7vh]">
                     <div className="grid place-items-center overflow-hidden h-10 rounded-xl">
                         <Pulse
-                            innerWidth="w-[94%] p-2 grid place-items-center text-center" 
+                            innerWidth="w-[93%] p-2 grid place-items-center text-center" 
                             innerHeight="h-6"
                             outerWidth="w-full rounded-xl"
                             outerHeight="h-7"

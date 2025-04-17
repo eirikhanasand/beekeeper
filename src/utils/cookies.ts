@@ -6,7 +6,7 @@ export function getCookie(name: string): string | null {
 }
 
 export function setCookie(name: string, value: string, days?: number) {
-    let expires = ""
+    let expires = ''
 
     if (!value) {
         return

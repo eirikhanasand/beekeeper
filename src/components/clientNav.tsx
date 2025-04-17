@@ -7,6 +7,7 @@ import Link from "next/link"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { Burger } from "./burger"
 import ThemeSwitch from "./theme/themeSwitch"
+import { getCookie } from "@/utils/cookies"
 
 type MiddleIconProps = {
     setActive: Dispatch<SetStateAction<boolean>>
@@ -48,18 +49,16 @@ export function RightIcon() {
 }
 
 // Displays the register icon or the logout icon depending on the login status
-export function MiddleIcon({ setActive }: MiddleIconProps) {
-    const href = '/'
+export function MiddleIcon() {
     const icon = "/images/logout.svg"
-    const loggedIn = false
+    const [loggedIn, setLoggedIn] = useState(false)
 
     useEffect(() => {
-        if (loggedIn) {
-            setActive(true)
-        } else {
-            setActive(false)
+        const token = getCookie('access_token')
+        if (token) {
+            setLoggedIn(true)
         }
-    }, [loggedIn])
+    }, [])
 
     function handleClick() {
         if (loggedIn) {
@@ -67,9 +66,13 @@ export function MiddleIcon({ setActive }: MiddleIconProps) {
         }
     }
 
+    if (!loggedIn) {
+        return <></>
+    }
+
     return (
         <Link 
-            href={href} 
+            href="/logout"
             className='grid place-self-center w-[4vh] h-[4vh] relative' 
             onClick={handleClick}
         >
@@ -79,13 +82,9 @@ export function MiddleIcon({ setActive }: MiddleIconProps) {
 }
 
 export function RightSide() {
-    const [active, setActive] = useState(true)
-
     return (
         <div className={`flex justify-end rounded-xl gap-2 md:min-w-[10rem]`}>
-            {/* create account */}
-            {active && <MiddleIcon setActive={setActive} />}
-            {/* login */}
+            <MiddleIcon />
             <RightIcon />
             <ThemeSwitch />
             <Burger />

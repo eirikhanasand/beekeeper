@@ -25,6 +25,9 @@ import postLocalLog from './handlers/post/postLocalLog'
 import runCommand from './handlers/post/runCommand'
 
 import { FastifyInstance, FastifyPluginOptions } from "fastify"
+import getLogin from './handlers/get/getLogin'
+import { getCallback } from './handlers/get/getCallback'
+import getToken from './handlers/get/getToken'
 
 export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPluginOptions) {
     // GET handlers
@@ -40,9 +43,10 @@ export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPlug
     fastify.get('/pods', getPods)
     fastify.get('/user/:name', getUser)
     fastify.get('/users', getUsers)
-    // fastify.get('/login', getLogin)
-    // fastify.get('/callback', getCallback)
+    fastify.get('/login', getLogin)
+    fastify.get('/callback', getCallback)
     fastify.get('/version', getVersion)
+    fastify.get('/token', getToken)
 
     // POST handlers
     fastify.post('/contexts', postContext)
