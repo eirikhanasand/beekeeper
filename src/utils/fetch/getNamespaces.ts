@@ -14,7 +14,6 @@ export default async function getNamespaces(location: 'server' | 'client'): Prom
     
         if (!response.ok) {
             const data = await response.json()
-    
             throw Error(data.error)
         }
     
