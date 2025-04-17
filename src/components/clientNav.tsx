@@ -40,7 +40,7 @@ export function RightIcon() {
     return (
         <Link 
             href={href} 
-            className='grid place-self-center w-[4vh] h-[4vh] relative'
+            className='grid place-self-center w-[3vh] h-[3vh] relative'
             onClick={handleClick}
         >
             <Image src={icon} alt="logo" fill={true} />
@@ -73,7 +73,7 @@ export function MiddleIcon() {
     return (
         <Link 
             href="/logout"
-            className='grid place-self-center w-[4vh] h-[4vh] relative' 
+            className='grid place-self-center w-[3vh] h-[3vh] relative' 
             onClick={handleClick}
         >
             <Image src={icon} alt="logo" fill={true} />
