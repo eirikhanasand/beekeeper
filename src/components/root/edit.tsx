@@ -1,25 +1,14 @@
 'use client'
 
-import getNamespaces from "@/utils/fetch/getNamespaces"
 import Link from "next/link"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
-export default function Edit() {
-    const [services, setServices] = useState<ServiceAsList[]>([])
-    const [error, setError] = useState('')
+type EditProps = {
+    services: ServiceAsList[]
+}
+
+export default function Edit({services}: EditProps) {
     const [displayServiceSelector, setDisplayServiceSelector] = useState(false)
-
-    useEffect(() => {
-        (async() => {
-            const newServices = await getNamespaces('client')
-
-            if (typeof newServices === 'string') {
-                setError(newServices)
-            } else {   
-                setServices(newServices)
-            }
-        })()
-    }, [])
 
     function handleReview() {
         setDisplayServiceSelector(true)
@@ -61,21 +50,6 @@ export default function Edit() {
                         Edit
                 </Link>
             </div>
-            {error && <Error text={error} />}
-        </div>
-    )
-}
-
-function Error({text}: { text: string }) {
-    const path = location.href
-
-    if (!path.includes('service')) {
-        return null
-    }
-
-    return (
-        <div className="absolute bg-darker bottom-8 right-8 min-h-50 p-2 max-w-[17.6vw] rounded-xl max-h-[19.5vh] overflow-auto">
-            <h1 className="text-red-500">{text}</h1>
         </div>
     )
 }

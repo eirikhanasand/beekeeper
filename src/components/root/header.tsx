@@ -3,6 +3,7 @@ import Edit from "./edit"
 import Global from "./global"
 import getFormattedContexts from "@/utils/fetch/getFormattedContexts"
 import getSegmentedPathname from "@/utils/fetch/pathname"
+import getNamespaces from "@/utils/fetch/getNamespaces"
 
 type HeaderProps = {
     path: string
@@ -49,11 +50,12 @@ function Context({context, service, activeContext}: ContextProps) {
     )
 }
 
-function ServiceHeader() {
+async function ServiceHeader() {
+    const services = await getNamespaces('server')
     return (
         <div className="flex flex-cols gap-2">
             <h1 className="text-lg">Services</h1>
-            <Edit />
+            <Edit services={services} />
             <Global />
         </div>
     )

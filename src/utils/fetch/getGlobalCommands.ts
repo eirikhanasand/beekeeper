@@ -1,7 +1,7 @@
 import { API, BROWSER_API } from "@parent/constants"
 
-export default async function getNamespaces(location: 'server' | 'client'): Promise<ServiceAsList[]> {
-    const url = location === 'server' ? `${API}/namespaces` : `${BROWSER_API}/namespaces`
+export default async function getGlobalCommands(location: 'server' | 'client'): Promise<GlobalCommand[]> {
+    const url = location === 'server' ? `${API}/commands/global` : `${BROWSER_API}/commands/global`
 
     try {
         const response = await fetch(url, {
@@ -17,8 +17,8 @@ export default async function getNamespaces(location: 'server' | 'client'): Prom
             throw Error(data)
         }
     
-        const services = await response.json()
-        return services
+        const commands = await response.json()
+        return commands
     } catch (error) {
         console.error(error)
         return []

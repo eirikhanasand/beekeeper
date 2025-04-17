@@ -30,7 +30,7 @@ echo "$commands" | while IFS='|' read -r name command; do
 
           if [ $exit_code -ne 0 ]; then
               status="down"
-          elif echo "$output" | grep -qE "Error|error|failed|BackOff"; then
+          elif echo "$output" | grep -qE "Error|error|failed|BackOff|Insufficient"; then
               status="down"
           elif echo "$output" | grep -qE "Unhealthy|Killing|do not meet"; then
               status="degraded"
@@ -53,7 +53,7 @@ echo "$commands" | while IFS='|' read -r name command; do
 
       if [ $exit_code -ne 0 ]; then
           status="down"
-      elif echo "$output" | grep -qE "Error|error|failed|BackOff"; then
+      elif echo "$output" | grep -qE "Error|error|failed|BackOff|Insufficient"; then
           status="down"
       elif echo "$output" | grep -qE "Unhealthy|Killing|do not meet"; then
           status="degraded"

@@ -9,14 +9,6 @@ type Editing = {
     texts: string[]
 }
 
-type Service = {
-    id: string
-    cards: Card[]
-    unreviewed: Card[]
-    textUnreviewed: string[]
-    mark?: boolean
-}
-
 type ServiceAsList = {
     context: string
     name: string
@@ -84,4 +76,24 @@ type Context = {
     cluster: string
     authinfo: string
     namespace: string
+}
+
+type GlobalCommand = {
+    id: string
+    name: string
+    command: string
+    author: string
+    reason: string
+    timestamp: string
+}
+
+type LocalCommand = {
+    id: string
+    context: string
+    name: string
+    namespace: string
+    command: string
+    author: string
+    reason: string
+    timestamp: string
 }
