@@ -2,7 +2,7 @@
 
 echo "🐝 [GLOBAL] Bee patrol started."
 
-PSQL="psql -h postgres -U $DB_USER -d $DB -t -c"
+PSQL="psql -h $DB_HOST -U $DB_USER -d $DB -t -c"
 
 export PGPASSWORD=$DB_PASSWORD
 export DOCTL_ACCESS_TOKEN=$DOCTL_TOKEN

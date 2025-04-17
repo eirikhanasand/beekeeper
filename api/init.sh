@@ -5,7 +5,7 @@ echo "🐝 Initiating BeeKeeper."
 export PGPASSWORD=$DB_PASSWORD
 export DOCTL_ACCESS_TOKEN=$DOCTL_TOKEN
 
-PSQL="psql -h postgres -U $DB_USER -d $DB -t -c"
+PSQL="psql -h $DB_HOST -U $DB_USER -d $DB -t -c"
 
 doctl auth init --access-token "$DOCTL_ACCESS_TOKEN"
 
