@@ -1,7 +1,7 @@
 import Log from "./log"
 
 type LogsProps = {
-    logs: Log[]
+    logs: (LocalLog | GlobalLog)[]
 }
 
 export default function Logs({logs}: LogsProps) {

@@ -14,7 +14,7 @@ type PulseProps = {
 export default function Pulse({ status, outerWidth, outerHeight, innerWidth, innerHeight, active, children }: PulseProps) {
     const color = {
         operational: 'bg-green-500',
-        degraded: 'bg-yellow-500',
+        degraded: 'bg-login',
         down: 'bg-red-500'
     }[status] || 'bg-gray-500'
 

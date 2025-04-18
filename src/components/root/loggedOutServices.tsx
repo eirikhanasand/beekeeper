@@ -23,7 +23,10 @@ export default async function LoggedOutServices() {
         hover:pl-[1.5rem] duration-[500ms] transition-[padding] cursor-not-allowed
         hover:*:fill-login hover:text-login font-medium justify-between
     `
-    
+
+    const localLog = await getLogs('server', 'local') as LocalLog[]
+    const logIncludesError = localLog.filter((log) => log.status === 'down' || log.status === 'degraded')
+
     return (
         <div className='w-full h-full overflow-hidden grid grid-rows-12'>
             <div className="w-full row-span-12 flex flex-col h-full overflow-hidden gap-2">
@@ -41,12 +44,20 @@ export default async function LoggedOutServices() {
                     </div>
                 </div>
                 <div className="h-full bg-darker rounded-xl overflow-auto max-h-full noscroll">
-                    {filteredServices.map(service =>
-                        <div key={service.name} className={serviceStyle}>
-                            <h1>{service.name}</h1>
-                            <Pulse status={service.service_status as ServiceStatus} />
-                        </div>
-                    )}
+                    {filteredServices.map(service => {
+                        const serviceLogIncludesError = logIncludesError.filter((log) => service.name === log.namespace)
+                        const downplayedStatus = service.service_status === 'operational' 
+                        ? serviceLogIncludesError.length > 0 
+                            ? 'degraded' : 'operational'
+                            : service.service_status
+
+                        return (
+                            <div key={service.name} className={serviceStyle}>
+                                <h1>{service.name}</h1>
+                                <Pulse status={downplayedStatus as ServiceStatus} />
+                            </div>
+                        )
+                    })}
                 </div>
             </div>
         </div>

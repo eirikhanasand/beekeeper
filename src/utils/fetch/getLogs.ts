@@ -1,6 +1,6 @@
 import { API, BROWSER_API } from "@parent/constants"
 
-export default async function getLogs(location: 'server' | 'client', path: 'global' | 'local'): Promise<Log[]> {
+export default async function getLogs(location: 'server' | 'client', path: 'global' | 'local'): Promise<(LocalLog | GlobalLog)[]> {
     const url = location === 'server' ? `${API}/log/${path}` : `${BROWSER_API}/log/${path}`
 
     try {

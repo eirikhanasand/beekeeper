@@ -2,7 +2,7 @@ import { ServiceStatus } from "@parent/interfaces"
 import Pulse from "../pulse"
 
 type LogProps = {
-    log: Log
+    log: LocalLog | GlobalLog
 }
 
 export default function Log({log}: LogProps) {

@@ -2,6 +2,7 @@ type ServiceProps = {
     service: ServiceAsList
     segmentedPathname: string[]
     context: string
+    localLog: Log[]
 }
 
 type Editing = {
@@ -62,7 +63,18 @@ type RegisterUser = {
     username: string
 }
 
-type Log = {
+type LocalLog = {
+    context: string
+    namespace: string
+    id: string
+    name: string
+    event: string
+    status: string
+    command: string 
+    timestamp: string
+}
+
+type GlobalLog = {
     id: string
     name: string
     event: string

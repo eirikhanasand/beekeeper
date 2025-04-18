@@ -2,6 +2,7 @@ import Link from "next/link"
 import Pulse from "../pulse"
 import { ServiceStatus } from "@parent/interfaces"
 import getSegmentedPathname from "@/utils/fetch/pathname"
+import getLogs from "@/utils/fetch/getLogs"
 
 type ServicesProps = {
     services: ServiceAsList[]
@@ -10,6 +11,7 @@ type ServicesProps = {
 
 export default async function ProdOrDev({ services, path }: ServicesProps) {
     const segmentedPathname = getSegmentedPathname(path)
+    const localLog = await getLogs('server', 'local')
     const context = segmentedPathname[1] || 'prod'
     const filteredServices = services.filter(service => {
         return service.context.includes(context)
@@ -23,13 +25,14 @@ export default async function ProdOrDev({ services, path }: ServicesProps) {
                     service={service} 
                     segmentedPathname={segmentedPathname}
                     context={context}
+                    localLog={localLog}
                 />
             )}
         </div>
     )
 }
 
-function Service({ context, service, segmentedPathname }: ServiceProps) {
+function Service({ context, service, segmentedPathname, localLog }: ServiceProps) {
     const currentService = segmentedPathname.includes("service") 
         ? segmentedPathname[2]
         : ''
@@ -43,13 +46,20 @@ function Service({ context, service, segmentedPathname }: ServiceProps) {
         } hover:*:fill-login hover:text-login font-medium justify-between
     `
 
+    const logIncludesError = localLog.filter((log) => log.status === 'down' || log.status === 'degraded')
+    const serviceLogIncludesError = logIncludesError.filter((log) => service.name === log.namespace)
+    const downplayedStatus = service.service_status === 'operational' 
+        ? serviceLogIncludesError.length > 0 
+            ? 'degraded' : 'operational'
+            : service.service_status
+
     return (
         <Link
             href={`/service/${context}/${service.name}`}
             className={serviceStyle}
         >
             <h1>{service.name}</h1>
-            <Pulse status={service.service_status as ServiceStatus} />
+            <Pulse status={downplayedStatus as ServiceStatus} />
         </Link>
     )
 }
