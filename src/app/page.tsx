@@ -23,7 +23,7 @@ export default async function Home() {
                                 BeeKeeper
                             </h1>
                             <Link 
-                                href={`${config.url.API_URL}/login`} 
+                                href={`${config.url.BROWSER_API}/login`} 
                                 className='bg-login text-dark px-5 rounded-xl cursor-pointer'
                             >
                                 Login
