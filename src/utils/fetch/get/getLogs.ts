@@ -1,7 +1,7 @@
-import { API, BROWSER_API } from "@parent/constants"
+import config from "@/constants"
 
-export default async function getContexts(location: 'server' | 'client'): Promise<ServiceAsList[]> {
-    const url = location === 'server' ? `${API}/contexts` : `${BROWSER_API}/contexts`
+export default async function getLogs(location: 'server' | 'client', path: 'global' | 'local'): Promise<(LocalLog | GlobalLog)[]> {
+    const url = location === 'server' ? `${config.url.API}/log/${path}` : `${process.env.NEXT_PUBLIC_BROWSER_API}/log/${path}`
 
     try {
         const response = await fetch(url, {

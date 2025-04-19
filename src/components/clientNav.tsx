@@ -1,17 +1,12 @@
 'use client'
 
-import { BROWSER_API } from "@parent/constants"
 import { sendLogout } from "@utils/user"
 import Image from "next/image"
 import Link from "next/link"
-import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { Burger } from "./burger"
 import ThemeSwitch from "./theme/themeSwitch"
 import { getCookie } from "@/utils/cookies"
-
-type MiddleIconProps = {
-    setActive: Dispatch<SetStateAction<boolean>>
-}
 
 // Displays the login icon or the profile icon depending on the login status
 export function RightIcon() {
@@ -28,7 +23,7 @@ export function RightIcon() {
             setHref(`/profile/${loggedIn}`)
             setIcon("/images/profile.svg")
         } else {
-            setHref(`${BROWSER_API}/login`)
+            setHref(`${process.env.NEXT_PUBLIC_BROWSER_API}/login`)
             setIcon("/images/join.svg")
         }
     }, [loggedIn])

@@ -1,21 +1,31 @@
 import { FastifyReply, FastifyRequest } from "fastify"
-import run from "../../db.js"
+import config from "../../constants.js"
+
+const { USER_ENDPOINT, AUTHENTIK_TOKEN } = config
 
 export default async function getUser(req: FastifyRequest, res: FastifyReply) {
-    const { name } = req.params as { name: string }
-
-    if (!name) {
-        return res.status(400).send({ error: "Missing username in parameters." })
+    const { email } = req.params as { email: string }
+    if (!email) {
+        return res.status(400).send({ error: "Missing ID." })
     }
 
     try {
-        const result = await run(`SELECT * FROM users WHERE name = $1`, [name])
-
-        if (result.rows.length === 0) {
-            return res.status(404).send({ error: `User '${name}' not found.` })
+        const response = await fetch(`${USER_ENDPOINT}?email=${email}`, {
+            headers: {
+                'Authorization': `Bearer ${AUTHENTIK_TOKEN}`,
+                'Content-Type': 'application/json'
+            }
+        })
+        if (!response.ok) {
+            throw new Error(await response.text())
         }
 
-        return res.send(result.rows[0])
+        const data = await response.json()
+        if ('results' in data && data.results.length) {
+            return res.send(data.results[0])
+        }
+
+        return res.status(400).send({ error: 'User not found' })
     } catch (error) {
         console.error(`Database error: ${JSON.stringify(error)}`)
         return res.status(500).send({ error: "Internal Server Error" })

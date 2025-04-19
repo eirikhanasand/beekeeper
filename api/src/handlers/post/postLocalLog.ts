@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify"
 import run from "../../db.js"
+import tokenWrapper from "../../utils/tokenWrapper.js"
 
 type PostLocalLogBody = { 
     context: string
@@ -13,6 +14,11 @@ type PostLocalLogBody = {
 
 export default async function postLocalLog(req: FastifyRequest, res: FastifyReply) {
     const { context, name, event, command, app, pod, status } = req.body as PostLocalLogBody || {}
+    const { valid } = await tokenWrapper(req, res)
+    if (!valid) {
+        return res.status(400).send({ error: "Unauthorized" })
+    }
+
     if (!context || !name || !event || !command || !status) {
         return res.status(400).send({ error: "Missing context, name, event, command, app, pod or status." })
     }

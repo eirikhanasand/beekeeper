@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify"
 import run from "../../db.js"
+import tokenWrapper from "../../utils/tokenWrapper.js"
 
 type PostGlobalLogBody = { 
     name: string
@@ -10,6 +11,11 @@ type PostGlobalLogBody = {
 
 export default async function postGlobalLog(req: FastifyRequest, res: FastifyReply) {
     const { name, event, command, status } = req.body as PostGlobalLogBody || {}
+    const { valid } = await tokenWrapper(req, res)
+    if (!valid) {
+        return res.status(400).send({ error: "Unauthorized" })
+    }
+
     if (!name || !event || !command || !status) {
         return res.status(400).send({ error: "Missing name, event, command or status." })
     }

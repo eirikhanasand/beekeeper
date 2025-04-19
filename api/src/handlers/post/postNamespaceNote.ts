@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify"
 import run from "../../db.js"
+import tokenWrapper from "../../utils/tokenWrapper.js"
 
 type PostNamespaceBody = { 
     context: string
@@ -10,6 +11,11 @@ type PostNamespaceBody = {
 
 export default async function postNamespaceNote(req: FastifyRequest, res: FastifyReply) {
     const { context, name, status, message } = req.body as PostNamespaceBody || {}
+    const { valid } = await tokenWrapper(req, res)
+    if (!valid) {
+        return res.status(400).send({ error: "Unauthorized" })
+    }
+
     if (!context || !name || !status || !message) {
         return res.status(400).send({ error: "Missing context, name, status or message." })
     }

@@ -1,4 +1,4 @@
-import getNamespaces from "@utils/fetch/getNamespaces"
+import getNamespaces from "@/utils/fetch/get/getNamespaces"
 import ToolTipsButton from "./toolTipsButton"
 import Header from "./header"
 import ProdOrDev from "./prodOrDev"

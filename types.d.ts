@@ -109,3 +109,52 @@ type LocalCommand = {
     reason: string
     timestamp: string
 }
+
+type User = {
+    pk: number
+    username: string
+    name: string
+    is_active: boolean
+    last_login: string
+    is_superuser: boolean
+    groups: string[]
+    groups_obj: Group[]
+    email: string
+    avatar: string
+    attributes: {}
+    uid: string
+    path: string
+    type: string
+    uuid: string
+    password_change_date: string
+}
+
+type Group = {
+    pk: string
+    num_pk: number
+    name: string
+    is_superuser: boolean
+    parent: string | null
+    parent_name: string | null
+    attributes: {}
+}
+
+type GlobalCommandWithUser = {
+    id: string
+    name: string
+    command: string
+    author: User
+    reason: string
+    timestamp: string
+}
+
+type LocalCommandWithUser = {
+    id: string
+    context: string
+    name: string
+    namespace: string
+    command: string
+    author: User
+    reason: string
+    timestamp: string
+}

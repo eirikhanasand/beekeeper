@@ -1,9 +1,9 @@
 import Link from "next/link"
 import Edit from "./edit"
 import Global from "./global"
-import getFormattedContexts from "@/utils/fetch/getFormattedContexts"
-import getSegmentedPathname from "@/utils/fetch/pathname"
-import getNamespaces from "@/utils/fetch/getNamespaces"
+import getFormattedContexts from "@/utils/fetch/get/getFormattedContexts"
+import getSegmentedPathname from "@/utils/fetch/get/pathname"
+import getNamespaces from "@/utils/fetch/get/getNamespaces"
 
 type HeaderProps = {
     path: string

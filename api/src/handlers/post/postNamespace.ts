@@ -1,9 +1,22 @@
 
 import { FastifyReply, FastifyRequest } from "fastify"
 import run from "../../db.js"
+import tokenWrapper from "../../utils/tokenWrapper.js"
+
+type PostNamespaceProps = { 
+    name: string, 
+    status: string, 
+    service_status: string, 
+    age: string
+}
 
 export default async function postNamespace(req: FastifyRequest, res: FastifyReply) {
-    const { name, status, service_status, age } = req.body as { name: string, status: string, service_status: string, age: string } || {}
+    const { name, status, service_status, age } = req.body as PostNamespaceProps || {}
+    const { valid } = await tokenWrapper(req, res)
+    if (!valid) {
+        return res.status(400).send({ error: "Unauthorized" })
+    }
+
     if (!name || !status || !service_status || !age) {
         return res.status(400).send({ error: "Missing name, status, service_status or age." })
     }

@@ -1,7 +1,7 @@
-import { API, BROWSER_API } from "@parent/constants"
+import config from "@/constants"
 
-export default async function getLocalCommands(location: 'server' | 'client', service: string): Promise<LocalCommand[]> {
-    const url = location === 'server' ? `${API}/commands/local` : `${BROWSER_API}/commands/local`
+export default async function getNamespaces(location: 'server' | 'client'): Promise<ServiceAsList[]> {
+    const url = location === 'server' ? `${config.url.API}/namespaces` : `${process.env.NEXT_PUBLIC_BROWSER_API}/namespaces`
 
     try {
         const response = await fetch(url, {
@@ -17,8 +17,8 @@ export default async function getLocalCommands(location: 'server' | 'client', se
             throw Error(data)
         }
     
-        const commands = await response.json()
-        return commands.filter((command: LocalCommand) => command.namespace.toLowerCase() === service)
+        const services = await response.json()
+        return services
     } catch (error) {
         console.error(error)
         return []

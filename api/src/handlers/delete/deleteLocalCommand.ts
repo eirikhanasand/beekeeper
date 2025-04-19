@@ -1,8 +1,14 @@
 import { FastifyReply, FastifyRequest } from "fastify"
 import run from "../../db.js"
+import tokenWrapper from "../../utils/tokenWrapper.js"
 
 export default async function deleteLocalCommand(req: FastifyRequest, res: FastifyReply) {
     const { id } = req.params as { id: string }
+    const { valid } = await tokenWrapper(req, res)
+    if (!valid) {
+        return res.status(400).send({ error: "Unauthorized" })
+    }
+
     try {
         const result = await run(`DELETE FROM local_commands WHERE id = $1`, [id])
 

@@ -1,8 +1,14 @@
 import { FastifyReply, FastifyRequest } from "fastify"
 import run from "../../db.js"
+import tokenWrapper from "../../utils/tokenWrapper.js"
 
 export default async function postGlobalCommand(req: FastifyRequest, res: FastifyReply) {
     const { name, command, author, reason } = req.body as { name: string, command: string, author: string, reason: string } || {}
+    const { valid } = await tokenWrapper(req, res)
+    if (!valid) {
+        return res.status(400).send({ error: "Unauthorized" })
+    }
+
     if (!name || !command || !author || !reason) {
         return res.status(400).send({ error: "Missing name, command, author or reason." })
     }

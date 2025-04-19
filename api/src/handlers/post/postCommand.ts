@@ -2,6 +2,7 @@ import { FastifyReply, FastifyRequest } from "fastify"
 import { exec } from "child_process"
 import run from "../../db.js"
 import path from "path"
+import tokenWrapper from "../../utils/tokenWrapper.js"
 
 type PostCommandBody = { 
     id: string
@@ -10,6 +11,11 @@ type PostCommandBody = {
 
 export default async function runCommand(req: FastifyRequest, res: FastifyReply) {
     const { type, id } = req.body as PostCommandBody || {}
+    const { valid } = await tokenWrapper(req, res)
+    if (!valid) {
+        return res.status(400).send({ error: "Unauthorized" })
+    }
+
     let command = "echo 'Command not found'"
     if (!type || !id) {
         return res.status(400).send({ error: "Missing id or type." })

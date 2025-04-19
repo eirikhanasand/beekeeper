@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify"
 import run from "../../db.js"
+import tokenWrapper from "../../utils/tokenWrapper.js"
 
 type PostLocalCommandProps = { 
     context: string
@@ -12,6 +13,11 @@ type PostLocalCommandProps = {
 
 export default async function postLocalCommand(req: FastifyRequest, res: FastifyReply) {
     const { context, name, namespace, command, author, reason } = req.body as PostLocalCommandProps || {}
+    const { valid } = await tokenWrapper(req, res)
+    if (!valid) {
+        return res.status(400).send({ error: "Unauthorized" })
+    }
+
     if (!context || !name || !namespace || !command || !author || !reason) {
         return res.status(400).send({ error: "Missing context, name, namespace, command, author or reason." })
     }

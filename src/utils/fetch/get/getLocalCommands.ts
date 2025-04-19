@@ -1,7 +1,7 @@
-import { API, BROWSER_API } from "@parent/constants"
+import config from "@/constants"
 
-export default async function getGlobalCommands(location: 'server' | 'client'): Promise<GlobalCommand[]> {
-    const url = location === 'server' ? `${API}/commands/global` : `${BROWSER_API}/commands/global`
+export default async function getLocalCommands(location: 'server' | 'client', service: string): Promise<LocalCommand[]> {
+    const url = location === 'server' ? `${config.url.API}/commands/local` : `${process.env.NEXT_PUBLIC_BROWSER_API}/commands/local`
 
     try {
         const response = await fetch(url, {
@@ -18,7 +18,7 @@ export default async function getGlobalCommands(location: 'server' | 'client'): 
         }
     
         const commands = await response.json()
-        return commands
+        return commands.filter((command: LocalCommand) => command.namespace.toLowerCase() === service)
     } catch (error) {
         console.error(error)
         return []

@@ -6,7 +6,7 @@ import { removeItem } from "./localStorage"
 export async function sendLogout(): Promise<Boolean | string> {
     try {
         // Removes user items from localstorage if the user wants to log out
-        removeItem('token')
+        removeItem('access_token')
         removeItem('name')
         removeItem('id')
         removeItem('groups')

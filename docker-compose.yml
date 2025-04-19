@@ -29,8 +29,8 @@ services:
     depends_on:
       - postgres
     environment:
-      API_URL: https://exam-api.login.no/api
-      BROWSER_API_URL: https://exam-api.login.no/api
+      API_URL: ${API_URL:-https://beekeeper-api.login.no/api}
+      BROWSER_API_URL: ${BROWSER_API_URL:-https://beekeeper-api.login.no/api}
       DOCTL_TOKEN: ${DOCTL_TOKEN}
       PRIVATE_TOKEN: ${PRIVATE_TOKEN}
       DB: ${DB}
@@ -42,6 +42,7 @@ services:
       CLIENT_SECRET: ${CLIENT_SECRET}
       REDIRECT_URI: ${REDIRECT_URI}
       BEEKEEPER_URL: ${BEEKEEPER_URL}
+      AUTHENTIK_TOKEN: ${AUTHENTIK_TOKEN}
 
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://localhost:8080/api"]

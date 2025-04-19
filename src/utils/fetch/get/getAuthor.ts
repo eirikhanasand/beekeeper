@@ -1,7 +1,7 @@
-import { API, BROWSER_API } from "@parent/constants"
+import config from "@/constants"
 
-export default async function getLogs(location: 'server' | 'client', path: 'global' | 'local'): Promise<(LocalLog | GlobalLog)[]> {
-    const url = location === 'server' ? `${API}/log/${path}` : `${BROWSER_API}/log/${path}`
+export default async function getAuthor(location: 'server' | 'client', email: string): Promise<User | null> {
+    const url = location === 'server' ? `${config.url.API}/user/${email}` : `${process.env.NEXT_PUBLIC_BROWSER_API}/user/${email}`
 
     try {
         const response = await fetch(url, {
@@ -18,10 +18,10 @@ export default async function getLogs(location: 'server' | 'client', path: 'glob
             throw Error(data.error)
         }
     
-        const services = await response.json()
-        return services
+        const user = await response.json()
+        return user
     } catch (error) {
         console.error(error)
-        return []
+        return null
     }
 }

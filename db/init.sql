@@ -104,9 +104,3 @@ CREATE TABLE IF NOT EXISTS local_commands (
     timestamp TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (context, namespace) REFERENCES namespaces(context, name)
 );
-
--- User table
-CREATE TABLE IF NOT EXISTS users (
-    id TEXT PRIMARY KEY,
-    name TEXT NOT NULL
-);

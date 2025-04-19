@@ -1,7 +1,6 @@
 import React from 'react'
 import LoggedOutServices from '@/components/root/loggedOutServices'
 import Link from 'next/link'
-import config from '@/constants'
 import { cookies } from 'next/headers'
 
 export default async function Home() {
@@ -23,7 +22,7 @@ export default async function Home() {
                                 BeeKeeper
                             </h1>
                             <Link 
-                                href={`${config.url.BROWSER_API}/login`} 
+                                href={`${process.env.NEXT_PUBLIC_BROWSER_API}/login`} 
                                 className='bg-login text-dark px-5 rounded-xl cursor-pointer'
                             >
                                 Login
