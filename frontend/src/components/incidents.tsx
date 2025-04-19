@@ -1,8 +1,8 @@
 import Link from "next/link"
 import ArrowOutward from "./svg/arrowOutward"
-import getSegmentedPathname from "@/utils/fetch/get/pathname"
+import getSegmentedPathname from "@/utils/pathname"
 import { headers } from "next/headers"
-import getIncidents from "@/utils/fetch/get/getIncidents"
+import getIncidents from "@/utils/fetch/namespace/getIncidents"
 
 export default async function Incidents() {
     const Headers = await headers()

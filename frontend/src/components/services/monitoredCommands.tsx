@@ -4,10 +4,10 @@ import { Dispatch, SetStateAction, useState } from "react"
 import Trash from "../svg/trash"
 import { getCookie } from "@/utils/cookies"
 import { useRouter } from "next/navigation"
-import putLocalCommand from "@/utils/fetch/put/putLocalCommand"
-import putGlobalCommand from "@/utils/fetch/put/putGlobalCommand"
-import deleteLocalCommand from "@/utils/fetch/delete/deleteLocalCommand"
-import deleteGlobalCommand from "@/utils/fetch/delete/deleteGlobalCommand"
+import putLocalCommand from "@/utils/fetch/localCommand/put"
+import putGlobalCommand from "@/utils/fetch/globalCommand/put"
+import deleteLocalCommand from "@/utils/fetch/localCommand/delete"
+import deleteGlobalCommand from "@/utils/fetch/globalCommand/delete"
 
 type MonitoredCommandsProps = {
     globalCommands: GlobalCommandWithUser[]

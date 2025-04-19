@@ -1,8 +1,8 @@
 import Link from "next/link"
 import Pulse from "../pulse"
 import { ServiceStatus } from "@/interfaces"
-import getSegmentedPathname from "@/utils/fetch/get/pathname"
-import getLogs from "@/utils/fetch/get/getLogs"
+import getSegmentedPathname from "@/utils/pathname"
+import getLogs from "@/utils/fetch/log/get"
 
 type ServicesProps = {
     services: ServiceAsList[]

@@ -1,5 +1,5 @@
-import getNamespaces from "@/utils/fetch/get/getNamespaces"
-import getLogs from "@/utils/fetch/get/getLogs"
+import getNamespaces from "@/utils/fetch/namespace/get"
+import getLogs from "@/utils/fetch/log/get"
 import { ServiceStatus } from "@/interfaces"
 import Pulse from "../pulse"
 

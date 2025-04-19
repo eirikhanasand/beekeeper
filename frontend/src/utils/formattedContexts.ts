@@ -1,6 +1,6 @@
-import getContexts from "./getContexts"
+import getContexts from "./fetch/context/get"
 
-export default async function getFormattedContexts() {
+export default async function formattedContexts() {
     const contexts = await getContexts('server')
     const formattedContexts = contexts.map((service) => {
         const name = service.name.split('-')[1]
