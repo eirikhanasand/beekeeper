@@ -1,8 +1,8 @@
 import { FastifyReply, FastifyRequest } from "fastify"
-import run from "../../db.js"
-import tokenWrapper from "../../utils/tokenWrapper.js"
+import run from "../../../db.js"
+import tokenWrapper from "../../../utils/tokenWrapper.js"
 
-export default async function deleteNamespaceNote(req: FastifyRequest, res: FastifyReply) {
+export default async function deleteNamespaceIncident(req: FastifyRequest, res: FastifyReply) {
     const { id } = req.params as { id: string }
     const { valid } = await tokenWrapper(req, res)
     if (!valid) {
@@ -10,7 +10,7 @@ export default async function deleteNamespaceNote(req: FastifyRequest, res: Fast
     }
 
     try {
-        const result = await run(`DELETE FROM namespace_notes WHERE id = $1`, [id])
+        const result = await run(`DELETE FROM namespace_incidents WHERE id = $1`, [id])
 
         return res.send(result.rows)
     } catch (error) {

@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify"
-import run from "../../db.js"
+import run from "../../../db.js"
 
 export default async function getNamespaceNotes(req: FastifyRequest, res: FastifyReply) {
     const { context, namespace } = req.params as { context: string, namespace: string }

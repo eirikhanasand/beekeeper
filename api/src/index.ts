@@ -1,7 +1,7 @@
 import cors from '@fastify/cors'
 import Fastify from 'fastify'
 import apiRoutes from './routes'
-import getIndexHandler from './handlers/get/getIndex'
+import getIndexHandler from './handlers/index/getIndex'
 
 const fastify = Fastify({
     logger: true

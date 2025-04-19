@@ -1,11 +1,11 @@
 import { FastifyReply, FastifyRequest } from "fastify"
-import run from "../../db.js"
+import run from "../../../db.js"
 
-export default async function getNamespaceIncidents(req: FastifyRequest, res: FastifyReply) {
+export default async function getNamespaceDomains(req: FastifyRequest, res: FastifyReply) {
     const { context, namespace } = req.params as { context: string, namespace: string }
     try {
         const result = await run(
-            `SELECT * FROM namespace_incidents WHERE context = $1 AND namespace = $2 ORDER BY timestamp DESC`,
+            `SELECT * FROM namespace_domains WHERE context = $1 AND namespace = $2 ORDER BY name;`, 
             [context, namespace]
         )
 
