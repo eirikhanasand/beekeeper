@@ -49,18 +49,18 @@ services:
       interval: 5s
       retries: 5
   
-  frontend:
-    container_name: frontend
-    image: beekeeper-frontend
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    depends_on:
-      - api
-    environment:
-      - API_URL=http://api:8080/api
+  # frontend:
+  #   container_name: frontend
+  #   image: beekeeper-frontend
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - api
+  #   environment:
+  #     - API_URL=http://api:8080/api
 
 volumes:
   postgres_data:

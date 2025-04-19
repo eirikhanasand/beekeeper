@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify"
-import run from "../../db.js"
-import tokenWrapper from "../../utils/tokenWrapper.js"
+import run from "../../../db.js"
+import tokenWrapper from "../../../utils/tokenWrapper.js"
 
 export default async function deleteGlobalCommand(req: FastifyRequest, res: FastifyReply) {
     const { id } = req.params as { id: string }

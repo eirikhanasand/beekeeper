@@ -1,9 +1,9 @@
 import { FastifyReply, FastifyRequest } from "fastify"
-import run from "../../db.js"
+import run from "../../../db.js"
 
-export default async function getGlobalCommands(_: FastifyRequest, res: FastifyReply) {
+export default async function getLocalCommands(_: FastifyRequest, res: FastifyReply) {
     try {
-        const commands = await run(`SELECT * FROM global_commands`, [])
+        const commands = await run(`SELECT * FROM local_commands`, [])
 
         return res.send(commands.rows)
     } catch (error) {

@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify"
-import run from "../../db.js"
-import tokenWrapper from "../../utils/tokenWrapper.js"
+import run from "../../../db.js"
+import tokenWrapper from "../../../utils/tokenWrapper.js"
 
 type PostGlobalLogBody = { 
     name: string
