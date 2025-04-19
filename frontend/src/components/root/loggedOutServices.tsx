@@ -1,6 +1,6 @@
 import getNamespaces from "@/utils/fetch/get/getNamespaces"
 import getLogs from "@/utils/fetch/get/getLogs"
-import { ServiceStatus } from "@parent/interfaces"
+import { ServiceStatus } from "@/interfaces"
 import Pulse from "../pulse"
 
 export default async function LoggedOutServices() {

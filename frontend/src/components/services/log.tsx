@@ -1,4 +1,4 @@
-import { ServiceStatus } from "@parent/interfaces"
+import { ServiceStatus } from "@/interfaces"
 import Pulse from "../pulse"
 
 type LogProps = {

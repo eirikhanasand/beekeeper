@@ -28,11 +28,11 @@
         }
     },
     "include": [
-        "next-env.d.ts", 
+        "frontend/next-env.d.ts", 
         "**/*.ts", 
         "**/*.tsx", 
         ".next/types/**/*.ts", 
-        "src/app/login/page.ts"
+        "frontend/src/app/login/page.ts"
     ],
     "exclude": ["node_modules"]
 }

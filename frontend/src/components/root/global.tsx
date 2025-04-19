@@ -1,6 +1,6 @@
 import Link from "next/link"
 import Pulse from "../pulse"
-import { ServiceStatus } from "@parent/interfaces"
+import { ServiceStatus } from "@/interfaces"
 import getLogs from "@/utils/fetch/get/getLogs"
 import getSegmentedPathname from "@/utils/fetch/get/pathname"
 import { headers } from "next/headers"

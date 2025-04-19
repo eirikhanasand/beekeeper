@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
 import Pulse from "./pulse"
-import { ServiceStatus } from "@parent/interfaces"
+import { ServiceStatus } from "@/interfaces"
 
 type DomainsClientProps = {
     domains: DomainsWithStatus[]

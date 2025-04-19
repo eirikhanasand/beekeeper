@@ -4,7 +4,7 @@ import getSegmentedPathname from "@/utils/fetch/get/pathname"
 import { headers } from "next/headers"
 import getDomains from "@/utils/fetch/get/getDomains"
 import Pulse from "./pulse"
-import { ServiceStatus } from "@parent/interfaces"
+import { ServiceStatus } from "@/interfaces"
 import DomainsClient from "./domainsClient"
 
 export default async function Domains() {

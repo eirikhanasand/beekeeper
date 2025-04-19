@@ -1,4 +1,4 @@
-import { ServiceStatus } from "@parent/interfaces"
+import { ServiceStatus } from "@/interfaces"
 import { ReactNode } from "react"
 
 type PulseProps = {

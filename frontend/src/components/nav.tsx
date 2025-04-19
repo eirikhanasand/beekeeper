@@ -3,7 +3,7 @@ import Link from 'next/link'
 import ToolTips from './root/toolTips'
 import Menu from './menu'
 import { RightSide } from './clientNav'
-import ArrowOutward from '@components/svg/arrowOutward'
+import ArrowOutward from '@/components/svg/arrowOutward'
 
 export default function Navbar() {
     return (
