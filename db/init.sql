@@ -43,11 +43,12 @@ CREATE TABLE IF NOT EXISTS namespaces (
 CREATE TABLE IF NOT EXISTS namespace_notes (
     id SERIAL PRIMARY KEY,
     context TEXT NOT NULL,
-    name TEXT NOT NULL,
+    namespace TEXT NOT NULL,
     status TEXT NOT NULL,
     message TEXT NOT NULL,
+    author TEXT NOT NULL,
     timestamp TIMESTAMP NOT NULL DEFAULT NOW(),
-    FOREIGN KEY (context, name) REFERENCES namespaces(context, name)
+    FOREIGN KEY (context, namespace) REFERENCES namespaces(context, name)
 );
 
 -- Pods
@@ -101,6 +102,27 @@ CREATE TABLE IF NOT EXISTS local_commands (
     command TEXT NOT NULL,
     author TEXT NOT NULL,
     reason TEXT NOT NULL,
+    timestamp TIMESTAMP NOT NULL DEFAULT NOW(),
+    FOREIGN KEY (context, namespace) REFERENCES namespaces(context, name)
+);
+
+-- Namespace domains
+CREATE TABLE IF NOT EXISTS namespace_domains (
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    url TEXT NOT NULL,
+    context TEXT NOT NULL,
+    namespace TEXT NOT NULL,
+    FOREIGN KEY (context, namespace) REFERENCES namespaces(context, name)
+);
+
+-- Namespace incidents
+CREATE TABLE IF NOT EXISTS namespace_incidents (
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    url TEXT NOT NULL,
+    context TEXT NOT NULL, 
+    namespace TEXT NOT NULL,
     timestamp TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (context, namespace) REFERENCES namespaces(context, name)
 );

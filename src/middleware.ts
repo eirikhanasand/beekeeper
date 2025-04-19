@@ -49,7 +49,7 @@ function pathIsAllowedWhileUnauthenticated(path: string) {
 }
 
 async function tokenIsValid(req: NextRequest, token: string): Promise<boolean> {
-    const authResponse = await fetch('https://beekeeper-api.login.no/api/token', {
+    const authResponse = await fetch(`${process.env.NEXT_PUBLIC_BROWSER_API}/token`, {
         headers: { Authorization: `Bearer ${token}` }
     })
 

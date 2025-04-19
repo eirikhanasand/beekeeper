@@ -158,3 +158,29 @@ type LocalCommandWithUser = {
     reason: string
     timestamp: string
 }
+
+type Incident = {
+    id: string
+    name: string
+    url: string
+    context: string
+    namespace: string
+    timestamp: string
+}
+
+type Domain = {
+    id: string
+    name: string
+    url: string
+    context: string
+    namespace: string
+}
+
+type DomainsWithStatus = {
+    id: string
+    name: string
+    url: string
+    context: string
+    namespace: string
+    status: number
+}

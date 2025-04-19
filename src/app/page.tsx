@@ -2,10 +2,12 @@ import React from 'react'
 import LoggedOutServices from '@/components/root/loggedOutServices'
 import Link from 'next/link'
 import { cookies } from 'next/headers'
+import Note from '@/components/note'
 
 export default async function Home() {
     const Cookies = await cookies()
-    const imposter = Cookies.get('imposter')?.value || false
+    const imposter = Boolean(Cookies.get('imposter')?.value)
+    const invalidToken = Boolean(Cookies.get('invalidToken')?.value)
     return (
         <div className='grid grid-cols-12 gap-2 w-full h-full max-h-full'>
             <div className='hidden rounded-xl lg:grid col-span-3 sm:col-span-2 max-h-[calc((100vh-var(--h-navbar))-1rem)]'>
@@ -13,9 +15,8 @@ export default async function Home() {
             </div>
             <div className='col-span-10 overflow-auto grid grid-cols-12 gap-2 max-h-[calc((100vh-var(--h-navbar))-1rem)]'>
                 <div className={`w-full col-span-9 max-h-full overflow-auto noscroll grid gap-2`}>
-                    {imposter && <div className='absolute mt-2 w-full h-[5vh] left-0 grid place-items-center'>
-                        <h1 className='bg-red-500/30 p-2 px-40 rounded-xl'>Denne tjenesten er kun for TekKom.</h1>
-                    </div>}
+                    <Note display={imposter} note="This service is only for TekKom." />
+                    <Note display={invalidToken} note="Reauthentication required." />
                     <div className="w-full h-full min-h-[91.7vh] grid place-items-center gap-2 col-span-6 bg-darker rounded-xl">
                         <div className='grid place-items-center h-[10vh]'>
                             <h1 className='text-2xl text-login font-semibold'>

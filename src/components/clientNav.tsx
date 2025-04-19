@@ -1,12 +1,12 @@
 'use client'
 
-import { sendLogout } from "@utils/user"
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { Burger } from "./burger"
 import ThemeSwitch from "./theme/themeSwitch"
 import { getCookie } from "@/utils/cookies"
+import { useRouter } from "next/navigation"
 
 // Displays the login icon or the profile icon depending on the login status
 export function RightIcon() {
@@ -47,6 +47,7 @@ export function RightIcon() {
 export function MiddleIcon() {
     const icon = "/images/logout.svg"
     const [loggedIn, setLoggedIn] = useState(false)
+    const router = useRouter()
 
     useEffect(() => {
         const token = getCookie('access_token')
@@ -57,7 +58,7 @@ export function MiddleIcon() {
 
     function handleClick() {
         if (loggedIn) {
-            sendLogout()
+            router.push('/logout')
         }
     }
 

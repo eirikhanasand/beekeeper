@@ -2,31 +2,32 @@ import { FastifyReply, FastifyRequest } from "fastify"
 import run from "../../db.js"
 import tokenWrapper from "../../utils/tokenWrapper.js"
 
-type PostNamespaceBody = { 
+type PostNamespaceNoteProps = { 
     context: string
-    name: string
+    namespace: string
     status: string
     message: string
+    author: string
 }
 
 export default async function postNamespaceNote(req: FastifyRequest, res: FastifyReply) {
-    const { context, name, status, message } = req.body as PostNamespaceBody || {}
+    const { context, namespace, status, message, author } = req.body as PostNamespaceNoteProps || {}
     const { valid } = await tokenWrapper(req, res)
     if (!valid) {
         return res.status(400).send({ error: "Unauthorized" })
     }
 
-    if (!context || !name || !status || !message) {
-        return res.status(400).send({ error: "Missing context, name, status or message." })
+    if (!context || !namespace || !status || !message || !author) {
+        return res.status(400).send({ error: "Missing context, namespace, status, message or author." })
     }
 
     try {
-        console.log(`Adding namespace note: context=${context} name=${name}, status=${status}, message=${message}`)
+        console.log(`Adding namespace note: context=${context} namespace=${namespace}, status=${status}, message=${message} author=${author}`)
 
         await run(
             `INSERT INTO namespace_notes (context, name, status, message) 
              SELECT $1, $2, $3, $4;`, 
-            [context, name, status, message]
+            [context, namespace, status, message, author]
         )
 
         return res.send({ message: `Successfully added namespace note to notes.` })

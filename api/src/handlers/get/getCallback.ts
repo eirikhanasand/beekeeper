@@ -3,13 +3,12 @@ import config from "../../constants"
 
 const { TOKEN_URL, CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, USERINFO_URL, BEEKEEPER_URL } = config
 
-
 /**
  * Callback route to exchange code for token
  * @param req Request
  * @param res Response
  */
-export async function getCallback(req: FastifyRequest, res: FastifyReply): Promise<any> {
+export default async function getCallback(req: FastifyRequest, res: FastifyReply): Promise<any> {
     const { code } = req.query as { code: string }
 
     if (!code) {

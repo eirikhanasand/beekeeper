@@ -61,26 +61,27 @@ export default function ToolTips() {
         <div className="w-full h-full fixed left-0 top-0 grid place-items-center bg-black bg-opacity-90 z-10" onClick={() => setDisplayTips(false)}>
             <div className="w-[55vw] h-[63vh] bg-normal rounded-xl p-8 overflow-auto noscroll">
                 <h1 className="w-full text-center text-xl font-semibold mb-2">Tooltips</h1>
+                <h1 className="w-full text-center text-almostbright">This section is not implemented yet.</h1>
                 <div className="grid grid-cols-2">
                     <div className="w-full">
                         <Tips hotkey="Q" info="Displays this message" />
-                        <Tips hotkey="W" info="Selects the first or next alternative" />
-                        <Tips hotkey="A" info="Go to the previous question" />
+                        {/* <Tips hotkey="W" info="Selects the first or next alternative" /> */}
+                        {/* <Tips hotkey="A" info="Go to the previous question" />
                         <Tips hotkey="B" info="Go to the previous question" />
                         <Tips hotkey="P" info="Go to the previous question" />
                         <Tips hotkey="S" info="Skip this question" />
                         <Tips hotkey="S" extraHotKey="Shift" info="Selects the previous alternative" />
-                        <Tips hotkey="D" info="Submits the selected answer" />
+                        <Tips hotkey="D" info="Submits the selected answer" /> */}
                     </div>
                     <div className="w-full">
-                        <Tips hotkey="1-9" info="Selects and submits alternative 1-9" />
-                        <Tips hotkey="0" info="Selects and submits alternative 10" />
-                        <Tips hotkey="ArrowUp" info="Selects the first or next alternative" />
+                        {/* <Tips hotkey="1-9" info="Selects and submits alternative 1-9" />
+                        <Tips hotkey="0" info="Selects and submits alternative 10" /> */}
+                        {/* <Tips hotkey="ArrowUp" info="Selects the first or next alternative" />
                         <Tips hotkey="ArrowDown" info="Selects the previous alternative" />
                         <Tips hotkey="ArrowLeft" info="Go to the previous question" />
-                        <Tips hotkey="ArrowRight" info="Submit the selected answer" />
-                        <Tips hotkey="Enter" info="Submit the selected answer" />
-                        <Tips hotkey="N" info="Submit the selected answer" />
+                        <Tips hotkey="ArrowRight" info="Submit the selected answer" /> */}
+                        {/* <Tips hotkey="Enter" info="Submit the selected answer" />
+                        <Tips hotkey="N" info="Submit the selected answer" /> */}
                     </div>
                 </div>
             </div>

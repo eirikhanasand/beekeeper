@@ -8,10 +8,11 @@ import getGlobalCommands from '@/utils/fetch/get/getGlobalCommands'
 import getLocalCommands from '@/utils/fetch/get/getLocalCommands'
 import Pulse from '@/components/pulse'
 import { ServiceStatus } from '@parent/interfaces'
-import ArrowOutward from '@/components/svg/arrowOutward'
-import Link from 'next/link'
 import { cookies } from 'next/headers'
 import getAuthor from '@/utils/fetch/get/getAuthor'
+import Note from '@/components/note'
+import Incidents from '@/components/incidents'
+import Domains from '@/components/domains'
 
 export default async function Service({params}: {params: Promise<{ id: string[] }>}) {
     const id = (await params).id[1]
@@ -25,7 +26,9 @@ export default async function Service({params}: {params: Promise<{ id: string[] 
     }))) as LocalCommandWithUser[]
 
     const filteredLogs = isGlobal ? logs : logs.filter((log) => log.command.includes(`-n ${id}`))
-    const filteredGlobalCommands = isGlobal ? globalCommands.filter((command) => !command.command.includes('{namespace}')) : globalCommands.filter((command) => command.command.includes('{namespace}'))
+    const filteredGlobalCommands = isGlobal 
+        ? globalCommands.filter((command) => !command.command.includes('{namespace}'))
+        : globalCommands.filter((command) => command.command.includes('{namespace}'))
     const filteredLocalCommands = localCommands.filter((command) => command.command.includes(`-n ${id}`))
     const buttonStyle = "bg-light w-full rounded-lg py-1 text-start flex justify-between items-center px-2 cursor-pointer"
     const Cookies = await cookies()
@@ -35,6 +38,7 @@ export default async function Service({params}: {params: Promise<{ id: string[] 
 
     return (
         <div className='grid grid-cols-12 gap-2 w-full h-full max-h-full'>
+            <Note display={true} note="This service is only for TekKom." />
             <div className='hidden rounded-xl lg:grid col-span-3 sm:col-span-2 max-h-[calc((100vh-var(--h-navbar))-1rem)]'>
                 <Services />
             </div>
@@ -62,15 +66,12 @@ export default async function Service({params}: {params: Promise<{ id: string[] 
                     <div className="w-full h-full rounded-xl bg-darker p-2">
                         <h1 className='text-superlight text-center pb-2'>This section is not implemented yet.</h1>
                         <div className="flex flex-col gap-2 h-full">
-                            <button className={buttonStyle}>Domain status<Pulse status={ServiceStatus.OPERATIONAL} /></button>
+                            <Domains />
                             <button className={buttonStyle}>Pods<Pulse status={ServiceStatus.OPERATIONAL} /></button>
                             <button className={buttonStyle}>Ingress<Pulse status={ServiceStatus.OPERATIONAL} /></button>
                             <button className={buttonStyle}>Service<Pulse status={ServiceStatus.OPERATIONAL} /></button>
                             <button className={buttonStyle}>PDB<Pulse status={ServiceStatus.OPERATIONAL} /></button>
-                            <Link
-                                href="https://wiki.login.no/tekkom/projects/infrastructure/incident" 
-                                className={buttonStyle}>Incidents<ArrowOutward className=' w-[1rem] h-[1rem] fill-login'/>
-                            </Link>
+                            <Incidents />
                         </div>
                     </div>
                 </div>

@@ -77,7 +77,7 @@ export default function Terminal({namespace, command, name: Name, reason: Reason
         }
 
         const token = getCookie('access_token')
-        const author = getCookie('id')
+        const author = getCookie('email')
         if (!token || !author) {
             return router.push('/logout')
         }

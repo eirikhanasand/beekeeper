@@ -12,7 +12,6 @@ type PostGlobalCommandProps = {
 
 export default async function postGlobalCommand({ router, token, name, command, author, reason }: PostGlobalCommandProps): Promise<number> {    
     try {
-        console.log("sending", { token, name, command, author, reason }, "to", `${process.env.NEXT_PUBLIC_BROWSER_API}/commands/global`)
         const response = await fetch(`${process.env.NEXT_PUBLIC_BROWSER_API}/commands/global`, {
             method: 'POST',
             headers: {
