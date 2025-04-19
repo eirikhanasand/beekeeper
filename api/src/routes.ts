@@ -45,51 +45,69 @@ import deleteNamespaceIncident from './handlers/namespace/incident/delete'
 import { FastifyInstance, FastifyPluginOptions } from "fastify"
 
 export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPluginOptions) {
-    // GET handlers
+    // index
     fastify.get("/", getIndex)
     fastify.get('/health', getHealth)
+    fastify.get('/version', getVersion)
+
+    // context
     fastify.get('/contexts', getContexts)
-    fastify.get('/commands/global', getGlobalCommands)
-    fastify.get('/commands/local', getLocalCommands)
-    fastify.get('/log/local', getLocalLog)
-    fastify.get('/log/global', getGlobalLog)
+
+    fastify.post('/contexts', postContext)
+
+    // namespace
+    fastify.get('/namespaces', getNamespaces)
     fastify.get('/namespaces/notes/:context/:namespace', getNamespaceNotes)
     fastify.get('/namespaces/domains/:context/:namespace', getNamespaceDomains)
     fastify.get('/namespaces/incidents/:context/:namespace', getNamespaceIncidents)
-    fastify.get('/namespaces', getNamespaces)
-    fastify.get('/pods', getPods)
-    fastify.get('/user/:email', getUser)
-    fastify.get('/users', getUsers)
-    fastify.get('/login', getLogin)
-    fastify.get('/callback', getCallback)
-    fastify.get('/version', getVersion)
-    fastify.get('/token', getToken)
 
-    // POST handlers
-    fastify.post('/contexts', postContext)
-    fastify.post('/command', postCommand)
-    fastify.post('/commands/global', postGlobalCommand)
-    fastify.post('/commands/local', postLocalCommand)
-    fastify.post('/log/global', postGlobalLog)
-    fastify.post('/log/local', postLocalLog)
     fastify.post('/namespaces', postNamespace)
     fastify.post('/namespaces/notes', postNamespaceNote)
     fastify.post('/namespaces/domains', postNamespaceDomain)
     fastify.post('/namespaces/incidents', postNamespaceIncident)
-    fastify.post('/pods', postPod)
-    fastify.post('/user', postUser)
 
-    // PUT handlers 
-    fastify.put('/commands/local', putLocalCommand)
-    fastify.put('/commands/global', putGlobalCommand)
     fastify.put('/namespaces/notes', putNamespaceNote)
     fastify.put('/namespaces/domains', putNamespaceDomain)
     fastify.put('/namespaces/incidents', putNamespaceIncident)
 
-    // DELETE handlers
-    fastify.delete('/commands/local', deleteLocalCommand)
-    fastify.delete('/commands/global', deleteGlobalCommand)
     fastify.delete('/namespaces/notes', deleteNamespaceNote)
     fastify.delete('/namespaces/domains', deleteNamespaceDomain)
     fastify.delete('/namespaces/incidents', deleteNamespaceIncident)
+
+    // log
+    fastify.get('/log/local', getLocalLog)
+    fastify.get('/log/global', getGlobalLog)
+
+    fastify.post('/log/global', postGlobalLog)
+    fastify.post('/log/local', postLocalLog)
+
+    // command 
+    fastify.get('/commands/global', getGlobalCommands)
+    fastify.get('/commands/local', getLocalCommands)
+
+    fastify.post('/command', postCommand)
+    fastify.post('/commands/global', postGlobalCommand)
+    fastify.post('/commands/local', postLocalCommand)
+
+    fastify.put('/commands/local', putLocalCommand)
+    fastify.put('/commands/global', putGlobalCommand)
+
+    fastify.delete('/commands/local', deleteLocalCommand)
+    fastify.delete('/commands/global', deleteGlobalCommand)
+
+    // pod
+    fastify.get('/pods', getPods)
+    
+    fastify.post('/pods', postPod)
+
+    // user
+    fastify.get('/user/:email', getUser)
+    fastify.get('/users', getUsers)
+    fastify.get('/token', getToken)
+
+    fastify.post('/user', postUser)
+    
+    // login
+    fastify.get('/login', getLogin)
+    fastify.get('/callback', getCallback)
 }
