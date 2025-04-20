@@ -126,3 +126,12 @@ CREATE TABLE IF NOT EXISTS namespace_incidents (
     timestamp TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (context, namespace) REFERENCES namespaces(context, name)
 );
+
+-- Service messages
+CREATE TABLE IF NOT EXISTS service_messages (
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    author TEXT NOT NULL,
+    status TEXT NOT NULL,
+    timestamp TIMESTAMP NOT NULL DEFAULT NOW(),
+);
