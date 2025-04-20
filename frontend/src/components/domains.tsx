@@ -1,28 +1,35 @@
-import Link from "next/link"
-import ArrowOutward from "./svg/arrowOutward"
 import getSegmentedPathname from "@/utils/pathname"
-import { headers } from "next/headers"
-import getDomains from "@/utils/fetch/namespace/getDomains"
-import Pulse from "./pulse"
-import { ServiceStatus } from "@/interfaces"
+import { cookies, headers } from "next/headers"
+import getDomains from "@/utils/fetch/namespace/domain/get"
 import DomainsClient from "./domainsClient"
+import getContexts from "@/utils/fetch/context/get"
 
 export default async function Domains() {
     const Headers = await headers()
+    const Cookies = await cookies()
     const path = Headers.get('x-current-path') || ''
     const segmentedPathname = getSegmentedPathname(path)
-    const context = segmentedPathname[1]
+    const pathContext = segmentedPathname[1]
+    const contexts = (await getContexts('server')).map((context) => context.name)
+    const context = contexts.find((serverContext) => serverContext.includes(pathContext)) || 'prod'
     const namespace = segmentedPathname[2] || ''
     const domains = await getDomains('server', context, namespace)
-    const buttonStyle = "bg-light w-full rounded-lg py-1 text-start flex justify-between items-center px-2 cursor-pointer text-almostbright"
     const domainsWithStatus = await Promise.all(domains.map(async(domain) => {
         const response = await fetch(domain.url)
         return {...domain, status: response.status}
     }))
+    const domain = Cookies.get('domain')?.value || ""
+    const domainURL = Cookies.get('domainURL')?.value || ""
 
     return (
         <div className="bg-light w-full rounded-lg py-1 text-start px-2 cursor-pointer">
-            <DomainsClient domains={domainsWithStatus} />
+            <DomainsClient 
+                context={context}
+                namespace={namespace} 
+                domains={domainsWithStatus} 
+                domain={domain}
+                domainURL={domainURL}
+            />
         </div>
     )
 }

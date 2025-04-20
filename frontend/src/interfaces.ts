@@ -1,5 +1,6 @@
 export enum ServiceStatus {
     OPERATIONAL = 'operational',
     DEGRADED = 'degraded',
-    DOWN = 'down'
+    DOWN = 'down',
+    INACTIVE = 'inactive',
 }

@@ -15,7 +15,8 @@ export default function Pulse({ status, outerWidth, outerHeight, innerWidth, inn
     const color = {
         operational: 'bg-green-500',
         degraded: 'bg-login',
-        down: 'bg-red-500'
+        down: 'bg-red-500',
+        inactive: 'bg-extralight',
     }[status] || 'bg-gray-500'
 
     const OuterWidth = outerWidth ? outerWidth : "w-3"

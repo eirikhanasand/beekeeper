@@ -38,7 +38,6 @@ export default async function Service({params}: {params: Promise<{ id: string[] 
 
     return (
         <div className='grid grid-cols-12 gap-2 w-full h-full max-h-full'>
-            <Note display={true} note="This service is only for TekKom." />
             <div className='hidden rounded-xl lg:grid col-span-3 sm:col-span-2 max-h-[calc((100vh-var(--h-navbar))-1rem)]'>
                 <Services />
             </div>
@@ -64,14 +63,14 @@ export default async function Service({params}: {params: Promise<{ id: string[] 
                 </div>
                 <div className='hidden xl:inline-flex flex-col w-full h-full rounded-xl col-span-3 overflow-hidden'>
                     <div className="w-full h-full rounded-xl bg-darker p-2">
-                        <h1 className='text-superlight text-center pb-2'>This section is not implemented yet.</h1>
                         <div className="flex flex-col gap-2 h-full">
                             <Domains />
+                            <Incidents />
+                            <h1 className='text-superlight text-center'>Below items are planned but not implemented yet.</h1>
                             <button className={buttonStyle}>Pods<Pulse status={ServiceStatus.OPERATIONAL} /></button>
                             <button className={buttonStyle}>Ingress<Pulse status={ServiceStatus.OPERATIONAL} /></button>
                             <button className={buttonStyle}>Service<Pulse status={ServiceStatus.OPERATIONAL} /></button>
                             <button className={buttonStyle}>PDB<Pulse status={ServiceStatus.OPERATIONAL} /></button>
-                            <Incidents />
                         </div>
                     </div>
                 </div>

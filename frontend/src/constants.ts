@@ -14,5 +14,3 @@ const config = {
 }
 
 export default config
-
-console.log("denne", process.env.NEXT_PUBLIC_BROWSER_API)

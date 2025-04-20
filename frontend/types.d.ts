@@ -176,6 +176,21 @@ type Domain = {
     namespace: string
 }
 
+type DomainWithoutID = {
+    name: string
+    url: string
+    context: string
+    namespace: string
+}
+
+type IncidentWithoutID = {
+    name: string
+    url: string
+    timestamp: string
+    context: string
+    namespace: string
+}
+
 type DomainsWithStatus = {
     id: string
     name: string

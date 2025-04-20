@@ -43,6 +43,7 @@ import deleteNamespaceDomain from './handlers/namespace/domain/delete'
 import deleteNamespaceIncident from './handlers/namespace/incident/delete'
 
 import { FastifyInstance, FastifyPluginOptions } from "fastify"
+import getNamespaceDomainsByNamespace from './handlers/namespace/domain/getByNamespace'
 
 export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPluginOptions) {
     // index
@@ -58,7 +59,8 @@ export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPlug
     // namespace
     fastify.get('/namespaces', getNamespaces)
     fastify.get('/namespaces/notes/:context/:namespace', getNamespaceNotes)
-    fastify.get('/namespaces/domains/:context/:namespace', getNamespaceDomains)
+    fastify.get('/namespaces/domains/:context', getNamespaceDomains)
+    fastify.get('/namespaces/domains/:context/:namespace', getNamespaceDomainsByNamespace)
     fastify.get('/namespaces/incidents/:context/:namespace', getNamespaceIncidents)
 
     fastify.post('/namespaces', postNamespace)
