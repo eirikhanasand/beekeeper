@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { setCookie } from './utils/cookies'
+import pathIsAllowedWhileUnauthenticated from './utils/pathIsAllowedWhileUnauthenticated'
 
 export async function middleware(req: NextRequest) {
     const tokenCookie = req.cookies.get('access_token')
@@ -26,26 +27,6 @@ export async function middleware(req: NextRequest) {
     res.headers.set('x-theme', theme)
     res.headers.set('x-current-path', req.nextUrl.pathname)
     return res
-}
-
-function pathIsAllowedWhileUnauthenticated(path: string) {
-    if (path === '/' || path === '/favicon.ico') {
-        return true
-    }
-
-    if (
-        path.startsWith('/_next/static/chunks/')
-        || path.startsWith('/_next/static/css/')
-        || path.startsWith('/_next/image')
-        || path.startsWith('/images/')
-        || path.startsWith('/login')
-        || path.startsWith('/logout')
-        || path.startsWith('/_next/webpack-hmr')
-    ) {
-        return true
-    }
-
-    return false
 }
 
 async function tokenIsValid(req: NextRequest, token: string): Promise<boolean> {

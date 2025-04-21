@@ -2,7 +2,6 @@ export default async function postIncident(incident: IncidentWithoutID): Promise
     const url =  `${process.env.NEXT_PUBLIC_BROWSER_API}/namespaces/incidents`
 
     try {
-        console.log("posting", incident)
         const response = await fetch(url, {
             method: 'POST',
             headers: {

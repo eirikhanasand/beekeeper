@@ -2,8 +2,8 @@
 
 import { getCookie, removeCookie, setCookie } from "@/utils/cookies"
 import getSegmentedPathname from "@/utils/pathname"
-import postGlobalCommand from "@/utils/fetch/globalCommand/post"
-import postLocalCommand from "@/utils/fetch/localCommand/post"
+import postGlobalCommand from "@/utils/fetch/command/global/post"
+import postLocalCommand from "@/utils/fetch/command/local/post"
 import { usePathname, useRouter } from "next/navigation"
 import { ChangeEvent, useEffect, useRef, useState } from "react"
 

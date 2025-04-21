@@ -199,3 +199,29 @@ type DomainsWithStatus = {
     namespace: string
     status: number
 }
+
+type ServiceMessage = {
+    id: string
+    title: string
+    author: string
+    status: string
+    content: string
+    timestamp: string
+}
+
+type BaseServiceMessage = {
+    title: string
+    author: string
+    status: string
+    content: string
+}
+
+type Pod = {
+    name: string
+    ready: string
+    status: string
+    restarts: string
+    age: string
+    context: string
+    namespace: string
+}

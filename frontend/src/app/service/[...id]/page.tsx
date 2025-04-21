@@ -4,15 +4,17 @@ import Logs from '@/components/services/logs'
 import getLogs from '@/utils/fetch/log/get'
 import Terminal from '@/components/services/terminal'
 import MonitoredCommands from '@/components/services/monitoredCommands'
-import getGlobalCommands from '@/utils/fetch/globalCommand/get'
-import getLocalCommands from '@/utils/fetch/localCommand/get'
+import getGlobalCommands from '@/utils/fetch/command/global/get'
+import getLocalCommands from '@/utils/fetch/command/local/get'
 import Pulse from '@/components/pulse'
 import { ServiceStatus } from '@/interfaces'
 import { cookies } from 'next/headers'
 import getAuthor from '@/utils/fetch/user/getUser'
-import Note from '@/components/note'
 import Incidents from '@/components/incidents'
 import Domains from '@/components/domains'
+import Link from 'next/link'
+import Pods from '@/components/pods'
+import Ingress from '@/components/ingress'
 
 export default async function Service({params}: {params: Promise<{ id: string[] }>}) {
     const id = (await params).id[1]
@@ -61,18 +63,23 @@ export default async function Service({params}: {params: Promise<{ id: string[] 
                         />
                     </div>
                 </div>
-                <div className='hidden xl:inline-flex flex-col w-full h-full rounded-xl col-span-3 overflow-hidden'>
-                    <div className="w-full h-full rounded-xl bg-darker p-2">
-                        <div className="flex flex-col gap-2 h-full">
+                <div className='flex flex-col w-full h-full rounded-xl col-span-3 gap-2'>
+                    <div className="w-full h-full rounded-xl bg-darker p-2 overflow-auto noscroll max-h-[87vh]">
+                        <div className="flex flex-col gap-2">
                             <Domains />
                             <Incidents />
+                            <Pods />
+                            <Ingress />
                             <h1 className='text-superlight text-center'>Below items are planned but not implemented yet.</h1>
-                            <button className={buttonStyle}>Pods<Pulse status={ServiceStatus.OPERATIONAL} /></button>
-                            <button className={buttonStyle}>Ingress<Pulse status={ServiceStatus.OPERATIONAL} /></button>
-                            <button className={buttonStyle}>Service<Pulse status={ServiceStatus.OPERATIONAL} /></button>
-                            <button className={buttonStyle}>PDB<Pulse status={ServiceStatus.OPERATIONAL} /></button>
+                            <button className={buttonStyle}>Flux<Pulse status={ServiceStatus.OPERATIONAL} /></button>
+                            <button className={buttonStyle}>Version status<Pulse status={ServiceStatus.OPERATIONAL} /></button>
+                            <button className={buttonStyle}>Commit history</button>
                         </div>
                     </div>
+                    <Link href='/service/message' className="w-full p-2 bg-darker rounded-xl flex">
+                        <h1 className="px-2 bg-superlight rounded-lg grid place-items-center mr-2">S</h1>
+                        <h1 className="grid place-items-center">Service Status</h1>
+                    </Link>
                 </div>
             </div>
         </div>

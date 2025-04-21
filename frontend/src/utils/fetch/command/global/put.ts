@@ -13,7 +13,6 @@ type PutGlobalCommandProps = {
 
 export default async function putGlobalCommand({ router, token, id, name, command, author, reason }: PutGlobalCommandProps): Promise<number> {    
     try {
-        console.log("sending", { token, id, name, command, author, reason }, "to", `PUT ${process.env.NEXT_PUBLIC_BROWSER_API}/commands/global`)
         const response = await fetch(`${process.env.NEXT_PUBLIC_BROWSER_API}/commands/global`, {
             method: 'PUT',
             headers: {

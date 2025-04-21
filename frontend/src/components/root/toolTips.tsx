@@ -1,9 +1,12 @@
 'use client'
 
+import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
 export default function ToolTips() {
-    const [displayTips, setDisplayTips] = useState(false)
+    const [display, setDisplay] = useState(false)
+    const path = usePathname()
+    const router = useRouter()
 
     useEffect(() => {
         function handleKeyDown(e: KeyboardEvent) {
@@ -12,14 +15,21 @@ export default function ToolTips() {
                 return
             }
 
-            if (e.key === 'q' || e.key === 'Q') {
-                setDisplayTips(prevDisplayTips => !prevDisplayTips)
+            const key = e.key.toLowerCase()
+            if (key === 'q') {
+                setDisplay(prevDisplay => !prevDisplay)
                 localStorage.setItem('tooltips', 'false')
             }
-
-            // if (e.key === 'n' && ) {
-            //     setDisplayTips(false)
-            // }
+            if (key === 's') {
+                setDisplay(false)
+                localStorage.setItem('tooltips', 'false')
+                if (!path.includes('/service/message')) {
+                    router.push('/service/message')
+                }
+            }
+            if (path.includes('/service/message') && key === 'b') {
+                router.push('/service/prod/global')
+            }
         }
 
         window.addEventListener('keydown', handleKeyDown)
@@ -27,20 +37,20 @@ export default function ToolTips() {
         return () => {
             window.removeEventListener('keydown', handleKeyDown)
         }
-    }, [])
+    }, [display, path])
 
     useEffect(() => {
         function checkTooltips() {
             const tooltips = localStorage.getItem('tooltips')
             if (tooltips === 'true') {
-                setDisplayTips(true)
+                setDisplay(true)
             }
         }
 
         function handleStorageChange(e: Event) {
             const event = e as CustomEvent
             if (event.detail.key === 'tooltips') {
-                setDisplayTips(event.detail.value === 'true')
+                setDisplay(event.detail.value === 'true')
             }
         }
 
@@ -53,35 +63,22 @@ export default function ToolTips() {
         }
     }, [])
 
-    if (!displayTips) {
+    if (!display) {
         return <></>
     }
 
     return (
-        <div className="w-full h-full fixed left-0 top-0 grid place-items-center bg-black bg-opacity-90 z-10" onClick={() => setDisplayTips(false)}>
+        <div className="w-full h-full fixed left-0 top-0 grid place-items-center bg-black bg-dark/50 z-10" onClick={() => setDisplay(false)}>
             <div className="w-[55vw] h-[63vh] bg-normal rounded-xl p-8 overflow-auto noscroll">
                 <h1 className="w-full text-center text-xl font-semibold mb-2">Tooltips</h1>
-                <h1 className="w-full text-center text-almostbright">This section is not implemented yet.</h1>
                 <div className="grid grid-cols-2">
                     <div className="w-full">
+                        {/* first column */}
                         <Tips hotkey="Q" info="Displays this message" />
-                        {/* <Tips hotkey="W" info="Selects the first or next alternative" /> */}
-                        {/* <Tips hotkey="A" info="Go to the previous question" />
-                        <Tips hotkey="B" info="Go to the previous question" />
-                        <Tips hotkey="P" info="Go to the previous question" />
-                        <Tips hotkey="S" info="Skip this question" />
-                        <Tips hotkey="S" extraHotKey="Shift" info="Selects the previous alternative" />
-                        <Tips hotkey="D" info="Submits the selected answer" /> */}
+                        <Tips hotkey="S + Auth" info="Edit the service status feed" />
                     </div>
                     <div className="w-full">
-                        {/* <Tips hotkey="1-9" info="Selects and submits alternative 1-9" />
-                        <Tips hotkey="0" info="Selects and submits alternative 10" /> */}
-                        {/* <Tips hotkey="ArrowUp" info="Selects the first or next alternative" />
-                        <Tips hotkey="ArrowDown" info="Selects the previous alternative" />
-                        <Tips hotkey="ArrowLeft" info="Go to the previous question" />
-                        <Tips hotkey="ArrowRight" info="Submit the selected answer" /> */}
-                        {/* <Tips hotkey="Enter" info="Submit the selected answer" />
-                        <Tips hotkey="N" info="Submit the selected answer" /> */}
+                        {/* second column */}
                     </div>
                 </div>
             </div>

@@ -15,6 +15,8 @@ import getGlobalCommands from './handlers/command/global/get'
 import getNamespaces from './handlers/namespace/get'
 import getNamespaceNotes from './handlers/namespace/note/get'
 import getNamespaceDomains from './handlers/namespace/domain/get'
+import getNamespaceDomainsByNamespace from './handlers/namespace/domain/getByNamespace'
+import getNamespaceMessages from './handlers/namespace/message/get'
 import getNamespaceIncidents from './handlers/namespace/incident/get'
 
 import postContext from './handlers/context/post'
@@ -24,6 +26,7 @@ import postGlobalCommand from './handlers/command/global/post'
 import postNamespace from './handlers/namespace/post'
 import postNamespaceNote from './handlers/namespace/note/post'
 import postNamespaceDomain from './handlers/namespace/domain/post'
+import postNamespaceMessage from './handlers/namespace/message/post'
 import postNamespaceIncident from './handlers/namespace/incident/post'
 import postPod from './handlers/pod/post'
 import postUser from './handlers/user/post'
@@ -34,16 +37,17 @@ import putLocalCommand from './handlers/command/local/put'
 import putGlobalCommand from './handlers/command/global/put'
 import putNamespaceNote from './handlers/namespace/note/put'
 import putNamespaceDomain from './handlers/namespace/domain/put'
+import putNamespaceMessage from './handlers/namespace/message/put'
 import putNamespaceIncident from './handlers/namespace/incident/put'
 
 import deleteLocalCommand from './handlers/command/local/delete'
 import deleteGlobalCommand from './handlers/command/global/delete'
 import deleteNamespaceNote from './handlers/namespace/note/delete'
 import deleteNamespaceDomain from './handlers/namespace/domain/delete'
+import deleteNamespaceMessage from './handlers/namespace/message/delete'
 import deleteNamespaceIncident from './handlers/namespace/incident/delete'
 
 import { FastifyInstance, FastifyPluginOptions } from "fastify"
-import getNamespaceDomainsByNamespace from './handlers/namespace/domain/getByNamespace'
 
 export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPluginOptions) {
     // index
@@ -62,19 +66,23 @@ export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPlug
     fastify.get('/namespaces/domains/:context', getNamespaceDomains)
     fastify.get('/namespaces/domains/:context/:namespace', getNamespaceDomainsByNamespace)
     fastify.get('/namespaces/incidents/:context/:namespace', getNamespaceIncidents)
+    fastify.get('/namespaces/messages/', getNamespaceMessages)
 
     fastify.post('/namespaces', postNamespace)
     fastify.post('/namespaces/notes', postNamespaceNote)
     fastify.post('/namespaces/domains', postNamespaceDomain)
     fastify.post('/namespaces/incidents', postNamespaceIncident)
+    fastify.post('/namespaces/messages', postNamespaceMessage)
 
     fastify.put('/namespaces/notes', putNamespaceNote)
     fastify.put('/namespaces/domains', putNamespaceDomain)
     fastify.put('/namespaces/incidents', putNamespaceIncident)
+    fastify.put('/namespaces/messages', putNamespaceMessage)
 
     fastify.delete('/namespaces/notes', deleteNamespaceNote)
     fastify.delete('/namespaces/domains', deleteNamespaceDomain)
     fastify.delete('/namespaces/incidents', deleteNamespaceIncident)
+    fastify.delete('/namespaces/messages', deleteNamespaceMessage)
 
     // log
     fastify.get('/log/local', getLocalLog)

@@ -35,7 +35,6 @@ CREATE TABLE IF NOT EXISTS namespaces (
     -- operational / degraded / down (ok - green, warning - orange, alert - red) 
     service_status TEXT NOT NULL,
     AGE TEXT NOT NULL,
-    FOREIGN KEY (context) REFERENCES contexts(name),
     PRIMARY KEY (context, name)
 );
 
@@ -47,15 +46,19 @@ CREATE TABLE IF NOT EXISTS namespace_notes (
     status TEXT NOT NULL,
     message TEXT NOT NULL,
     author TEXT NOT NULL,
-    timestamp TIMESTAMP NOT NULL DEFAULT NOW(),
-    FOREIGN KEY (context, namespace) REFERENCES namespaces(context, name)
+    timestamp TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 -- Pods
 CREATE TABLE IF NOT EXISTS pods (
-    name TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    ready TEXT NOT NULL,
+    status TEXT NOT NULL,
+    restarts TEXT NOT NULL,
+    age TEXT NOT NULL,
     context TEXT NOT NULL,
-    FOREIGN KEY (context, name) REFERENCES namespaces(context, name)
+    namespace TEXT NOT NULL,
+    PRIMARY KEY (context, namespace, name)
 );
 
 -- Global logs
@@ -79,8 +82,7 @@ CREATE TABLE IF NOT EXISTS local_log (
     app TEXT,
     pod TEXT,
     status TEXT NOT NULL,
-    timestamp TIMESTAMP NOT NULL DEFAULT NOW(),
-    FOREIGN KEY (context, namespace) REFERENCES namespaces(context, name)
+    timestamp TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 -- Global commands
@@ -102,8 +104,7 @@ CREATE TABLE IF NOT EXISTS local_commands (
     command TEXT NOT NULL,
     author TEXT NOT NULL,
     reason TEXT NOT NULL,
-    timestamp TIMESTAMP NOT NULL DEFAULT NOW(),
-    FOREIGN KEY (context, namespace) REFERENCES namespaces(context, name)
+    timestamp TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 -- Namespace domains
@@ -112,8 +113,7 @@ CREATE TABLE IF NOT EXISTS namespace_domains (
     name TEXT NOT NULL,
     url TEXT NOT NULL,
     context TEXT NOT NULL,
-    namespace TEXT NOT NULL,
-    FOREIGN KEY (context, namespace) REFERENCES namespaces(context, name)
+    namespace TEXT NOT NULL
 );
 
 -- Namespace incidents
@@ -123,15 +123,15 @@ CREATE TABLE IF NOT EXISTS namespace_incidents (
     url TEXT NOT NULL,
     context TEXT NOT NULL, 
     namespace TEXT NOT NULL,
-    timestamp TIMESTAMP NOT NULL DEFAULT NOW(),
-    FOREIGN KEY (context, namespace) REFERENCES namespaces(context, name)
+    timestamp TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 -- Service messages
-CREATE TABLE IF NOT EXISTS service_messages (
+CREATE TABLE IF NOT EXISTS namespace_messages (
     id SERIAL PRIMARY KEY,
-    name TEXT NOT NULL,
+    title TEXT NOT NULL,
     author TEXT NOT NULL,
     status TEXT NOT NULL,
-    timestamp TIMESTAMP NOT NULL DEFAULT NOW(),
+    content TEXT NOT NULL,
+    timestamp TIMESTAMP NOT NULL DEFAULT NOW()
 );
