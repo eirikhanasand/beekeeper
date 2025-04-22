@@ -30,7 +30,6 @@ import postNamespaceDomain from './handlers/namespace/domain/post'
 import postNamespaceIncident from './handlers/namespace/incident/post'
 import postMessage from './handlers/message/post'
 import postPod from './handlers/pod/post'
-import postUser from './handlers/user/post'
 import postLocalLog from './handlers/log/local/post'
 import postGlobalLog from './handlers/log/global/post'
 
@@ -114,8 +113,6 @@ export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPlug
     fastify.get('/user/:email', getUser)
     fastify.get('/users', getUsers)
     fastify.get('/token', getToken)
-    
-    fastify.post('/user', postUser)
     
     // login
     fastify.get('/login', getLogin)
