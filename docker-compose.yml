@@ -49,18 +49,41 @@ services:
       interval: 5s
       retries: 5
   
-  # frontend:
-  #   container_name: frontend
-  #   image: beekeeper-frontend
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "3000:3000"
-  #   depends_on:
-  #     - api
-  #   environment:
-  #     - API_URL=http://api:8080/api
+  frontend:
+    container_name: frontend
+    image: beekeeper-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    environment:
+      # Production
+      API_URL: ${API_URL}
+      NEXT_PUBLIC_BROWSER_API: ${NEXT_PUBLIC_BROWSER_API}
+      NEXT_PUBLIC_CDN: ${NEXT_PUBLIC_CDN}
+
+      # DigitalOcean
+      DOCTL_TOKEN: ${DOCTL_TOKEN}
+
+      # Gitlab
+      PRIVATE_TOKEN: ${PRIVATE_TOKEN}
+
+      # PSQL db
+      DB: ${DB}
+      DB_HOST: ${DB_HOST}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+
+      # Authentik integration
+      BASE_URL: ${BASE_URL}
+      CLIENT_ID: ${CLIENT_ID}
+      CLIENT_SECRET: ${CLIENT_SECRET}
+      REDIRECT_URI: ${REDIRECT_URI}
+      BEEKEEPER_URL: ${BEEKEEPER_URL}
+      AUTHENTIK_TOKEN: ${AUTHENTIK_TOKEN}
 
 volumes:
   postgres_data:
