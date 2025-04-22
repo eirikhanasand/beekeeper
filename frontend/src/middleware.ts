@@ -30,7 +30,7 @@ export async function middleware(req: NextRequest) {
 }
 
 async function tokenIsValid(req: NextRequest, token: string): Promise<boolean> {
-    const authResponse = await fetch(`${process.env.NEXT_PUBLIC_BROWSER_API}/token`, {
+    const authResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/token`, {
         headers: { Authorization: `Bearer ${token}` }
     })
 

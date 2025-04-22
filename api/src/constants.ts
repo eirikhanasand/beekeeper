@@ -1,7 +1,7 @@
 import dotenv from 'dotenv'
 
 type ENV = { 
-    API_URL: string
+    NEXT_PUBLIC_API_URL: string
     DOCTL_TOKEN: string
     PRIVATE_TOKEN: string
     DB: string
@@ -27,7 +27,7 @@ const {
     DB_MAX_CONN,
     DB_IDLE_TIMEOUT_MS,
     DB_TIMEOUT_MS,
-    API_URL,
+    NEXT_PUBLIC_API_URL,
     DOCTL_TOKEN,
     PRIVATE_TOKEN,
     DB,

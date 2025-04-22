@@ -2,12 +2,12 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-const { API_URL, CDN_URL } = process.env
+const { NEXT_PUBLIC_API_URL, CDN_URL } = process.env
 const { version } = require('../package.json')
 
 const config = {
     url: {
-        API: API_URL || 'https://beekeeper-api.login.no/api',
+        API: NEXT_PUBLIC_API_URL || 'https://beekeeper-api.login.no/api',
         CDN_URL: CDN_URL || 'https://cdn.login.no'
     },
     version
