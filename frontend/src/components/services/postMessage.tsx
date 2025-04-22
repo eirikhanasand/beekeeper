@@ -59,7 +59,7 @@ export default function PostMessage({title: Title, content: Content, status: Sta
         <div className="w-full h-full bg-darker rounded-xl p-2">
             <h1>Post Message</h1>
             {response !== null && <h1 className={`${response.status === 200 ? 'bg-green-500/20' : 'bg-red-500/20'} py-1 text-center w-full text-bright rounded-lg mt-1 mb-2`}>
-                {response.status === 200 ? response.result.message : response.result.error}
+                {response.message}
             </h1>}
             <div className="grid gap-2 text-almostbright">
                 <FancyField placeholder="Title" value={title} setValue={setTitle} />

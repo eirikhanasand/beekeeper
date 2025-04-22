@@ -22,7 +22,7 @@ export default function IncidentsClient({context, namespace, incidents, incident
     const [name, setName] = useState(incident)
     const [url, setURL] = useState(incidentURL)
     const [time, setTime] = useState(incidentTimestamp)
-    const [result, setResult] = useState<{ status: number, message: any } | null>(null)
+    const [response, setResponse] = useState<{ status: number, message: any } | null>(null)
     const [open, setOpen] = useState(false)
     const path = usePathname()
     const allowEdit = namespace !== 'global' && !path.includes('/service/message')
@@ -44,7 +44,7 @@ export default function IncidentsClient({context, namespace, incidents, incident
             setOpen(false)
         }
 
-        setResult(response)
+        setResponse(response)
     }
 
     function handleCancel() {
@@ -113,8 +113,8 @@ export default function IncidentsClient({context, namespace, incidents, incident
             </div>)}
             {allowEdit && <div className={`pb-2 ${!incidents.length && 'pt-2'}`}>
                 {open ? <div className="grid space-between items-center text-almostbright bg-normal rounded-lg gap-2 p-2">
-                    {result && <h1 className={`w-full ${result.status === 200 ? 'bg-green-500/20' : 'bg-red-500/20'} rounded-lg py-1 text-center`}>
-                        {typeof result.message === 'string' ? result.message : JSON.stringify(result.message)}
+                    {response && <h1 className={`w-full ${response.status === 200 ? 'bg-green-500/20' : 'bg-red-500/20'} rounded-lg py-1 text-center`}>
+                        {response.message}
                     </h1>}
                     <button onClick={handleCancel} className="cursor-pointer bg-superlight py-1 text-center w-full text-bright rounded-lg">Cancel</button>
                     <div className="relative grid gap-2">

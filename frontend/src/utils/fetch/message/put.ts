@@ -1,5 +1,5 @@
-export default async function putMessage(message: MessageWithoutTimestamp, token: string): Promise<{status: number, result: any}> {
-    const url =  `${process.env.NEXT_PUBLIC_BROWSER_API}/messages`
+export default async function putMessage(message: MessageWithoutTimestamp, token: string): Promise<Result> {
+    const url = `${process.env.NEXT_PUBLIC_BROWSER_API}/messages`
 
     try {
         const response = await fetch(url, {
@@ -10,16 +10,16 @@ export default async function putMessage(message: MessageWithoutTimestamp, token
             },
             body: JSON.stringify(message)
         })
-        
+
         if (!response.ok) {
             const data = await response.text()
             throw Error(data)
         }
-    
-        const result = await response.json()
-        return { status: response.status, result}
+
+        const { message: responseMessage } = await response.json()
+        return { status: response.status, message: responseMessage }
     } catch (error) {
         console.error(error)
-        return { status: 400, result: "Something went wrong."}
+        return { status: 400, message: "Something went wrong." }
     }
 }

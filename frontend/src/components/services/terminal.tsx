@@ -88,7 +88,7 @@ export default function Terminal({ namespace, command, name: Name, reason: Reaso
 
         setResponse({ 
             status: response, 
-            result: { message: `Successfully added ${inputSeemsLocal ? 'local' : 'global'} command ${name}.` } 
+            message: `Successfully added ${inputSeemsLocal ? 'local' : 'global'} command ${name}.`
         })
         if (response === 200) {
             setAcceptedRisk(false)
@@ -155,7 +155,7 @@ export default function Terminal({ namespace, command, name: Name, reason: Reaso
     return (
         <div className="relative grid gap-2 pb-2">
             {response && <h1 className={`w-full ${response.status === 200 ? 'bg-green-500/20' : 'bg-red-500/20'} rounded-lg py-1 text-center`}>
-                {typeof response.result.message === 'string' ? response.result.message : JSON.stringify(response.result)}
+                {response.message}
             </h1>}
             {text.length > 0 && <div className="flex justify-between gap-2">
                 <div className="w-full rounded-lg bg-darker p-2">

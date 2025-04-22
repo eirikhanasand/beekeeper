@@ -1,4 +1,4 @@
-export default async function postDomain(domain: DomainWithoutID): Promise<{status: number, message: any}> {
+export default async function postDomain(domain: DomainWithoutID): Promise<Result> {
     const url =  `${process.env.NEXT_PUBLIC_BROWSER_API}/namespaces/domains`
 
     try {
@@ -14,8 +14,8 @@ export default async function postDomain(domain: DomainWithoutID): Promise<{stat
             const data = await response.text()
             throw Error(data)
         }
-    
-        const message = await response.json()
+
+        const { message } = await response.json()
         return {status: 200, message}
     } catch (error) {
         console.error(error)

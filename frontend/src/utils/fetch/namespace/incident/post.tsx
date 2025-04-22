@@ -1,4 +1,4 @@
-export default async function postIncident(incident: IncidentWithoutID): Promise<{status: number, message: any}> {
+export default async function postIncident(incident: IncidentWithoutID): Promise<Result> {
     const url =  `${process.env.NEXT_PUBLIC_BROWSER_API}/namespaces/incidents`
 
     try {
@@ -15,7 +15,7 @@ export default async function postIncident(incident: IncidentWithoutID): Promise
             throw Error(data)
         }
     
-        const message = await response.json()
+        const { message } = await response.json()
         return {status: 200, message}
     } catch (error) {
         console.error(error)

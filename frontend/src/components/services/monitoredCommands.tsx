@@ -87,7 +87,7 @@ function GlobalCommand({ command }: GlobalCommandProps) {
     const [reason, setReason] = useState(command.reason)
     const [name, setName] = useState(command.name)
     const [value, setValue] = useState(command.command)
-    const [result, setResult] = useState<number | null>(null)
+    const [response, setResponse] = useState<number | null>(null)
     const [editing, setEditing] = useState(false)
     const router = useRouter()
 
@@ -105,7 +105,7 @@ function GlobalCommand({ command }: GlobalCommandProps) {
             author: String(command.author.email),
             reason
         })
-        setResult(response)
+        setResponse(response)
         setEditing(false)
     }
 
@@ -204,9 +204,9 @@ function LocalCommand({ command }: LocalCommandProps) {
         }
         setResponse({
             status: response, 
-            result: {message: response === 200 
+            message: response === 200 
                 ? 'Edit recorded successfully.' 
-                : 'Something went wrong. Please try again.'}
+                : 'Something went wrong. Please try again.'
         })
         setEditing(false)
     }
@@ -220,9 +220,9 @@ function LocalCommand({ command }: LocalCommandProps) {
         if (allowDelete) {
             const response = await deleteLocalCommand({ token, id: command.id })
             if (response === 200) {
-                setResponse({ status: response, result: { message: 'Command deleted successfully. It will disappear shortly.' } })
+                setResponse({ status: response, message: 'Command deleted successfully. It will disappear shortly.' })
             } else {
-                setResponse({ status: response, result: { message: 'Something went wrong. Please try again.' } })
+                setResponse({ status: response, message: 'Something went wrong. Please try again.' })
             }
         } else {
             setAllowDelete(true)
@@ -241,7 +241,7 @@ function LocalCommand({ command }: LocalCommandProps) {
     return (
         <div>
             {response !== null && <h1 className={`${response.status === 200 ? 'bg-green-500/20' : 'bg-red-500/20'} py-1 text-center w-full text-bright rounded-lg mt-1 mb-2`}>
-                {response.status === 200 ? response.result.message : JSON.stringify(response.result)}
+                {response.message}
             </h1>}
             <div className="p-2 bg-light rounded-lg">
                 <div className="flex justify-between">

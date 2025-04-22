@@ -47,7 +47,7 @@ export default function EditableMessage({ message, shrink, author }: MessageProp
 
         if (allowDelete) {
             const response = await deleteMessage(message.id, token)
-            setResponse({ status: response, result: { message: 'Message deleted successfully. It will disappear on refresh.' } })
+            setResponse({ status: response, message: 'Message deleted successfully. It will disappear on refresh.' })
         } else {
             setAllowDelete(true)
         }
@@ -93,7 +93,7 @@ export default function EditableMessage({ message, shrink, author }: MessageProp
         return (
             <div className="rounded-lg px-[1px] grid gap-2">
                 {response !== null && <h1 className={`${response.status === 200 ? 'bg-green-500/20' : 'bg-red-500/20'} py-1 text-center w-full text-bright rounded-lg mt-1 mb-2`}>
-                    {response.status === 200 ? response.result.message : response.result.error}
+                    {response.message}
                 </h1>}
                 {editing && <button onClick={handleCancel} className="cursor-pointer bg-superlight py-1 text-center w-full text-bright rounded-lg">Cancel</button>}
                 <FancyField placeholder="Title" value={title} setValue={setTitle} />
@@ -107,7 +107,7 @@ export default function EditableMessage({ message, shrink, author }: MessageProp
     return (
         <div className="w-full">
             {response !== null && <h1 className={`${response.status === 200 ? 'bg-green-500/20' : 'bg-red-500/20'} py-1 text-center w-full text-bright rounded-lg mt-1 mb-2`}>
-                {response.result.message}
+                {response.message}
             </h1>}
             <div className="bg-light rounded-lg flex gap-2 p-2">
                 <div className="w-full">

@@ -248,5 +248,5 @@ type Ingress = {
 
 type Result = {
     status: number
-    result: any
+    message: string
 }
