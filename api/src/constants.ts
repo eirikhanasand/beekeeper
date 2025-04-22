@@ -67,7 +67,7 @@ const config = {
     DB_MAX_CONN,
     DB_IDLE_TIMEOUT_MS,
     DB_TIMEOUT_MS,
-    API_URL,
+    NEXT_PUBLIC_API_URL,
     DOCTL_TOKEN,
     PRIVATE_TOKEN,
     DB,
