@@ -4,8 +4,7 @@ export default function pathIsAllowedWhileUnauthenticated(path: string) {
     }
 
     if (
-        path.startsWith('/_next/static/chunks/')
-        || path.startsWith('/_next/static/css/')
+        path.startsWith('/_next/static/')
         || path.startsWith('/_next/image')
         || path.startsWith('/images/')
         || path.startsWith('/login')
