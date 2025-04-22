@@ -1,8 +1,8 @@
 import Link from "next/link"
-import Pulse from "../pulse"
-import { ServiceStatus } from "@/interfaces"
+import Pulse from "./pulse"
 import getSegmentedPathname from "@/utils/pathname"
 import getLogs from "@/utils/fetch/log/get"
+import serviceStatus from "../services/serviceStatus"
 
 type ServicesProps = {
     services: ServiceAsList[]
@@ -11,8 +11,8 @@ type ServicesProps = {
 
 export default async function ProdOrDev({ services, path }: ServicesProps) {
     const segmentedPathname = getSegmentedPathname(path)
-    const localLog = await getLogs('server', 'local')
-    const context = segmentedPathname[1] !== 'message' ? segmentedPathname[1] : 'prod'
+    const localLog = await getLogs('server', 'local') as LocalLog[]
+    const context = segmentedPathname[1] && segmentedPathname[1] !== 'message' ? segmentedPathname[1] : 'prod'
     const filteredServices = services.filter(service => {
         return service.context.includes(context)
     })
@@ -32,7 +32,7 @@ export default async function ProdOrDev({ services, path }: ServicesProps) {
     )
 }
 
-function Service({ context, service, segmentedPathname, localLog }: ServiceProps) {
+async function Service({ context, service, segmentedPathname, localLog }: ServiceProps) {
     const currentService = segmentedPathname.includes("service") 
         ? segmentedPathname[2]
         : ''
@@ -46,12 +46,7 @@ function Service({ context, service, segmentedPathname, localLog }: ServiceProps
         } hover:*:fill-login hover:text-login font-medium justify-between
     `
 
-    const logIncludesError = localLog.filter((log) => log.status === 'down' || log.status === 'degraded')
-    const serviceLogIncludesError = logIncludesError.filter((log) => service.name === log.namespace)
-    const downplayedStatus = service.service_status === 'operational' 
-        ? serviceLogIncludesError.length > 0 
-            ? 'degraded' : 'operational'
-            : service.service_status
+    const status = await serviceStatus(localLog, service)
 
     return (
         <Link
@@ -59,7 +54,8 @@ function Service({ context, service, segmentedPathname, localLog }: ServiceProps
             className={serviceStyle}
         >
             <h1>{service.name}</h1>
-            <Pulse status={downplayedStatus as ServiceStatus} />
+            <Pulse status={status} />
         </Link>
     )
 }
+

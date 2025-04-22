@@ -3,8 +3,8 @@
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useState } from "react"
-import { Burger } from "./burger"
-import ThemeSwitch from "./theme/themeSwitch"
+import { Burger } from "../root/burger"
+import ThemeSwitch from "../theme/themeSwitch"
 import { getCookie } from "@/utils/cookies"
 import { useRouter } from "next/navigation"
 

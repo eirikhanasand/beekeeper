@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 import './globals.css'
-import Navbar from '@/components/nav'
+import Navbar from '@/components/root/nav'
 import { cookies } from 'next/headers'
 
 export const metadata = {

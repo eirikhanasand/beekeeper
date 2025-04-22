@@ -200,7 +200,7 @@ type DomainsWithStatus = {
     status: number
 }
 
-type ServiceMessage = {
+type Message = {
     id: string
     title: string
     author: string
@@ -209,7 +209,15 @@ type ServiceMessage = {
     timestamp: string
 }
 
-type BaseServiceMessage = {
+type BaseMessage = {
+    title: string
+    author: string
+    status: string
+    content: string
+}
+
+type MessageWithoutTimestamp = {
+    id: string
     title: string
     author: string
     status: string
@@ -224,4 +232,21 @@ type Pod = {
     age: string
     context: string
     namespace: string
+}
+
+type Ingress = {
+    id: string
+    context: string
+    namespace: string
+    name: string
+    class: string
+    hosts: string
+    address: string
+    ports: string
+    age: string
+}
+
+type Result = {
+    status: number
+    result: any
 }

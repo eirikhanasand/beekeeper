@@ -2,16 +2,19 @@ import React from 'react'
 import LoggedOutServices from '@/components/root/loggedOutServices'
 import Link from 'next/link'
 import { cookies } from 'next/headers'
-import Note from '@/components/note'
+import Note from '@/components/services/note'
+import getMessages from '@/utils/fetch/message/get'
+import Message from '@/components/services/message'
 
 export default async function Home() {
     const Cookies = await cookies()
     const imposter = Boolean(Cookies.get('imposter')?.value)
     const invalidToken = Boolean(Cookies.get('invalidToken')?.value)
+    const messages = await getMessages('server')
     return (
         <div className='grid grid-cols-12 gap-2 w-full h-full max-h-full'>
             <div className='hidden rounded-xl lg:grid col-span-3 sm:col-span-2 max-h-[calc((100vh-var(--h-navbar))-1rem)]'>
-                <LoggedOutServices  />
+                <LoggedOutServices />
             </div>
             <div className='col-span-10 overflow-auto grid grid-cols-12 gap-2 max-h-[calc((100vh-var(--h-navbar))-1rem)]'>
                 <div className={`w-full col-span-9 max-h-full overflow-auto noscroll grid gap-2`}>
@@ -33,8 +36,15 @@ export default async function Home() {
                 </div>
                 <div className='hidden xl:inline-flex flex-col w-full rounded-xl col-span-3 overflow-hidden'>
                     <div className="w-full h-full rounded-xl">
-                        <div className="flex flex-col gap-[0.2rem] bg-darker h-full p-2 text-almostbright">
+                        <div className="flex flex-col gap-2 bg-darker h-full p-2 text-almostbright">
                             Latest service messages
+                            <div className="flex flex-col h-full overflow-auto noscroll gap-2">
+                                {messages.map((message) => <Message 
+                                    key={message.id} 
+                                    message={message}
+                                    shrink={true}
+                                />)}
+                            </div>
                         </div>
                     </div>
                 </div>

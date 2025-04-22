@@ -2,11 +2,11 @@
 
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
-import Pulse from "./pulse"
+import Pulse from "../root/pulse"
 import { ServiceStatus } from "@/interfaces"
 import postDomain from "@/utils/fetch/namespace/domain/post"
 import { removeCookie, setCookie } from "@/utils/cookies"
-import FancyField from "./fancyField"
+import FancyField from "../root/fancyField"
 import { usePathname } from "next/navigation"
 
 type DomainsClientProps = {
@@ -20,7 +20,6 @@ type DomainsClientProps = {
 export default function DomainsClient({context, namespace, domains: Domains, domain, domainURL}: DomainsClientProps) {
     const [domains, setDomains] = useState(Domains)
     // const allDomainsAreOperational = true
-    const buttonStyle = "bg-light w-full rounded-lg py-1 text-start flex justify-between items-center px-2 cursor-pointer text-almostbright"
     const timerRef = useRef(3000)
     const [timeLeft, setTimeLeft] = useState(timerRef.current / 1000)
     const [name, setName] = useState(domain)
@@ -108,7 +107,7 @@ export default function DomainsClient({context, namespace, domains: Domains, dom
     }, [url])
 
     return (
-        <div>
+        <div className="grid gap-2">
             <div className="flex justify-between px-2">
                 <h1 className="text-almostbright">Domain status</h1>
                 {/* <h1 className="text-almostbright">Domain status {allDomainsAreOperational ? '˅' : '˄'}</h1> */}
@@ -118,13 +117,21 @@ export default function DomainsClient({context, namespace, domains: Domains, dom
                 </div>
             </div>
             {(domains.length > 0 || allowEdit) && <div className="h-[1px] bg-superlight w-full" />}
-            {domains.map((domain) => <div key={domain.name} className={buttonStyle}>
-                <h1>{domain.name}</h1>
-                <div className="flex items-center gap-2">
-                    <Link href={domain.url} className="text-superlight">{domain.url}</Link>
-                    <Pulse status={ServiceStatus.OPERATIONAL} />
-                </div>
-            </div>)}
+            {domains.toReversed().map((domain) => {
+                const formattedDomain = domain.name.includes('-') 
+                    ? `${domain.name.split('-')[1][0].toUpperCase()}${domain.name.split('-')[1].slice(1)}`
+                    : domain.name
+                return (
+                    <Link
+                        href={domain.url}
+                        key={domain.name} 
+                        className="bg-darker w-full rounded-lg cursor-pointer text-almostbright py-1 px-2"
+                    >
+                        <h1 className="flex justify-between items-center">{formattedDomain}<Pulse status={ServiceStatus.OPERATIONAL} /></h1>
+                        <h1 className="text-superlight text-xs">{domain.url}</h1>
+                    </Link>
+                )
+            })}
             {allowEdit && <div className={`pb-2 ${!domains.length && 'pt-2'}`}>
                 {open ? <div className="grid space-between items-center text-almostbright bg-normal rounded-lg gap-2 p-2">
                     {result && <h1 className={`w-full ${result.status === 200 ? 'bg-green-500/20' : 'bg-red-500/20'} rounded-lg py-1 text-center`}>

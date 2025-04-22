@@ -113,7 +113,8 @@ CREATE TABLE IF NOT EXISTS namespace_domains (
     name TEXT NOT NULL,
     url TEXT NOT NULL,
     context TEXT NOT NULL,
-    namespace TEXT NOT NULL
+    namespace TEXT NOT NULL,
+    UNIQUE (context, namespace, url)
 );
 
 -- Namespace incidents
@@ -126,12 +127,35 @@ CREATE TABLE IF NOT EXISTS namespace_incidents (
     timestamp TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
--- Service messages
-CREATE TABLE IF NOT EXISTS namespace_messages (
+-- Messages
+CREATE TABLE IF NOT EXISTS messages (
     id SERIAL PRIMARY KEY,
     title TEXT NOT NULL,
     author TEXT NOT NULL,
     status TEXT NOT NULL,
     content TEXT NOT NULL,
     timestamp TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+-- Namespace ingress
+CREATE TABLE IF NOT EXISTS namespace_ingress (
+    id SERIAL PRIMARY KEY,
+    context TEXT NOT NULL,
+    namespace TEXT NOT NULL,
+    name TEXT NOT NULL,
+    class TEXT NOT NULL,
+    hosts TEXT NOT NULL,
+    address TEXT NOT NULL,
+    ports TEXT NOT NULL,
+    age TEXT NOT NULL,
+    UNIQUE (context, namespace, name)
+);
+
+-- Namespace ingress events
+CREATE TABLE IF NOT EXISTS namespace_ingress_events (
+    id SERIAL PRIMARY KEY,
+    context TEXT NOT NULL,
+    namespace TEXT NOT NULL,
+    name TEXT NOT NULL,
+    events TEXT NOT NULL
 );

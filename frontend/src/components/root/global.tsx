@@ -1,18 +1,16 @@
 import Link from "next/link"
-import Pulse from "../pulse"
-import { ServiceStatus } from "@/interfaces"
-import getLogs from "@/utils/fetch/log/get"
+import Pulse from "./pulse"
 import getSegmentedPathname from "@/utils/pathname"
 import { headers } from "next/headers"
+import worstAndBestServiceStatus from "../services/worstAndBestServiceStatus"
 
 export default async function Global() {
     const Headers = await headers()
     const path = Headers.get('x-current-path') || ''
     const segmentedPathname = getSegmentedPathname(path)
-    const logs = await getLogs('server', 'global')
-    const isDegraded = logs.find((log) => log.status !== 'operational')
     const context = segmentedPathname[1] || 'prod'
     const isGlobal = path.includes('global')
+    const { meta } = await worstAndBestServiceStatus()
 
     return (
         <Link 
@@ -25,7 +23,7 @@ export default async function Global() {
                 innerHeight="h-2"
                 outerWidth="w-2.5"
                 outerHeight="h-2.5"
-                status={isDegraded ? ServiceStatus.DEGRADED : ServiceStatus.OPERATIONAL}
+                status={meta}
             />
         </Link>
     )

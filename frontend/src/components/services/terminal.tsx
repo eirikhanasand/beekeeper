@@ -14,7 +14,7 @@ type TerminalProps = {
     reason: string
 }
 
-export default function Terminal({namespace, command, name: Name, reason: Reason}: TerminalProps) {
+export default function Terminal({ namespace, command, name: Name, reason: Reason }: TerminalProps) {
     const [text, setText] = useState(command)
     const [name, setName] = useState(Name)
     const [reason, setReason] = useState(Reason)
@@ -24,13 +24,13 @@ export default function Terminal({namespace, command, name: Name, reason: Reason
     const [acceptedRisk, setAcceptedRisk] = useState(false)
     const [promptForRisk, setPromptForRisk] = useState(false)
     const [inputSeemsLocal, setInputSeemsLocal] = useState(false)
-    const [result, setResult] = useState<number | null>(null)
+    const [response, setResponse] = useState<Result | null>(null)
     const router = useRouter()
     const path = usePathname()
     const segmentedPathname = getSegmentedPathname(path)
     const context = segmentedPathname[1] || 'prod'
-    const currentCommandStatusLabel = inputSeemsValid || acceptedRisk ? 'Valid command': 'Invalid command'
-    const currentCommandTextLabel = inputSeemsLocal ? 'Local': 'Global'
+    const currentCommandStatusLabel = inputSeemsValid || acceptedRisk ? 'Valid command' : 'Invalid command'
+    const currentCommandTextLabel = inputSeemsLocal ? 'Local' : 'Global'
     const terminalIndicator = "beekeeper $"
     const legitimateStrings = ['kubectl', 'docker', 'flux', 'helm', 'kubelet', 'grafana', 'prometheus', 'helmfile', 'k9s', 'namespace']
     const terminalStyle = `
@@ -82,11 +82,14 @@ export default function Terminal({namespace, command, name: Name, reason: Reason
             return router.push('/logout')
         }
 
-        const response = inputSeemsLocal 
+        const response = inputSeemsLocal
             ? await postLocalCommand({ router, token, context, name, namespace, command: text, author, reason })
             : await postGlobalCommand({ router, token, name, command: text, author, reason })
 
-        setResult(response)
+        setResponse({ 
+            status: response, 
+            result: { message: `Successfully added ${inputSeemsLocal ? 'local' : 'global'} command ${name}.` } 
+        })
         if (response === 200) {
             setAcceptedRisk(false)
             setInputSeemsValid(false)
@@ -98,6 +101,9 @@ export default function Terminal({namespace, command, name: Name, reason: Reason
                 setReason("")
                 setName("")
             }, 10)
+            setTimeout(() => {
+                setResponse(null)
+            }, 3000)
         }
     }
 
@@ -148,9 +154,12 @@ export default function Terminal({namespace, command, name: Name, reason: Reason
 
     return (
         <div className="relative grid gap-2 pb-2">
+            {response && <h1 className={`w-full ${response.status === 200 ? 'bg-green-500/20' : 'bg-red-500/20'} rounded-lg py-1 text-center`}>
+                {typeof response.result.message === 'string' ? response.result.message : JSON.stringify(response.result)}
+            </h1>}
             {text.length > 0 && <div className="flex justify-between gap-2">
                 <div className="w-full rounded-lg bg-darker p-2">
-                    <input 
+                    <input
                         placeholder="Command Name"
                         className="w-full h-full"
                         value={name}
@@ -158,7 +167,7 @@ export default function Terminal({namespace, command, name: Name, reason: Reason
                     />
                 </div>
                 <div className="w-full rounded-lg bg-darker p-2">
-                    <input 
+                    <input
                         placeholder="Reason"
                         className="w-full h-full"
                         value={reason}
@@ -166,7 +175,7 @@ export default function Terminal({namespace, command, name: Name, reason: Reason
                     />
                 </div>
             </div>}
-            <textarea 
+            <textarea
                 ref={inputRef}
                 className={terminalStyle}
                 placeholder={terminalIndicator}
@@ -177,7 +186,7 @@ export default function Terminal({namespace, command, name: Name, reason: Reason
                 onBlur={() => setIsFocused(false)}
             />
             <div className={`text-almostbright absolute bottom-4 ${isFocused ? 'right-3' : 'right-2'} flex gap-2`}>
-                {text.length > 0 && (!name.length || !reason.length) && <button 
+                {text.length > 0 && (!name.length || !reason.length) && <button
                     className="bg-superlight/20 rounded-lg px-5 text-red-500"
                 >
                     Empty name or reason
@@ -185,8 +194,8 @@ export default function Terminal({namespace, command, name: Name, reason: Reason
                 {text.length > 0 && !inputSeemsValid && <h1 className={`${currentCommandStatusLabel.toLowerCase().includes('invalid') ? 'text-red-500' : 'text-almostbright'} bg-superlight/20 rounded-lg px-5`}>
                     {currentCommandStatusLabel}
                 </h1>}
-                {text.length > 0 && !inputSeemsValid && !acceptedRisk && <button 
-                    onClick={() => setAcceptedRisk(true)} 
+                {text.length > 0 && !inputSeemsValid && !acceptedRisk && <button
+                    onClick={() => setAcceptedRisk(true)}
                     className="bg-almostbright/20 cursor-pointer rounded-lg px-5"
                 >
                     Override invalid warning
@@ -194,8 +203,8 @@ export default function Terminal({namespace, command, name: Name, reason: Reason
                 <h1 className="bg-superlight/20 rounded-lg px-5">
                     {currentCommandTextLabel}
                 </h1>
-                {text.length > 0 && name.length > 0 && reason.length > 0 && (inputSeemsValid || acceptedRisk) && <button 
-                    onClick={() => submit({key: 'Enter'} as React.KeyboardEvent<HTMLTextAreaElement>)} 
+                {text.length > 0 && name.length > 0 && reason.length > 0 && (inputSeemsValid || acceptedRisk) && <button
+                    onClick={() => submit({ key: 'Enter' } as React.KeyboardEvent<HTMLTextAreaElement>)}
                     className="bg-login cursor-pointer text-white rounded-lg px-5"
                 >
                     Submit

@@ -25,7 +25,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
-    command: sh -c "./init.sh"
+    command: sh -c "./scripts/init.sh"
     depends_on:
       - postgres
     environment:

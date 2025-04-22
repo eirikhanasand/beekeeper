@@ -36,6 +36,29 @@ kubectl config get-contexts | sed 's/^\*//' | tail -n +2 | while read -r line; d
             $PSQL "INSERT INTO pods (name, ready, status, restarts, age, context, namespace) VALUES ('$pod_name', '$ready', '$status', '$restarts', '$pod_age', '$context_short_name', '$namespace_name');"
         done
 
+        kubectl get ingress -n $namespace_name | tail -n +2 | while read -r line; do
+            ingress_name=$(echo $line | awk '{print $1}')
+            class=$(echo $line | awk '{print $2}')
+            hosts=$(echo $line | awk '{print $3}')
+            address=$(echo $line | awk '{print $4}')
+            ports=$(echo $line | awk '{print $5 $6}')
+            age=$(echo $line | awk '{print $7}')
+            $PSQL "INSERT INTO namespace_ingress (context, namespace, name, class, hosts, address, ports, age) VALUES ('$context_short_name', '$namespace_name', '$ingress_name', '$class', '$hosts', '$address', '$ports', '$age');"
+            $PSQL "INSERT INTO namespace_domains (name, url, context, namespace) VALUES ('$ingress_name', '$hosts', '$context_short_name', '$namespace_name');"
+        done
+
+        for ingress in $(kubectl get ingress -n beehive -o name); do
+            echo "🐝 Swarming $ingress"
+            events=$(kubectl describe $ingress -n beehive | awk '/Events:/ {flag=1; next} /^$/ {flag=0} flag' | grep -v '<none>')
+            if [ -n "$events" ]; then
+                echo "🚩 Events found:"
+                echo "$events"
+                $PSQL "INSERT INTO namespace_ingress_events (context, namespace, name, events) VALUES ('$context_short_name', '$namespace_name', '$ingress', '$events');"
+            else
+                echo "🐝 No events"
+            fi
+            echo "-------------------------------"
+        done
     done
 done
 

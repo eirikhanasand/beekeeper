@@ -9,8 +9,7 @@ export default async function deleteGlobalCommand({ token, id }: DeleteGlobalCom
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
+            }
         })
     
         if (!response.ok) {

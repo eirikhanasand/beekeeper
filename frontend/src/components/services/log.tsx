@@ -1,5 +1,5 @@
 import { ServiceStatus } from "@/interfaces"
-import Pulse from "../pulse"
+import Pulse from "../root/pulse"
 
 type LogProps = {
     log: LocalLog | GlobalLog

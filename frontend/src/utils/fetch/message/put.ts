@@ -1,9 +1,9 @@
-export default async function postServiceMessage(message: BaseServiceMessage, token: string): Promise<{status: number, result: any}> {
-    const url =  `${process.env.NEXT_PUBLIC_BROWSER_API}/service/messages`
+export default async function putMessage(message: MessageWithoutTimestamp, token: string): Promise<{status: number, result: any}> {
+    const url =  `${process.env.NEXT_PUBLIC_BROWSER_API}/messages`
 
     try {
         const response = await fetch(url, {
-            method: 'POST',
+            method: 'PUT',
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',

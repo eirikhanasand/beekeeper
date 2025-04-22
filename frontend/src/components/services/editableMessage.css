@@ -1,0 +1,7 @@
+.light .edit:hover {
+    color: black;
+}
+
+.dark .edit:hover {
+    color: white;
+}

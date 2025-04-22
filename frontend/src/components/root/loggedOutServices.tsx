@@ -1,31 +1,23 @@
 import getNamespaces from "@/utils/fetch/namespace/get"
 import getLogs from "@/utils/fetch/log/get"
 import { ServiceStatus } from "@/interfaces"
-import Pulse from "../pulse"
+import Pulse from "./pulse"
+import worstAndBestServiceStatus from "../services/worstAndBestServiceStatus"
+import serviceStatus from "../services/serviceStatus"
 
 export default async function LoggedOutServices() {
     const services = await getNamespaces('server')
-    const logs = await getLogs('server', 'global')
-    const isDegraded = logs.find((log) => log.status !== 'operational')
-    const isDown = services.find((service) => service.service_status !== 'operational' && service.service_status !== 'degraded')
-    const status = isDown 
-        ? ServiceStatus.DOWN 
-        : isDegraded 
-            ? ServiceStatus.DEGRADED 
-            : ServiceStatus.OPERATIONAL
-
+    const { meta } = await worstAndBestServiceStatus()
+    const localLog = await getLogs('server', 'local') as LocalLog[]
+    const logIncludesError = localLog.filter((log) => log.status === 'down' || log.status === 'degraded')
     const filteredServices = services.filter(service => {
         return service.context.includes('prod')
     })
-
     const serviceStyle = `
         flex flex-row px-[1rem] items-center gap-[0.5rem] py-[0.8rem] 
         hover:pl-[1.5rem] duration-[500ms] transition-[padding] cursor-not-allowed
         hover:*:fill-login hover:text-login font-medium justify-between
     `
-
-    const localLog = await getLogs('server', 'local') as LocalLog[]
-    const logIncludesError = localLog.filter((log) => log.status === 'down' || log.status === 'degraded')
 
     return (
         <div className='w-full h-full overflow-hidden grid grid-rows-12'>
@@ -37,24 +29,20 @@ export default async function LoggedOutServices() {
                             innerHeight="h-6"
                             outerWidth="w-full rounded-xl"
                             outerHeight="h-7"
-                            status={status}
+                            status={meta}
                         >
                             <h1 className="w-full text-light">Overall status</h1>
                         </Pulse>
                     </div>
                 </div>
                 <div className="h-full bg-darker rounded-xl overflow-auto max-h-full noscroll">
-                    {filteredServices.map(service => {
-                        const serviceLogIncludesError = logIncludesError.filter((log) => service.name === log.namespace)
-                        const downplayedStatus = service.service_status === 'operational' 
-                        ? serviceLogIncludesError.length > 0 
-                            ? 'degraded' : 'operational'
-                            : service.service_status
+                    {filteredServices.map(async(service) => {
+                        const status = await serviceStatus(localLog, service)
 
                         return (
                             <div key={service.name} className={serviceStyle}>
                                 <h1>{service.name}</h1>
-                                <Pulse status={downplayedStatus as ServiceStatus} />
+                                <Pulse status={status} />
                             </div>
                         )
                     })}

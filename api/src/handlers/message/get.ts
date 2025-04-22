@@ -1,10 +1,10 @@
 import { FastifyReply, FastifyRequest } from "fastify"
-import run from "../../../db.js"
+import run from "../../db.js"
 
-export default async function getNamespaceMessages(_: FastifyRequest, res: FastifyReply) {
+export default async function getMessages(_: FastifyRequest, res: FastifyReply) {
     try {
         const result = await run(
-            `SELECT * FROM namespace_messages ORDER BY timestamp DESC`,
+            `SELECT * FROM messages ORDER BY timestamp DESC`,
             []
         )
 

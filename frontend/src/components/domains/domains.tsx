@@ -15,7 +15,12 @@ export default async function Domains() {
     const namespace = segmentedPathname[2] || ''
     const domains = await getDomains('server', context, namespace)
     const domainsWithStatus = await Promise.all(domains.map(async(domain) => {
-        const response = await fetch(domain.url)
+        const fetchAbleDomain = domain.url.includes('http') 
+            ? domain.url
+            : domain.url.includes(',') 
+                ? `https://${domain.url.split(',')[0]}`
+                : `https://${domain.url}`
+        const response = await fetch(fetchAbleDomain)
         return {...domain, status: response.status}
     }))
     const domain = Cookies.get('domain')?.value || ""

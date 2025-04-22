@@ -1,4 +1,4 @@
-import Services from "./root/services"
+import Services from "../root/services"
 
 export default function Menu() {
     return (

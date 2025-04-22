@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import ToolTips from './root/toolTips'
+import ToolTips from './toolTips'
 import Menu from './menu'
 import { RightSide } from './clientNav'
 import ArrowOutward from '@/components/svg/arrowOutward'

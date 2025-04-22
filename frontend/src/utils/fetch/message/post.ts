@@ -1,5 +1,5 @@
-export default async function postServiceMessage(message: BaseServiceMessage, token: string): Promise<{status: number, result: any}> {
-    const url =  `${process.env.NEXT_PUBLIC_BROWSER_API}/service/messages`
+export default async function postMessage(message: BaseMessage, token: string): Promise<{status: number, result: any}> {
+    const url =  `${process.env.NEXT_PUBLIC_BROWSER_API}/messages`
 
     try {
         const response = await fetch(url, {

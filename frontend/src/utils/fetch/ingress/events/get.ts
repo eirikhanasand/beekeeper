@@ -1,7 +1,14 @@
 import config from "@/constants"
 
-export default async function getIngress(location: 'server' | 'client', context: string, namespace: string): Promise<Ingress[]> {
-    const url = `${location === 'server' ? config.url.API : process.env.NEXT_PUBLIC_BROWSER_API}/namespaces/ingress/${context}/${namespace}`
+type GetIngressEventsProps = {
+    location: 'server' | 'client'
+    context: string
+    namespace: string
+    name: string
+}
+
+export default async function getIngressEvents({location, context, namespace, name}: GetIngressEventsProps): Promise<string[]> {
+    const url = `${location === 'server' ? config.url.API : process.env.NEXT_PUBLIC_BROWSER_API}/namespaces/ingress/events/${context}/${namespace}/${name}`
 
     try {
         const response = await fetch(url, {

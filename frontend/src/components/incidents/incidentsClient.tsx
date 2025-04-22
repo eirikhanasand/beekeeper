@@ -4,8 +4,8 @@ import Link from "next/link"
 import { useEffect, useState } from "react"
 import postIncident from "@/utils/fetch/namespace/incident/post"
 import { removeCookie, setCookie } from "@/utils/cookies"
-import ArrowOutward from "./svg/arrowOutward"
-import FancyField from "./fancyField"
+import ArrowOutward from "../svg/arrowOutward"
+import FancyField from "../root/fancyField"
 import { usePathname } from "next/navigation"
 
 type IncidentsClientProps = {

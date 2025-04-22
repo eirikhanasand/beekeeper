@@ -38,30 +38,30 @@ type EditAndDeleteProps = {
     allowDelete: boolean
 }
 
-export default function MonitoredCommands({globalCommands, localCommands}: MonitoredCommandsProps) {
+export default function MonitoredCommands({ globalCommands, localCommands }: MonitoredCommandsProps) {
     const [active, setActive] = useState(false)
 
     if (active) {
         return (
             <div className="w-full h-[50vh] max-h-[50vh] bg-darker rounded-xl p-2">
                 <div className="w-full h-full overflow-auto mb-2 noscroll text-foreground">
-                    <h1 
-                        onClick={() => setActive(false)} 
+                    <h1
+                        onClick={() => setActive(false)}
                         className="w-full overflow-auto mb-2 noscroll grid place-items-center text-almostbright cursor-pointer bg-normal rounded-lg py-1"
                     >
                         ↓ Monitored commands ↓
                     </h1>
                     <h1 className="text-almostbright">Global commands</h1>
-                    <div className="grid gap-2 mb-2">
-                        {globalCommands.map((command) => <GlobalCommand 
+                    {globalCommands.length > 0 ? <div className="grid gap-2 mb-2">
+                        {globalCommands.map((command) => <GlobalCommand
                             key={command.id}
                             command={command}
                         />)}
-                    </div>
+                    </div> : <h1 className="text-superlight">No global commands are monitored.</h1>}
                     <h1 className="text-almostbright">Local commands</h1>
-                    {localCommands.length > 0 ? <div>
-                        {localCommands.map((command) => <LocalCommand 
-                            key={command.id} 
+                    {localCommands.length > 0 ? <div className="grid gap-2 mb-2">
+                        {localCommands.map((command) => <LocalCommand
+                            key={command.id}
                             command={command}
                         />)}
                     </div> : <h1 className="text-superlight">There are no local commands monitored specifically for this service.</h1>}
@@ -72,8 +72,8 @@ export default function MonitoredCommands({globalCommands, localCommands}: Monit
 
     return (
         <div className="w-full h-[4.7vh] max-h-[4.7vh] bg-darker rounded-xl pt-1 px-2 pb-2">
-            <h1 
-                onClick={() => setActive(true)} 
+            <h1
+                onClick={() => setActive(true)}
                 className="w-full h-full overflow-auto mb-2 noscroll grid place-items-center text-almostbright cursor-pointer"
             >
                 ↑ Monitored commands ↑
@@ -82,7 +82,7 @@ export default function MonitoredCommands({globalCommands, localCommands}: Monit
     )
 }
 
-function GlobalCommand({command}: GlobalCommandProps) {
+function GlobalCommand({ command }: GlobalCommandProps) {
     const [allowDelete, setAllowDelete] = useState(false)
     const [reason, setReason] = useState(command.reason)
     const [name, setName] = useState(command.name)
@@ -98,11 +98,11 @@ function GlobalCommand({command}: GlobalCommandProps) {
         }
         const response = await putGlobalCommand({
             router,
-            token, 
-            id: command.id, 
-            name, 
-            command: value, 
-            author: String(command.author.email), 
+            token,
+            id: command.id,
+            name,
+            command: value,
+            author: String(command.author.email),
             reason
         })
         setResult(response)
@@ -116,7 +116,7 @@ function GlobalCommand({command}: GlobalCommandProps) {
         }
 
         if (allowDelete) {
-            deleteGlobalCommand({token, id: command.id})
+            deleteGlobalCommand({ token, id: command.id })
         } else {
             setAllowDelete(true)
         }
@@ -153,14 +153,14 @@ function GlobalCommand({command}: GlobalCommandProps) {
             </div>
             <div className="ml-[1rem] pl-2 flex justify-between gap-2">
                 <div className="flex flex-1">
-                <Field className="text-almostbright" placeholder="Command" value={value} setValue={setValue} editing={editing} />
+                    <Field className="text-almostbright" placeholder="Command" value={value} setValue={setValue} editing={editing} />
                 </div>
                 <div className={`${editing ? 'max-w-[30%] pt-1' : 'max-w-[16%] pr-[3px]'} flex gap-2`}>
                     <h1 className="text-superlight text-sm">{command.author.name}</h1>
-                    <EditAndDelete 
-                        editing={editing} 
-                        allowDelete={allowDelete} 
-                        handleEdit={handleEdit} 
+                    <CancelSaveAndDelete
+                        editing={editing}
+                        allowDelete={allowDelete}
+                        handleEdit={handleEdit}
                         handleDelete={handleDelete}
                         handleCancel={handleCancel}
                     />
@@ -170,13 +170,13 @@ function GlobalCommand({command}: GlobalCommandProps) {
     )
 }
 
-function LocalCommand({command}: LocalCommandProps) {
+function LocalCommand({ command }: LocalCommandProps) {
     const [allowDelete, setAllowDelete] = useState(false)
     const [editing, setEditing] = useState(false)
     const [context, setContext] = useState(command.context)
     const [namespace, setNamespace] = useState(command.namespace)
     const [reason, setReason] = useState(command.reason)
-    const [result, setResult] = useState<number | null>(null)
+    const [response, setResponse] = useState<Result | null>(null)
     const [name, setName] = useState(command.name)
     const [value, setValue] = useState(command.command)
     const router = useRouter()
@@ -188,27 +188,42 @@ function LocalCommand({command}: LocalCommandProps) {
         }
         const response = await putLocalCommand({
             router,
-            token, 
+            token,
             id: command.id,
-            context, 
-            namespace, 
-            name, 
-            command: value, 
-            author: String(command.author.email), 
+            context,
+            namespace,
+            name,
+            command: value,
+            author: String(command.author.email),
             reason
         })
-        setResult(response)
+        if (response === 200) {
+            setTimeout(() => {
+                setResponse(null)
+            }, 3000)
+        }
+        setResponse({
+            status: response, 
+            result: {message: response === 200 
+                ? 'Edit recorded successfully.' 
+                : 'Something went wrong. Please try again.'}
+        })
         setEditing(false)
     }
 
-    function handleDelete() {
+    async function handleDelete() {
         const token = getCookie('access_token')
         if (!token) {
             return router.push('/logout')
         }
 
         if (allowDelete) {
-            deleteLocalCommand({token, id: command.id})
+            const response = await deleteLocalCommand({ token, id: command.id })
+            if (response === 200) {
+                setResponse({ status: response, result: { message: 'Command deleted successfully. It will disappear shortly.' } })
+            } else {
+                setResponse({ status: response, result: { message: 'Something went wrong. Please try again.' } })
+            }
         } else {
             setAllowDelete(true)
         }
@@ -224,50 +239,57 @@ function LocalCommand({command}: LocalCommandProps) {
     }
 
     return (
-        <div className="p-2 bg-light rounded-lg">
-            <div className="flex justify-between">
-                <div className="flex gap-2">
-                    <h1 className="min-w-[1rem] text-superlight text-sm">{command.id}</h1>
-                    <Field placeholder="Name" value={name} setValue={setName} editing={editing} />
-                </div>
-                <div className="flex flex-col grid place-items-end">
-                    <div className="flex items-center gap-2">
-                        {editing ? <input /> : <h1 className="text-sm text-superlight">{command.reason}</h1>}
-                        <h1 className="text-superlight text-sm">{new Date(command.timestamp).toLocaleString('no-NO')}</h1>
-                        <h1 onClick={() => setEditing(true)} className="xl:mr-1 text-almostbright cursor-pointer">✎</h1>
-                        {/* disable funksjon senere? puls for aktiv eller ikke? */}
-                        {/* <Pulse
-                            innerWidth="w-2" 
-                            innerHeight="h-2"
-                            active={false}
-                            status={log.status as ServiceStatus}
-                            /> */}
+        <div>
+            {response !== null && <h1 className={`${response.status === 200 ? 'bg-green-500/20' : 'bg-red-500/20'} py-1 text-center w-full text-bright rounded-lg mt-1 mb-2`}>
+                {response.status === 200 ? response.result.message : JSON.stringify(response.result)}
+            </h1>}
+            <div className="p-2 bg-light rounded-lg">
+                <div className="flex justify-between">
+                    <div className="flex gap-2">
+                        <h1 className="min-w-[1rem] text-superlight text-sm">{command.id}</h1>
+                        <div className="grid gap-2">
+                            <Field placeholder="Name" value={name} setValue={setName} editing={editing} />
+                            <div className="flex justify-between">
+                                <Field className="text-almostbright" placeholder="Command" value={value} setValue={setValue} editing={editing} />
+                            </div >
+                        </div>
                     </div>
-                    <div className="text-superlight text-sm flex gap-2">
-                        <Field placeholder="Namespace" value={namespace} setValue={setNamespace} editing={editing} />
-                        <h1>-</h1>
-                        <Field placeholder="Context" value={context} setValue={setContext} editing={editing} />
-                        <h1>| {command.author.name}</h1>
+                    <div className={`flex flex-col grid place-items-end ${editing ? 'gap-2' : ''}`}>
+                        <div className="flex items-center gap-2 text-almostbright">
+                            {editing ? 
+                                <Field placeholder="Namespace" value={namespace} setValue={setNamespace} editing={editing} />
+                            : <h1 className="text-sm text-superlight">{command.reason}</h1>}
+                            <h1 className="text-superlight text-sm min-w-fit">{new Date(command.timestamp).toLocaleString('no-NO')}</h1>
+                            {!editing && <h1 onClick={() => setEditing(true)} className="xl:mr-1 text-almostbright cursor-pointer">✎</h1>}
+                            {/* disable funksjon senere? puls for aktiv eller ikke? */}
+                            {/* <Pulse
+                                innerWidth="w-2" 
+                                innerHeight="h-2"
+                                active={false}
+                                status={log.status as ServiceStatus}
+                                /> */}
+                        </div>
+                        <div className="text-superlight text-sm flex gap-2 pr-[3px]">
+                            <Field placeholder="Namespace" value={namespace} setValue={setNamespace} editing={editing} />
+                            <h1>-</h1>
+                            <Field placeholder="Context" value={context} setValue={setContext} editing={editing} />
+                            <h1 className="min-w-fit">| {command.author.name}</h1>
+                            <CancelSaveAndDelete
+                                editing={editing}
+                                allowDelete={allowDelete}
+                                handleEdit={handleEdit}
+                                handleDelete={handleDelete}
+                                handleCancel={handleCancel}
+                            />
+                        </div>
                     </div>
-                    <EditAndDelete 
-                        editing={editing} 
-                        allowDelete={allowDelete} 
-                        handleEdit={handleEdit} 
-                        handleDelete={handleDelete}
-                        handleCancel={handleCancel}
-                    />
                 </div>
             </div>
-            <div className="ml-[1rem] pl-2 flex justify-between">
-                <div className="max-w-[84%]">
-                    <Field className="text-almostbright" placeholder="Command" value={value} setValue={setValue} editing={editing} />
-                </div>
-            </div >
         </div>
     )
 }
 
-function Field({className, placeholder, editing, value, setValue}: FieldProps) {
+function Field({ className, placeholder, editing, value, setValue }: FieldProps) {
     if (editing) {
         return (
             <input
@@ -278,22 +300,22 @@ function Field({className, placeholder, editing, value, setValue}: FieldProps) {
             />
         )
     }
-    
-    return <h1 className={`min-w-[6rem] text-sm ${className}`}>{value}</h1>
+
+    return <h1 className={`text-sm ${className}`}>{value}</h1>
 }
 
-function EditAndDelete({editing, allowDelete, handleEdit, handleDelete, handleCancel}: EditAndDeleteProps) {
+function CancelSaveAndDelete({ editing, allowDelete, handleEdit, handleDelete, handleCancel }: EditAndDeleteProps) {
     if (editing) {
         return (
             <>
-                <h1 onClick={handleCancel} className="h-fit w-fit bg-superlight hover:bg-login px-4 cursor-pointer rounded-lg text-sm">Cancel</h1>
+                <h1 onClick={handleCancel} className="h-fit w-fit bg-superlight hover:bg-almostbright px-4 cursor-pointer rounded-lg text-sm text-white">Cancel</h1>
                 <div onClick={handleEdit}>
-                    <h1 className="bg-superlight hover:bg-login px-4 cursor-pointer rounded-lg text-sm">Save</h1>
+                    <h1 className="bg-login px-4 cursor-pointer rounded-lg text-sm text-white">Save</h1>
                 </div>
             </>
         )
     }
-    
+
     return (
         <div onClick={handleDelete}>
             <Trash fill={`${allowDelete ? 'fill-red-500' : 'fill-almostbright'} hover:fill-red-500 h-4 w-4 cursor-pointer`} />

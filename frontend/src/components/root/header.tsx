@@ -1,5 +1,4 @@
 import Link from "next/link"
-import Edit from "./edit"
 import Global from "./global"
 import getFormattedContexts from "@/utils/formattedContexts"
 import getSegmentedPathname from "@/utils/pathname"
@@ -51,11 +50,9 @@ function Context({context, service, activeContext}: ContextProps) {
 }
 
 async function ServiceHeader() {
-    const services = await getNamespaces('server')
     return (
         <div className="flex flex-cols gap-2">
             <h1 className="text-lg">Services</h1>
-            <Edit services={services} />
             <Global />
         </div>
     )

@@ -9,8 +9,7 @@ export default async function deleteLocalCommand({ token, id }: DeleteLocalComma
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
+            }
         })
     
         if (!response.ok) {
@@ -19,10 +18,9 @@ export default async function deleteLocalCommand({ token, id }: DeleteLocalComma
             throw Error(data.error)
         }
     
-        const services = await response.json()
-        return services
+        return response.status
     } catch (error) {
         console.error(error)
-        return []
+        return 400
     }
 }

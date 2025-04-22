@@ -16,7 +16,7 @@ type PutLocalCommandProps = {
 export default async function putLocalCommand({ router, token, id, context, name, namespace, command, author, reason }: PutLocalCommandProps) {    
     try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_BROWSER_API}/commands/local`, {
-            method: 'POST',
+            method: 'PUT',
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
@@ -37,10 +37,9 @@ export default async function putLocalCommand({ router, token, id, context, name
             }
         }
     
-        const services = await response.json()
-        return services
+        return response.status
     } catch (error) {
         console.error(error)
-        return []
+        return 400
     }
 }

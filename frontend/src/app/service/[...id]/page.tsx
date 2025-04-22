@@ -6,15 +6,15 @@ import Terminal from '@/components/services/terminal'
 import MonitoredCommands from '@/components/services/monitoredCommands'
 import getGlobalCommands from '@/utils/fetch/command/global/get'
 import getLocalCommands from '@/utils/fetch/command/local/get'
-import Pulse from '@/components/pulse'
+import Pulse from '@/components/root/pulse'
 import { ServiceStatus } from '@/interfaces'
 import { cookies } from 'next/headers'
 import getAuthor from '@/utils/fetch/user/getUser'
-import Incidents from '@/components/incidents'
-import Domains from '@/components/domains'
+import Incidents from '@/components/incidents/incidents'
+import Domains from '@/components/domains/domains'
 import Link from 'next/link'
-import Pods from '@/components/pods'
-import Ingress from '@/components/ingress'
+import Pods from '@/components/services/pods'
+import Ingress from '@/components/services/ingress'
 
 export default async function Service({params}: {params: Promise<{ id: string[] }>}) {
     const id = (await params).id[1]
@@ -70,10 +70,10 @@ export default async function Service({params}: {params: Promise<{ id: string[] 
                             <Incidents />
                             <Pods />
                             <Ingress />
-                            <h1 className='text-superlight text-center'>Below items are planned but not implemented yet.</h1>
+                            {/* <h1 className='text-superlight text-center'>Below items are planned but not implemented yet.</h1>
                             <button className={buttonStyle}>Flux<Pulse status={ServiceStatus.OPERATIONAL} /></button>
                             <button className={buttonStyle}>Version status<Pulse status={ServiceStatus.OPERATIONAL} /></button>
-                            <button className={buttonStyle}>Commit history</button>
+                            <button className={buttonStyle}>Commit history (last 5 infra repo, last 5 actual repo)</button> */}
                         </div>
                     </div>
                     <Link href='/service/message' className="w-full p-2 bg-darker rounded-xl flex">
