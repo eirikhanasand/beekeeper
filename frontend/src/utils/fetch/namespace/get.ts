@@ -1,7 +1,9 @@
 import config from "@/constants"
 
+const API_URL = process.env.NEXT_PUBLIC_BROWSER_API
+
 export default async function getNamespaces(location: 'server' | 'client'): Promise<ServiceAsList[]> {
-    const url = location === 'server' ? `${config.url.API}/namespaces` : `${process.env.NEXT_PUBLIC_BROWSER_API}/namespaces`
+    const url = location === 'server' ? `${config.url.API}/namespaces` : `${API_URL}/namespaces`
 
     try {
         const response = await fetch(url, {

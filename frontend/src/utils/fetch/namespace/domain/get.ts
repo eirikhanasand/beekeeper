@@ -1,7 +1,9 @@
 import config from "@/constants"
 
+const API_URL = process.env.NEXT_PUBLIC_BROWSER_API
+
 export default async function getDomains(location: 'server' | 'client', context: string, service: string): Promise<Domain[]> {
-    const url =  `${location === 'server' ? config.url.API : process.env.NEXT_PUBLIC_BROWSER_API}/namespaces/domains/${context}/${service}`
+    const url =  `${location === 'server' ? config.url.API : API_URL}/namespaces/domains/${context}/${service}`
 
     try {
         const response = await fetch(url, {

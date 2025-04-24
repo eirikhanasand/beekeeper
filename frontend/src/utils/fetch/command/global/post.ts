@@ -10,9 +10,11 @@ type PostGlobalCommandProps = {
     reason: string
 }
 
+const API_URL = process.env.NEXT_PUBLIC_BROWSER_API
+
 export default async function postGlobalCommand({ router, token, name, command, author, reason }: PostGlobalCommandProps): Promise<number> {    
     try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BROWSER_API}/commands/global`, {
+        const response = await fetch(`${API_URL}/commands/global`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,

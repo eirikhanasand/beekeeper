@@ -1,5 +1,7 @@
+const API_URL = process.env.NEXT_PUBLIC_BROWSER_API
+
 export default async function postDomain(domain: DomainWithoutID): Promise<Result> {
-    const url =  `${process.env.NEXT_PUBLIC_BROWSER_API}/namespaces/domains`
+    const url =  `${API_URL}/namespaces/domains`
 
     try {
         const response = await fetch(url, {

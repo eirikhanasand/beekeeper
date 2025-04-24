@@ -1,7 +1,9 @@
 import config from "@/constants"
 
+const API_URL = process.env.NEXT_PUBLIC_BROWSER_API
+
 export default async function getLocalCommands(location: 'server' | 'client', service: string): Promise<LocalCommand[]> {
-    const url = location === 'server' ? `${config.url.API}/commands/local` : `${process.env.NEXT_PUBLIC_BROWSER_API}/commands/local`
+    const url = location === 'server' ? `${config.url.API}/commands/local` : `${API_URL}/commands/local`
 
     try {
         const response = await fetch(url, {

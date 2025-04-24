@@ -8,6 +8,8 @@ import ThemeSwitch from "../theme/themeSwitch"
 import { getCookie } from "@/utils/cookies"
 import { useRouter } from "next/navigation"
 
+const API_URL = process.env.NEXT_PUBLIC_BROWSER_API
+
 // Displays the login icon or the profile icon depending on the login status
 export function RightIcon() {
     const [href, setHref] = useState('/login')
@@ -23,7 +25,7 @@ export function RightIcon() {
             setHref(`/profile/${loggedIn}`)
             setIcon("/images/profile.svg")
         } else {
-            setHref(`${process.env.NEXT_PUBLIC_BROWSER_API}/login`)
+            setHref(`${API_URL}/login`)
             setIcon("/images/join.svg")
         }
     }, [loggedIn])
@@ -69,7 +71,7 @@ export function MiddleIcon() {
     return (
         <Link 
             href="/logout"
-            className='grid place-self-center w-[3vh] h-[3vh] relative' 
+            className='grid place-self-center w-[2rem] h-[2rem] relative' 
             onClick={handleClick}
         >
             <Image src={icon} alt="logo" fill={true} />

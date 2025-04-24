@@ -16,7 +16,7 @@ export default async function Page() {
     const status = Cookies.get('messageStatus')?.value || ""
     return (
         <div className='grid grid-cols-12 gap-2 w-full h-full max-h-full'>
-            <div className='hidden rounded-xl lg:grid col-span-3 sm:col-span-2 max-h-[calc((100vh-var(--h-navbar))-1rem)]'>
+            <div className='rounded-xl grid col-span-3 sm:col-span-2 max-h-[calc((100vh-var(--h-navbar))-1rem)]'>
                 <Services />
             </div>
             <div className="col-span-10 w-full rounded-xl grid grid-cols-12 gap-2 h-full max-h-[calc((100vh-var(--h-navbar))-1rem)]">
@@ -33,14 +33,14 @@ export default async function Page() {
                         </div>
                     </div>
                 </div>
-                <div className='hidden xl:inline-flex flex-col w-full h-full rounded-xl col-span-3 overflow-auto noscroll gap-2'>
+                <div className='inline-flex flex-col w-full h-full rounded-xl col-span-3 overflow-auto noscroll gap-2'>
                     <div className="w-full h-full rounded-xl bg-darker p-2">
                         <div className="flex flex-col gap-2 h-full">
                             <Domains />
                             <Incidents />
                         </div>
                     </div>
-                    <Link href='/service/prod/global' className="hidden lg:flex w-full p-2 bg-darker rounded-xl">
+                    <Link href='/service/prod/global' className="flex w-full p-2 bg-darker rounded-xl">
                         <h1 className="px-2 bg-superlight rounded-lg grid place-items-center mr-2">B</h1>
                         <h1 className="grid place-items-center">Back</h1>
                     </Link>

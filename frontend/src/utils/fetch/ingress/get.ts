@@ -1,7 +1,9 @@
 import config from "@/constants"
 
+const API_URL = process.env.NEXT_PUBLIC_BROWSER_API
+
 export default async function getIngress(location: 'server' | 'client', context: string, namespace: string): Promise<Ingress[]> {
-    const url = `${location === 'server' ? config.url.API : process.env.NEXT_PUBLIC_BROWSER_API}/namespaces/ingress/${context}/${namespace}`
+    const url = `${location === 'server' ? config.url.API : API_URL}/namespaces/ingress/${context}/${namespace}`
 
     try {
         const response = await fetch(url, {

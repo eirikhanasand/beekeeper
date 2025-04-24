@@ -27,7 +27,11 @@ export default function PostMessage({title: Title, content: Content, status: Sta
             setCookie('redirect', path)
             return router.push('/logout')
         }
-        const response = await postMessage({ title, content, author, status }, token)
+
+        const response = await postMessage({
+            message: { title, content, author, status }, 
+            token
+        })
         if (response.status === 200) {
             setTitle('')
             setContent('')
@@ -65,7 +69,12 @@ export default function PostMessage({title: Title, content: Content, status: Sta
                 <FancyField placeholder="Title" value={title} setValue={setTitle} />
                 <FancyField placeholder="Content" value={content} setValue={setContent} />
                 <FancyField placeholder="Status" value={status} setValue={setStatus} />
-                <button onClick={handleSubmit} className="cursor-pointer bg-login py-1 text-center w-full text-bright rounded-lg">Post</button>
+                <button 
+                    onClick={handleSubmit}
+                    className="cursor-pointer bg-login py-1 text-center w-full text-bright rounded-lg"
+                >
+                    Post
+                </button>
             </div>
         </div>
     )

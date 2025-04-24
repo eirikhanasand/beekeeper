@@ -13,9 +13,11 @@ type PutLocalCommandProps = {
     reason: string
 }
 
+const API_URL = process.env.NEXT_PUBLIC_BROWSER_API
+
 export default async function putLocalCommand({ router, token, id, context, name, namespace, command, author, reason }: PutLocalCommandProps) {    
     try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BROWSER_API}/commands/local`, {
+        const response = await fetch(`${API_URL}/commands/local`, {
             method: 'PUT',
             headers: {
                 'Authorization': `Bearer ${token}`,

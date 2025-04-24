@@ -1,7 +1,9 @@
 import config from "@/constants"
 
+const API_URL = process.env.NEXT_PUBLIC_BROWSER_API
+
 export default async function getPods(location: 'server' | 'client'): Promise<Pod[]> {
-    const url = location === 'server' ? `${config.url.API}/pods` : `${process.env.NEXT_PUBLIC_BROWSER_API}/pods`
+    const url = location === 'server' ? `${config.url.API}/pods` : `${API_URL}/pods`
 
     try {
         const response = await fetch(url, {

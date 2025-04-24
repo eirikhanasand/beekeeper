@@ -1,7 +1,9 @@
 import config from "@/constants"
 
+const API_URL = process.env.NEXT_PUBLIC_BROWSER_API
+
 export default async function getContexts(location: 'server' | 'client'): Promise<ServiceAsList[]> {
-    const url = location === 'server' ? `${config.url.API}/contexts` : `${process.env.NEXT_PUBLIC_BROWSER_API}/contexts`
+    const url = location === 'server' ? `${config.url.API}/contexts` : `${API_URL}/contexts`
 
     try {
         const response = await fetch(url, {

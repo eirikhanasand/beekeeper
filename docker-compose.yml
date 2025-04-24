@@ -48,23 +48,23 @@ services:
       test: ["CMD-SHELL", "wget -qO- http://localhost:8080/api"]
       interval: 5s
       retries: 5
-  
+
   frontend:
     container_name: frontend
     image: beekeeper-frontend
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+        NEXT_PUBLIC_BROWSER_API: ${NEXT_PUBLIC_BROWSER_API}
+        NEXT_PUBLIC_CDN: ${NEXT_PUBLIC_CDN}
+        NEXT_PUBLIC_DEBUG: ${NEXT_PUBLIC_DEBUG}
     ports:
       - "3000:3000"
     depends_on:
       - api
     environment:
-      # Production
-      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
-      NEXT_PUBLIC_BROWSER_API: ${NEXT_PUBLIC_BROWSER_API}
-      NEXT_PUBLIC_CDN: ${NEXT_PUBLIC_CDN}
-
       # DigitalOcean
       DOCTL_TOKEN: ${DOCTL_TOKEN}
 

@@ -7,8 +7,10 @@ type GetIngressEventsProps = {
     name: string
 }
 
+const API_URL = process.env.NEXT_PUBLIC_BROWSER_API
+
 export default async function getIngressEvents({location, context, namespace, name}: GetIngressEventsProps): Promise<string[]> {
-    const url = `${location === 'server' ? config.url.API : process.env.NEXT_PUBLIC_BROWSER_API}/namespaces/ingress/events/${context}/${namespace}/${name}`
+    const url = `${location === 'server' ? config.url.API : API_URL}/namespaces/ingress/events/${context}/${namespace}/${name}`
 
     try {
         const response = await fetch(url, {

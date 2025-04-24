@@ -21,7 +21,7 @@ export default function Navbar() {
                      />
                 </Link>
             </div>
-            <nav className='hidden md:flex justify-between items-center w-fill max-w-[40rem]'>
+            <nav className='flex justify-between items-center w-fill max-w-[40rem]'>
                 <Link href='https://login.no'>
                     <li className='text-white flex flex-row items-center list-none no-underline leading-[1rem] p-3 pr-[1.5rem] font-medium cursor-pointer link--corner-hover'>
                         Login

@@ -10,6 +10,10 @@ sub vcl_recv {
         set req.http.X-Theme = regsub(req.http.Cookie, ".*theme=([^;]+);?.*", "\1");
     }
 
+    if (req.url ~ "^/(service/message)") {
+        return (pass);
+    }
+
     return (hash);
 }
 

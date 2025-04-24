@@ -43,8 +43,8 @@ function Context({context, service, activeContext}: ContextProps) {
             href={`/service/${context.toLowerCase()}/${service ? service : 'global'}`}
             className={`${active && service === 'global' ? 'cursor-not-allowed' : ''} ${active ? "bg-normal" : "bg-light"} w-full rounded-lg w-full px-2 content-center text-almostbright flex text-lg`}
         >
-            <h1 className="xl:mr-1">≡</h1>
-            <h1 className="hidden xl:grid text-base place-self-center">{context}</h1>
+            <h1 className="mr-1">≡</h1>
+            <h1 className="grid text-base place-self-center">{context}</h1>
         </Link>
     )
 }

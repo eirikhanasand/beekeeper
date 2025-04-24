@@ -140,7 +140,7 @@ function GlobalCommand({ command }: GlobalCommandProps) {
                     <div className="flex items-center gap-2 w-full justify-end">
                         <Field className="text-superlight" placeholder="Reason" value={reason} setValue={setReason} editing={editing} />
                         <h1 className="text-superlight text-sm min-w-[8rem]">{new Date(command.timestamp).toLocaleString('no-NO')}</h1>
-                        {!editing && <h1 onClick={() => setEditing(true)} className="xl:mr-1 text-almostbright cursor-pointer">✎</h1>}
+                        {!editing && <h1 onClick={() => setEditing(true)} className="mr-1 text-almostbright cursor-pointer">✎</h1>}
                         {/* disable funksjon senere? puls for aktiv eller ikke? */}
                         {/* <Pulse
                             innerWidth="w-2" 
@@ -260,7 +260,7 @@ function LocalCommand({ command }: LocalCommandProps) {
                                 <Field placeholder="Namespace" value={namespace} setValue={setNamespace} editing={editing} />
                             : <h1 className="text-sm text-superlight">{command.reason}</h1>}
                             <h1 className="text-superlight text-sm min-w-fit">{new Date(command.timestamp).toLocaleString('no-NO')}</h1>
-                            {!editing && <h1 onClick={() => setEditing(true)} className="xl:mr-1 text-almostbright cursor-pointer">✎</h1>}
+                            {!editing && <h1 onClick={() => setEditing(true)} className="mr-1 text-almostbright cursor-pointer">✎</h1>}
                             {/* disable funksjon senere? puls for aktiv eller ikke? */}
                             {/* <Pulse
                                 innerWidth="w-2" 

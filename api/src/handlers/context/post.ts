@@ -2,8 +2,15 @@ import { FastifyReply, FastifyRequest } from "fastify"
 import run from "../../db.js"
 import tokenWrapper from "../../utils/tokenWrapper.js"
 
+type PostContextBody = { 
+    name: string
+    cluster: string 
+    authinfo: string 
+    namespace: string
+}
+
 export default async function postContext(req: FastifyRequest, res: FastifyReply) {
-    const { name, cluster, authinfo, namespace } = req.body as { name: string, cluster: string, authinfo: string, namespace: string } || {}
+    const { name, cluster, authinfo, namespace } = req.body as PostContextBody || {}
     const { valid } = await tokenWrapper(req, res)
     if (!valid) {
         return res.status(400).send({ error: "Unauthorized" })

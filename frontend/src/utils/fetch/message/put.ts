@@ -1,5 +1,13 @@
+import debug from "@/utils/debug"
+
 export default async function putMessage(message: MessageWithoutTimestamp, token: string): Promise<Result> {
     const url = `${process.env.NEXT_PUBLIC_BROWSER_API}/messages`
+
+    debug({
+        basic: `Updating message with ${url}`,
+        detailed: `Updating message with content ${message} to ${url}`,
+        full: `Updating message with content ${message} to ${url} using token ${token}`
+    })
 
     try {
         const response = await fetch(url, {
@@ -13,11 +21,13 @@ export default async function putMessage(message: MessageWithoutTimestamp, token
 
         if (!response.ok) {
             const data = await response.text()
+            debug({ detailed: { message: `PUT Request to ${url} failed.`, data } })
             throw Error(data)
         }
 
-        const { message: responseMessage } = await response.json()
-        return { status: response.status, message: responseMessage }
+        const { message: data } = await response.json()
+        debug({ detailed: { message: `Request to ${url} succeeded`, data } })
+        return { status: response.status, message: data }
     } catch (error) {
         console.error(error)
         return { status: 400, message: "Something went wrong." }

@@ -1,5 +1,7 @@
+const API_URL = process.env.NEXT_PUBLIC_BROWSER_API
+
 export default async function postIncident(incident: IncidentWithoutID): Promise<Result> {
-    const url =  `${process.env.NEXT_PUBLIC_BROWSER_API}/namespaces/incidents`
+    const url =  `${API_URL}/namespaces/incidents`
 
     try {
         const response = await fetch(url, {

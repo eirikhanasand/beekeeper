@@ -1,7 +1,9 @@
 import config from "@/constants"
 
+const API_URL = process.env.NEXT_PUBLIC_BROWSER_API
+
 export default async function getIncidents(location: 'server' | 'client', context: string, service: string): Promise<Incident[]> {
-    const url =  `${location === 'server' ? config.url.API : process.env.NEXT_PUBLIC_BROWSER_API}/namespaces/incidents/${context}/${service}`
+    const url =  `${location === 'server' ? config.url.API : API_URL}/namespaces/incidents/${context}/${service}`
 
     try {
         const response = await fetch(url, {

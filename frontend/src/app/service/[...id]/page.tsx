@@ -38,7 +38,7 @@ export default async function Service({params}: {params: Promise<{ id: string[] 
 
     return (
         <div className='grid grid-cols-12 gap-2 w-full h-full max-h-full'>
-            <div className='hidden rounded-xl lg:grid col-span-3 sm:col-span-2 max-h-[calc((100vh-var(--h-navbar))-1rem)]'>
+            <div className='rounded-xl grid col-span-3 sm:col-span-2 max-h-[calc((100vh-var(--h-navbar))-1rem)]'>
                 <Services />
             </div>
             <div className="col-span-10 w-full rounded-xl grid grid-cols-12 gap-2 h-full max-h-[calc((100vh-var(--h-navbar))-1rem)]">

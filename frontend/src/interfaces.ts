@@ -2,5 +2,12 @@ export enum ServiceStatus {
     OPERATIONAL = 'operational',
     DEGRADED = 'degraded',
     DOWN = 'down',
-    INACTIVE = 'inactive',
+    INACTIVE = 'inactive'
+}
+
+export enum Debug {
+    PRODUCTION = 'production',
+    BASIC = 'basic',
+    DETAILED = 'detailed',
+    FULL = 'full'
 }
