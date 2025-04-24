@@ -7,7 +7,6 @@ export default async function getLocalCommands(location: 'server' | 'client', se
 
     try {
         const response = await fetch(url, {
-            next: { revalidate: 10 },
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

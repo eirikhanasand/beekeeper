@@ -7,7 +7,6 @@ export default async function getGlobalCommands(location: 'server' | 'client'): 
 
     try {
         const response = await fetch(url, {
-            next: { revalidate: 10 },
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

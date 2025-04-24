@@ -69,7 +69,7 @@ type LocalLog = {
     id: string
     name: string
     event: string
-    status: string
+    status: ServiceStatus
     command: string 
     timestamp: string
 }

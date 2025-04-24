@@ -30,7 +30,6 @@ export default async function Service({params}: {params: Promise<{ id: string[] 
         ? globalCommands.filter((command) => !command.command.includes('{namespace}'))
         : globalCommands.filter((command) => command.command.includes('{namespace}'))
     const filteredLocalCommands = localCommands.filter((command) => command.command.includes(`-n ${id}`))
-    const buttonStyle = "bg-light w-full rounded-lg py-1 text-start flex justify-between items-center px-2 cursor-pointer"
     const Cookies = await cookies()
     const command = Cookies.get('command')?.value || ''
     const commandName = Cookies.get('commandName')?.value || ''

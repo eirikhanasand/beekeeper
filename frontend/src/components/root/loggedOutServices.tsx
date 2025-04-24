@@ -1,6 +1,5 @@
 import getNamespaces from "@/utils/fetch/namespace/get"
 import getLogs from "@/utils/fetch/log/get"
-import { ServiceStatus } from "@/interfaces"
 import Pulse from "./pulse"
 import worstAndBestServiceStatus from "../services/worstAndBestServiceStatus"
 import serviceStatus from "../services/serviceStatus"
@@ -9,7 +8,6 @@ export default async function LoggedOutServices() {
     const services = await getNamespaces('server')
     const { meta } = await worstAndBestServiceStatus()
     const localLog = await getLogs('server', 'local') as LocalLog[]
-    const logIncludesError = localLog.filter((log) => log.status === 'down' || log.status === 'degraded')
     const filteredServices = services.filter(service => {
         return service.context.includes('prod')
     })
