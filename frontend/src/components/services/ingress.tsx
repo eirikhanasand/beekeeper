@@ -46,7 +46,7 @@ export default async function Ingresses() {
 async function Ingress({ingress}: IngressProps) {
     const formattedHost = ingress.hosts.includes(',') ? ingress.hosts.split(',')[0] : ingress.hosts
     return (
-        <div className="w-full bg-darker rounded-xl p-2 overflow-hidden">
+        <div className="w-full bg-darker rounded-lg p-2 overflow-hidden">
             <h1 className="text-superlight text-[0.8rem] flex justify-between items-center">
                 {ingress.name + ' - ' + ingress.class}<Pulse status={ingress.events.length > 0 ? ServiceStatus.DOWN : ServiceStatus.OPERATIONAL} />
             </h1>
