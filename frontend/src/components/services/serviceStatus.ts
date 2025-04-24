@@ -17,7 +17,7 @@ export default async function serviceStatus(localLog: LocalLog[], service: Servi
 
     let worstStatus = ServiceStatus.OPERATIONAL
     let worstPriority = statusPriority[worstStatus]
-                
+
     uniqueLogsByCommand.forEach((log: LocalLog) => {
         const logPriority = statusPriority[log.status] || 1
         if (logPriority > worstPriority) {
@@ -29,15 +29,14 @@ export default async function serviceStatus(localLog: LocalLog[], service: Servi
     const downplayedStatus = service.service_status === ServiceStatus.OPERATIONAL
         ? worstStatus !== ServiceStatus.OPERATIONAL
             ? worstStatus : ServiceStatus.OPERATIONAL
-            : service.service_status
+        : service.service_status
 
     const { status } = await podStatus(service.name)
-
     const serviceStatusIncludingPodStatus = downplayedStatus === ServiceStatus.OPERATIONAL
         ? status === ServiceStatus.OPERATIONAL
             ? ServiceStatus.OPERATIONAL
             : status
-        : downplayedStatus === ServiceStatus.DEGRADED && status === ServiceStatus.DEGRADED 
+        : downplayedStatus === ServiceStatus.DEGRADED && (status === ServiceStatus.DEGRADED || status === ServiceStatus.OPERATIONAL)
             ? ServiceStatus.DEGRADED
             : ServiceStatus.DOWN
 
