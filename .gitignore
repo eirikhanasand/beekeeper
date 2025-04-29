@@ -22,7 +22,7 @@ dist/
 npm-debug.log*
 
 # local env files
-.env
+.env*
 secret.json
 .secret.json
 .secret2.json
