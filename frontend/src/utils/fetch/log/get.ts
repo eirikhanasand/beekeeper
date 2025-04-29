@@ -3,7 +3,15 @@ import debug from "@/utils/debug"
 
 const API_URL = process.env.NEXT_PUBLIC_BROWSER_API
 
-export default async function getLogs(location: 'server' | 'client', path: 'global' | 'local', page: number): Promise<(LocalLog | GlobalLog)[]> {
+type Log = {
+    page: number
+    resultsPerPage: number
+    pages: number
+    results: (LocalLog | GlobalLog)[]
+    error?: string
+}
+
+export default async function getLogs(location: 'server' | 'client', path: 'global' | 'local', page: number): Promise<Log> {
     const url = `${location === 'server' ? config.url.API : API_URL}/log/${path}?page=${page}`
 
     debug({
@@ -31,6 +39,12 @@ export default async function getLogs(location: 'server' | 'client', path: 'glob
         return services
     } catch (error) {
         debug({ production: { message: `Fetching logs (${location}) from ${url} failed`, error } })
-        return []
+        return {
+            page: 1,
+            pages: 1,
+            resultsPerPage: 0,
+            error: `Fetching logs (${location}) from ${url} failed`,
+            results: []
+        }
     }
 }

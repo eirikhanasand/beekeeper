@@ -7,7 +7,8 @@ import serviceStatus from "../services/serviceStatus"
 export default async function LoggedOutServices() {
     const services = await getNamespaces('server')
     const { meta } = await worstAndBestServiceStatus()
-    const localLog = await getLogs('server', 'local', 1) as LocalLog[]
+    const response = await getLogs('server', 'local', 1)
+    const logs = response.results as LocalLog[]
     const filteredServices = services.filter(service => {
         return service.context.includes('prod')
     })
@@ -35,7 +36,7 @@ export default async function LoggedOutServices() {
                 </div>
                 <div className="h-full bg-darker rounded-xl overflow-auto max-h-full noscroll">
                     {filteredServices.map(async(service) => {
-                        const status = await serviceStatus(localLog, service)
+                        const status = await serviceStatus(logs, service)
 
                         return (
                             <div key={service.name} className={serviceStyle}>

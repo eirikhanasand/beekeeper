@@ -8,8 +8,6 @@ import getHealth from './handlers/index/getHealth.js'
 import getVersion from './handlers/index/getVersion.js'
 import getContexts from './handlers/context/get.js'
 import getCallback from './handlers/login/getCallback.js'
-import getLocalLog from './handlers/log/local/get.js'
-import getGlobalLog from './handlers/log/global/get.js'
 import getLocalCommands from './handlers/command/local/get.js'
 import getGlobalCommands from './handlers/command/global/get.js'
 import getNamespaces from './handlers/namespace/get.js'
@@ -20,6 +18,7 @@ import getMessages from './handlers/message/get.js'
 import getNamespaceIncidents from './handlers/namespace/incident/get.js'
 import getIngress from './handlers/ingress/get.js'
 import getIngressEvents from './handlers/ingress/events/get.js'
+import getLog from './handlers/log/get.js'
 
 import postContext from './handlers/context/post.js'
 import postCommand from './handlers/command/post.js'
@@ -84,8 +83,7 @@ export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPlug
     fastify.delete('/namespaces/incidents/:id', deleteNamespaceIncident)
     
     // log
-    fastify.get('/log/local', getLocalLog)
-    fastify.get('/log/global', getGlobalLog)
+    fastify.get('/log/:log', getLog)
     
     fastify.post('/log/global', postGlobalLog)
     fastify.post('/log/local', postLocalLog)

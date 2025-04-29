@@ -13,7 +13,8 @@ export default async function worstAndBestServiceStatus(): Promise<{ best: Servi
     const Headers = await headers()
     const path = Headers.get('x-current-path') || ''
     const segmentedPathname = getSegmentedPathname(path)
-    const localLog = await getLogs('server', 'local', 1)
+    const response = await getLogs('server', 'local', 1)
+    const logs = response.results as LocalLog[]
     const context = segmentedPathname[1] && segmentedPathname[1] !== 'message' ? segmentedPathname[1] : 'prod'
     const services = await getNamespaces('server')
     const filteredServices = services.filter(service => {
@@ -21,7 +22,7 @@ export default async function worstAndBestServiceStatus(): Promise<{ best: Servi
     })
 
     for (const service of filteredServices) {
-        const logIncludesError = localLog.filter((log) => log.status === 'down' || log.status === 'degraded')
+        const logIncludesError = logs.filter((log) => log.status === 'down' || log.status === 'degraded')
         const serviceLogIncludesError = logIncludesError.filter((log) => service.name === ('namespace' in log ? log.namespace : ''))
         const downplayedStatus = service.service_status === ServiceStatus.OPERATIONAL
             ? serviceLogIncludesError.length > 0
