@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify"
-import run from "../../../db.js"
+import run from "@db"
 import tokenWrapper from "../../../utils/tokenWrapper.js"
 
 type PostLocalLogBody = { 

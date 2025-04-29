@@ -17,7 +17,7 @@ import Ingress from '@/components/services/ingress'
 export default async function Service({params}: {params: Promise<{ id: string[] }>}) {
     const id = (await params).id[1]
     const isGlobal = id === "global"
-    const logs = await getLogs("server", isGlobal ? "global" : "local")
+    const logs = await getLogs("server", isGlobal ? "global" : "local", 1)
     const globalCommands = await Promise.all((await getGlobalCommands('server')).map(async(command) => ({
         ...command, author: await getAuthor('server', command.author) || "Unknown User"
     }))) as GlobalCommandWithUser[]

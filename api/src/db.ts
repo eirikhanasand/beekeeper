@@ -1,5 +1,5 @@
 import pg from 'pg'
-import config from './constants.js'
+import config from '@constants'
 
 const { 
     DB, 

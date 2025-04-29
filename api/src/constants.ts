@@ -18,6 +18,7 @@ type ENV = {
     BASE_URL: string
     BEEKEEPER_URL: string
     AUTHENTIK_TOKEN: string
+    DEFAULT_RESULTS_PER_PAGE: string
 }
 
 dotenv.config({path: '../.env'})
@@ -39,7 +40,8 @@ const {
     REDIRECT_URI,
     BASE_URL,
     BEEKEEPER_URL,
-    AUTHENTIK_TOKEN
+    AUTHENTIK_TOKEN,
+    DEFAULT_RESULTS_PER_PAGE
 } = process.env as unknown as ENV
 if (!DOCTL_TOKEN
     || !PRIVATE_TOKEN
@@ -82,7 +84,8 @@ const config = {
     USERINFO_URL,
     BEEKEEPER_URL,
     USER_ENDPOINT,
-    AUTHENTIK_TOKEN
+    AUTHENTIK_TOKEN,
+    DEFAULT_RESULTS_PER_PAGE: Number(DEFAULT_RESULTS_PER_PAGE) || 50
 }
 
 export default config

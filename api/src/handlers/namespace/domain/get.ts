@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify"
-import run from "../../../db.js"
+import run from "@db"
 
 export default async function getNamespaceDomains(req: FastifyRequest, res: FastifyReply) {
     const { context } = req.params as { context: string }

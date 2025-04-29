@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify"
-import run from "../../../db.js"
+import run from "@db"
 
 export default async function getLocalCommands(_: FastifyRequest, res: FastifyReply) {
     try {

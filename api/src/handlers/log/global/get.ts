@@ -1,9 +1,17 @@
 import { FastifyReply, FastifyRequest } from "fastify"
-import run from "../../../db.js"
+import run from "@db"
+import { loadSQL } from "@utils/loadSQL.js"
+import config from '@constants'
 
-export default async function getGlobalLog(_: FastifyRequest, res: FastifyReply) {
+const { DEFAULT_RESULTS_PER_PAGE } = config
+
+export default async function getGlobalLog(req: FastifyRequest, res: FastifyReply) {
+    const { resultsPerPage: clientResultsPerPage, page } = req.query as { resultsPerPage: string, page: string } || {}
+    const resultsPerPage = Number(clientResultsPerPage) || DEFAULT_RESULTS_PER_PAGE
+
     try {
-        const log = await run(`SELECT * FROM global_log ORDER BY timestamp DESC`, [])
+        const query = await loadSQL('fetchGlobalLog.sql')
+        const log = await run(query, [resultsPerPage, Number(page) || 1])
 
         return res.send(log.rows)
     } catch (error) {

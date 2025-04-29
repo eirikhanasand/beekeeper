@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify"
-import run from "../../../db.js"
+import run from "@db"
 
 type PostNamespaceIncidentProps = { 
     name: string

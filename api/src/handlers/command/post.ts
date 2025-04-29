@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify"
 import { exec } from "child_process"
-import run from "../../db.js"
+import run from "@db"
 import path from "path"
 import tokenWrapper from "../../utils/tokenWrapper.js"
 
