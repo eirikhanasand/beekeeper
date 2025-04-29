@@ -7,7 +7,11 @@ import serviceStatus from "../services/serviceStatus"
 export default async function LoggedOutServices() {
     const services = await getNamespaces('server')
     const { meta } = await worstAndBestServiceStatus()
-    const response = await getLogs('server', 'local', 1)
+    const response = await getLogs({
+        location: 'server', 
+        path: 'local', 
+        page: 1
+    })
     const logs = response.results as LocalLog[]
     const filteredServices = services.filter(service => {
         return service.context.includes('prod')

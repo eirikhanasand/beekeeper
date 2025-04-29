@@ -13,7 +13,11 @@ export default async function worstAndBestServiceStatus(): Promise<{ best: Servi
     const Headers = await headers()
     const path = Headers.get('x-current-path') || ''
     const segmentedPathname = getSegmentedPathname(path)
-    const response = await getLogs('server', 'local', 1)
+    const response = await getLogs({
+        location: 'server', 
+        path: 'local', 
+        page: 1
+    })
     const logs = response.results as LocalLog[]
     const context = segmentedPathname[1] && segmentedPathname[1] !== 'message' ? segmentedPathname[1] : 'prod'
     const services = await getNamespaces('server')

@@ -6,18 +6,29 @@ import Terminal from '@/components/services/terminal'
 import MonitoredCommands from '@/components/services/monitoredCommands'
 import getGlobalCommands from '@/utils/fetch/command/global/get'
 import getLocalCommands from '@/utils/fetch/command/local/get'
-import { cookies } from 'next/headers'
+import { cookies, headers } from 'next/headers'
 import getAuthor from '@/utils/fetch/user/getUser'
 import Incidents from '@/components/incidents/incidents'
 import Domains from '@/components/domains/domains'
 import Link from 'next/link'
 import Pods from '@/components/services/pods'
 import Ingress from '@/components/services/ingress'
+import getSegmentedPathname from '@/utils/pathname'
 
 export default async function Service({params}: {params: Promise<{ id: string[] }>}) {
     const id = (await params).id[1]
     const isGlobal = id === "global"
-    const response = await getLogs("server", isGlobal ? "global" : "local", 1)
+    const Headers = await headers()
+    const Cookies = await cookies()
+    const path = Headers.get('x-current-path') || ''
+    const segmentedPathname = getSegmentedPathname(path)
+    const namespace = segmentedPathname[2] || ''
+    const response = await getLogs({
+        location: "server", 
+        path: isGlobal ? "global" : "local", 
+        page: 1,
+        namespace
+    })
     const logs = response.results
     const globalCommands = await Promise.all((await getGlobalCommands('server')).map(async(command) => ({
         ...command, author: await getAuthor('server', command.author) || "Unknown User"
@@ -30,7 +41,6 @@ export default async function Service({params}: {params: Promise<{ id: string[] 
         ? globalCommands.filter((command) => !command.command.includes('{namespace}'))
         : globalCommands.filter((command) => command.command.includes('{namespace}'))
     const filteredLocalCommands = localCommands.filter((command) => command.command.includes(`-n ${id}`))
-    const Cookies = await cookies()
     const command = Cookies.get('command')?.value || ''
     const commandName = Cookies.get('commandName')?.value || ''
     const commandReason = Cookies.get('commandReason')?.value || ''

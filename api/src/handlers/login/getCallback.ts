@@ -3,6 +3,13 @@ import config from '@constants'
 
 const { TOKEN_URL, CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, USERINFO_URL, BEEKEEPER_URL } = config
 
+type UserInfo = {
+    sub: string
+    name: string
+    email: string
+    groups: string[]
+}
+
 /**
  * Callback route to exchange code for token
  * @param req Request
@@ -47,7 +54,7 @@ export default async function getCallback(req: FastifyRequest, res: FastifyReply
             return res.status(500).send(`No user info found: ${userInfoError}`)
         }
 
-        const userInfo = await userInfoResponse.json()
+        const userInfo = await userInfoResponse.json() as UserInfo
 
         const redirectUrl = new URL(`${BEEKEEPER_URL}/login`)
         const params = new URLSearchParams({

@@ -3,6 +3,10 @@ import config from '@constants'
 
 const { USER_ENDPOINT, AUTHENTIK_TOKEN } = config
 
+type Data = {
+    results: Array<any>
+}
+
 export default async function getUser(req: FastifyRequest, res: FastifyReply) {
     const { email } = req.params as { email: string }
     if (!email) {
@@ -20,7 +24,7 @@ export default async function getUser(req: FastifyRequest, res: FastifyReply) {
             throw new Error(await response.text())
         }
 
-        const data = await response.json()
+        const data = await response.json() as Data
         if ('results' in data && data.results.length) {
             return res.send(data.results[0])
         }

@@ -11,7 +11,11 @@ type ServicesProps = {
 
 export default async function ProdOrDev({ services, path }: ServicesProps) {
     const segmentedPathname = getSegmentedPathname(path)
-    const response = await getLogs('server', 'local', 1)
+    const response = await getLogs({
+        location: 'server', 
+        path: 'local', 
+        page: 1
+    })
     const logs = response.results as LocalLog[]
     const context = segmentedPathname[1] && segmentedPathname[1] !== 'message' ? segmentedPathname[1] : 'prod'
     const filteredServices = services.filter(service => {
@@ -19,7 +23,7 @@ export default async function ProdOrDev({ services, path }: ServicesProps) {
     })
 
     return (
-        <div className="h-full bg-darker rounded-xl overflow-auto max-h-full noscroll">
+        <div className="h-full w-full bg-darker rounded-xl overflow-auto max-h-full noscroll">
             {filteredServices.map(service =>
                 <Service 
                     key={service.name} 

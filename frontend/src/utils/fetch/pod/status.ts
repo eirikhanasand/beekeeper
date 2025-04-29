@@ -66,7 +66,7 @@ function worstPodStatus(groupedPods: PodGroup): ServiceStatus {
     let status = ServiceStatus.OPERATIONAL
     Object.values(groupedPods).forEach((group) => {
         for (const pod of group) {
-            const podStatus = pod.status === 'Running' 
+            const podStatus = pod.status === 'Running' && !pod.ready.includes('0/')
                 ? ServiceStatus.OPERATIONAL
                 : pod.restarts !== '0'
                     ? ServiceStatus.DOWN

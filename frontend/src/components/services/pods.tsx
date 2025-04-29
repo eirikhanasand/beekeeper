@@ -31,7 +31,7 @@ export default async function Pods() {
 }
 
 function Pod({pod}: PodProps) {
-    const status = pod.status === 'Running' 
+    const status = pod.status === 'Running' && !pod.ready.includes('0/')
         ? ServiceStatus.OPERATIONAL
         : pod.restarts !== '0'
             ? ServiceStatus.DOWN
