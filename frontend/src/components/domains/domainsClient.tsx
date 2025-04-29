@@ -4,9 +4,9 @@ import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
 import Pulse from "../root/pulse"
 import { ServiceStatus } from "@/interfaces"
-import postDomain from "@/utils/fetch/namespace/domain/post"
+// import postDomain from "@/utils/fetch/namespace/domain/post"
 import { removeCookie, setCookie } from "@/utils/cookies"
-import FancyField from "../root/fancyField"
+// import FancyField from "../root/fancyField"
 import { usePathname } from "next/navigation"
 
 type DomainsClientProps = {
@@ -17,41 +17,44 @@ type DomainsClientProps = {
     domainURL: string
 }
 
-export default function DomainsClient({context, namespace, domains: Domains, domain, domainURL}: DomainsClientProps) {
+export default function DomainsClient({context: _, namespace, domains: Domains, domain, domainURL}: DomainsClientProps) {
+// export default function DomainsClient({context, namespace, domains: Domains, domain, domainURL}: DomainsClientProps) {
     const [domains, setDomains] = useState(Domains)
-    // const allDomainsAreOperational = true
     const timerRef = useRef(3000)
     const [timeLeft, setTimeLeft] = useState(timerRef.current / 1000)
-    const [name, setName] = useState(domain)
-    const [url, setURL] = useState(domainURL)
-    const [response, setResponse] = useState<Result | null>(null)
-    const [open, setOpen] = useState(false)
+    const [name, __] = useState(domain)
+    const [url, ___] = useState(domainURL)
+    // const allDomainsAreOperational = true
+    // const [name, setName] = useState(domain)
+    // const [url, setURL] = useState(domainURL)
+    // const [response, setResponse] = useState<Result | null>(null)
+    // const [open, setOpen] = useState(false)
     const path = usePathname()
     const allowEdit = namespace !== 'global' && !path.includes('/service/message')
 
-    async function handleSubmit() {
-        const response = await postDomain({
-            name, 
-            url: url.includes('http') ? url : `https://${url}`, 
-            context, 
-            namespace
-        })
-        if (response.status === 200) {
-            setName("")
-            setURL("")
-            removeCookie('domain')
-            removeCookie('domainURL')
-            setOpen(false)
-        }
+    // async function handleSubmit() {
+    //     const response = await postDomain({
+    //         name, 
+    //         url: url.includes('http') ? url : `https://${url}`, 
+    //         context, 
+    //         namespace
+    //     })
+    //     if (response.status === 200) {
+    //         setName("")
+    //         setURL("")
+    //         removeCookie('domain')
+    //         removeCookie('domainURL')
+    //         setOpen(false)
+    //     }
 
-        setResponse(response)
-    }
+    //     setResponse(response)
+    // }
 
-    function handleCancel() {
-        setCookie('domain', name)
-        setCookie('domainURL', url)
-        setOpen(false)
-    }
+    // function handleCancel() {
+    //     setCookie('domain', name)
+    //     setCookie('domainURL', url)
+    //     setOpen(false)
+    // }
     
     useEffect(() => {
         const countdown = setInterval(() => {
@@ -107,7 +110,7 @@ export default function DomainsClient({context, namespace, domains: Domains, dom
     }, [url])
 
     return (
-        <div className="grid gap-2">
+        <div className="grid gap-2 pb-1">
             <div className="flex justify-between px-2">
                 <h1 className="text-almostbright">Domain status</h1>
                 {/* <h1 className="text-almostbright">Domain status {allDomainsAreOperational ? '˅' : '˄'}</h1> */}
@@ -132,7 +135,7 @@ export default function DomainsClient({context, namespace, domains: Domains, dom
                     </Link>
                 )
             })}
-            {allowEdit && <div className={`pb-2 ${!domains.length && 'pt-2'}`}>
+            {/* {allowEdit && <div className={`pb-2 ${!domains.length && 'pt-2'}`}>
                 {open ? <div className="grid space-between items-center text-almostbright bg-normal rounded-lg gap-2 p-2">
                     {response && <h1 className={`w-full ${response.status === 200 ? 'bg-green-500/20' : 'bg-red-500/20'} rounded-lg py-1 text-center`}>
                         {response.message}
@@ -145,7 +148,7 @@ export default function DomainsClient({context, namespace, domains: Domains, dom
                     <h1 className="select-none">Add domain</h1>
                     <h1 className="select-none text-lg pr-[3px] text-login">+</h1>
                 </div>}
-            </div>}
+            </div>} */}
         </div>
     )
 }
