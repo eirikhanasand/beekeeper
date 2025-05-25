@@ -58,6 +58,7 @@ CREATE TABLE IF NOT EXISTS pods (
     age TEXT NOT NULL,
     context TEXT NOT NULL,
     namespace TEXT NOT NULL,
+    timestamp TIMESTAMP NOT NULL DEFAULT NOW(),
     PRIMARY KEY (context, namespace, name)
 );
 
