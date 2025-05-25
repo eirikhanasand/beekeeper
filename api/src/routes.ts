@@ -68,60 +68,60 @@ export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPlug
     fastify.get('/namespaces/incidents/:context/:namespace', getNamespaceIncidents)
     fastify.get('/namespaces/ingress/:context/:namespace', getIngress)
     fastify.get('/namespaces/ingress/events/:context/:namespace/:name', getIngressEvents)
-    
+
     fastify.post('/namespaces', postNamespace)
     fastify.post('/namespaces/notes', postNamespaceNote)
     fastify.post('/namespaces/domains', postNamespaceDomain)
     fastify.post('/namespaces/incidents', postNamespaceIncident)
-    
+
     fastify.put('/namespaces/notes', putNamespaceNote)
     fastify.put('/namespaces/domains', putNamespaceDomain)
     fastify.put('/namespaces/incidents', putNamespaceIncident)
-    
+
     fastify.delete('/namespaces/notes/:id', deleteNamespaceNote)
     fastify.delete('/namespaces/domains/:id', deleteNamespaceDomain)
     fastify.delete('/namespaces/incidents/:id', deleteNamespaceIncident)
-    
+
     // log
     fastify.get('/log/:log', getLog)
-    
+
     fastify.post('/log/global', postGlobalLog)
     fastify.post('/log/local', postLocalLog)
-    
+
     // command 
     fastify.get('/commands/local', getLocalCommands)
     fastify.get('/commands/global', getGlobalCommands)
-    
+
     fastify.post('/command', postCommand)
     fastify.post('/commands/local', postLocalCommand)
     fastify.post('/commands/global', postGlobalCommand)
-    
+
     fastify.put('/commands/local', putLocalCommand)
     fastify.put('/commands/global', putGlobalCommand)
-    
+
     fastify.delete('/commands/local/:id', deleteLocalCommand)
     fastify.delete('/commands/global/:id', deleteGlobalCommand)
-    
+
     // pod
     fastify.get('/pods', getPods)
-    
+
     fastify.post('/pods', postPod)
-    
+
     // user
     fastify.get('/user/:email', getUser)
     fastify.get('/users', getUsers)
     fastify.get('/token', getToken)
-    
+
     // login
     fastify.get('/login', getLogin)
     fastify.get('/callback', getCallback)
-    
+
     // messages
     fastify.get('/messages', getMessages)
 
     fastify.post('/messages', postMessage)
-    
+
     fastify.put('/messages', putMessage)
-    
+
     fastify.delete('/messages/:id', deleteMessage)
 }
