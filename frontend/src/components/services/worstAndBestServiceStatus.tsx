@@ -5,7 +5,13 @@ import podStatus from "@/utils/fetch/pod/status"
 import getSegmentedPathname from "@/utils/pathname"
 import { headers } from "next/headers"
 
-export default async function worstAndBestServiceStatus(): Promise<{ best: ServiceStatus, worst: ServiceStatus, meta: ServiceStatus }> {
+type WorstAndBestServiceStatus = {
+    best: ServiceStatus
+    worst: ServiceStatus
+    meta: ServiceStatus
+}
+
+export default async function worstAndBestServiceStatus(): Promise<WorstAndBestServiceStatus> {
     let best = ServiceStatus.OPERATIONAL
     let worst = ServiceStatus.OPERATIONAL
     let upCount = 0
@@ -13,13 +19,14 @@ export default async function worstAndBestServiceStatus(): Promise<{ best: Servi
     const Headers = await headers()
     const path = Headers.get('x-current-path') || ''
     const segmentedPathname = getSegmentedPathname(path)
+    const context = segmentedPathname[1] && segmentedPathname[1] !== 'message' ? segmentedPathname[1] : 'prod'
     const response = await getLogs({
-        location: 'server', 
-        path: 'local', 
-        page: 1
+        location: 'server',
+        path: 'local',
+        page: 1,
+        context
     })
     const logs = response.results as LocalLog[]
-    const context = segmentedPathname[1] && segmentedPathname[1] !== 'message' ? segmentedPathname[1] : 'prod'
     const services = await getNamespaces('server')
     const filteredServices = services.filter(service => {
         return service.context.includes(context)

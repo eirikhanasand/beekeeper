@@ -10,7 +10,8 @@ export default async function LoggedOutServices() {
     const response = await getLogs({
         location: 'server', 
         path: 'local', 
-        page: 1
+        page: 1,
+        context: 'prod'
     })
     const logs = response.results as LocalLog[]
     const filteredServices = services.filter(service => {

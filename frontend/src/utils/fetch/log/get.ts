@@ -9,6 +9,7 @@ type LogParams = {
     page: number
     resultsPerPage?: number
     namespace?: string
+    context?: string
     search?: string
 }
 
@@ -20,11 +21,20 @@ type Log = {
     error?: string
 }
 
-export default async function getLogs({location, path, page, namespace, search, resultsPerPage}: LogParams): Promise<Log> {
+export default async function getLogs({
+    location,
+    path,
+    page,
+    namespace,
+    context,
+    search,
+    resultsPerPage
+}: LogParams): Promise<Log> {
     const baseUrl = `${location === 'server' ? config.url.API : API_URL}/log/${path}`
     const params = new URLSearchParams({ page: String(page) })
     resultsPerPage && params.set('resultsPerPage', String(resultsPerPage))
     namespace && params.set('namespace', namespace)
+    context && params.set('context', context)
     search && params.set('search', search)
     const url = `${baseUrl}?${params.toString()}`
     debug({

@@ -22,12 +22,14 @@ export default async function Service({params}: {params: Promise<{ id: string[] 
     const Cookies = await cookies()
     const path = Headers.get('x-current-path') || ''
     const segmentedPathname = getSegmentedPathname(path)
+    const context = segmentedPathname[1] || 'prod'
     const namespace = segmentedPathname[2] || ''
     const response = await getLogs({
         location: "server", 
         path: isGlobal ? "global" : "local", 
         page: 1,
-        namespace
+        namespace,
+        context
     })
     const logs = response.results
     const globalCommands = await Promise.all((await getGlobalCommands('server')).map(async(command) => ({

@@ -11,13 +11,14 @@ type ServicesProps = {
 
 export default async function ProdOrDev({ services, path }: ServicesProps) {
     const segmentedPathname = getSegmentedPathname(path)
+    const context = segmentedPathname[1] && segmentedPathname[1] !== 'message' ? segmentedPathname[1] : 'prod'
     const response = await getLogs({
         location: 'server', 
         path: 'local', 
-        page: 1
+        page: 1,
+        context
     })
     const logs = response.results as LocalLog[]
-    const context = segmentedPathname[1] && segmentedPathname[1] !== 'message' ? segmentedPathname[1] : 'prod'
     const filteredServices = services.filter(service => {
         return service.context.includes(context)
     })

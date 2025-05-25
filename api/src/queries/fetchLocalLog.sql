@@ -1,5 +1,6 @@
 SELECT * FROM local_log
 WHERE ($3::TEXT IS NULL OR namespace = $3)
+WHERE ($5::TEXT IS NULL OR context ILIKE '%' || $5 || '%')
 AND (
     $4::TEXT IS NULL 
     OR event ILIKE '%' || $4 || '%' 

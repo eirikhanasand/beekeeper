@@ -11,6 +11,7 @@ type PagingProps = {
     setResultsPerPage: Dispatch<SetStateAction<number>>
     searchParams: ReadonlyURLSearchParams
     namespace: string
+    context: string
     customStyle?: string
 }
 
@@ -33,7 +34,8 @@ export default function Paging({
     setResultsPerPage,
     searchParams,
     customStyle,
-    namespace
+    namespace,
+    context
 }: PagingProps) {
     const unClickableButtonStyle = 'bg-light rounded-md p-1 px-3 hover:bg-extralight h-[2rem] min-w-[2rem]'
     const buttonStyle = 'bg-light rounded-md p-1 px-3 hover:bg-extralight grid place-items-center cursor-pointer'
@@ -65,6 +67,7 @@ export default function Paging({
                 path: isGlobal ? 'global' : 'local',
                 page,
                 namespace,
+                context,
                 search,
                 resultsPerPage
             })

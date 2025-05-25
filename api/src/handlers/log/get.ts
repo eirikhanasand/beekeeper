@@ -5,16 +5,23 @@ import config from '@constants'
 
 const { DEFAULT_RESULTS_PER_PAGE } = config
 
-type LogProps = { 
-    resultsPerPage?: string 
-    page?: string,
+type LogProps = {
+    resultsPerPage?: string
+    page?: string
+    context?: string
     namespace?: string
     search?: string
 }
 
 export default async function getLog(req: FastifyRequest, res: FastifyReply) {
     const { log } = req.params as { log: string } || {}
-    const { resultsPerPage: clientResultsPerPage, page, namespace, search } = req.query as LogProps || {}
+    const {
+        resultsPerPage: clientResultsPerPage,
+        page,
+        context,
+        namespace,
+        search
+    } = req.query as LogProps || {}
     const resultsPerPage = Number(clientResultsPerPage) || DEFAULT_RESULTS_PER_PAGE
 
     if (log !== 'local' && log !== 'global') {
@@ -30,9 +37,9 @@ export default async function getLog(req: FastifyRequest, res: FastifyReply) {
     const logQueryFile = isLocal ? 'fetchLocalLog.sql' : 'fetchGlobalLog.sql'
     const logCountQueryFile = isLocal ? 'fetchLocalLogCount.sql' : 'fetchGlobalLogCount.sql'
     const logQueryParameters = isLocal
-        ? [Number(page) || 1, resultsPerPage, namespace || null, search || null]
+        ? [Number(page) || 1, resultsPerPage, namespace || null, search || null, context || null]
         : [Number(page) || 1, resultsPerPage, search || null]
-    const logCountQueryParameters = isLocal ? [namespace || null, search || null] : [search || null]
+    const logCountQueryParameters = isLocal ? [namespace || null, search || null, context || null] : [search || null]
 
     try {
         const logQuery = (await loadSQL(logQueryFile))
@@ -44,6 +51,7 @@ export default async function getLog(req: FastifyRequest, res: FastifyReply) {
             console.error(`Page does not exist (${page} / ${pages})`)
             return res.send({
                 namespace: namespace || 'global',
+                context: context || 'global',
                 page,
                 pages,
                 resultsPerPage,
