@@ -37,7 +37,15 @@ kubectl config get-contexts | sed 's/^\*//' | tail -n +2 | while read -r line; d
             status=$(echo $line | awk '{print $3}')
             restarts=$(echo $line | awk '{print $4}')
             pod_age=$(echo $line | awk '{print $5}')
-            $PSQL "INSERT INTO pods_staging (name, ready, status, restarts, age, context, namespace) VALUES ('$pod_name', '$ready', '$status', '$restarts', '$pod_age', '$context_short_name', '$namespace_name');"
+            $PSQL "INSERT INTO pods_staging (name, ready, status, restarts, age, context, namespace)
+            VALUES ('$pod_name', '$ready', '$status', '$restarts', '$pod_age', '$context_short_name', '$namespace_name')
+            ON CONFLICT (name, context, namespace)
+            DO UPDATE SET
+            ready = EXCLUDED.ready,
+            status = EXCLUDED.status,
+            restarts = EXCLUDED.restarts,
+            age = EXCLUDED.age,
+            timestamp = now();"
         done
 
         kubectl get ingress -n $namespace_name | tail -n +2 | while read -r line; do
@@ -61,7 +69,7 @@ kubectl config get-contexts | sed 's/^\*//' | tail -n +2 | while read -r line; d
             else
                 echo "🐝 No events"
             fi
-            echo "-------------------------------"
+            echo "--------------------------------------------------------------"
         done
     done
 done
@@ -69,11 +77,49 @@ done
 $PSQL_MULTILINE <<EOF
 BEGIN;
 TRUNCATE pods, namespaces, contexts CASCADE;
-INSERT INTO contexts SELECT * FROM contexts_staging;
-INSERT INTO namespaces SELECT * FROM namespaces_staging;
-INSERT INTO pods SELECT * FROM pods_staging;
-INSERT INTO namespace_ingress SELECT * FROM ingress_staging;
-INSERT INTO namespace_domains SELECT * FROM domains_staging;
+
+INSERT INTO contexts (name, cluster, authinfo, namespace)
+SELECT name, cluster, authinfo, namespace FROM contexts_staging
+ON CONFLICT (name)
+DO UPDATE SET
+  cluster = EXCLUDED.cluster,
+  authinfo = EXCLUDED.authinfo,
+  namespace = EXCLUDED.namespace;
+
+INSERT INTO namespaces (context, name, status, service_status, age)
+SELECT context, name, status, service_status, age FROM namespaces_staging
+ON CONFLICT (context, name)
+DO UPDATE SET
+  status = EXCLUDED.status,
+  service_status = EXCLUDED.service_status,
+  age = EXCLUDED.age;
+
+INSERT INTO pods (name, ready, status, restarts, age, context, namespace)
+SELECT name, ready, status, restarts, age, context, namespace FROM pods_staging
+ON CONFLICT (context, namespace, name)
+DO UPDATE SET
+  ready = EXCLUDED.ready,
+  status = EXCLUDED.status,
+  restarts = EXCLUDED.restarts,
+  age = EXCLUDED.age,
+  timestamp = NOW();
+
+INSERT INTO namespace_ingress (context, namespace, name, class, hosts, address, ports, age)
+SELECT context, namespace, name, class, hosts, address, ports, age FROM ingress_staging
+ON CONFLICT (context, namespace, name)
+DO UPDATE SET
+  class = EXCLUDED.class,
+  hosts = EXCLUDED.hosts,
+  address = EXCLUDED.address,
+  ports = EXCLUDED.ports,
+  age = EXCLUDED.age;
+
+INSERT INTO namespace_domains (name, url, context, namespace)
+SELECT name, url, context, namespace FROM domains_staging
+ON CONFLICT (context, namespace, url)
+DO UPDATE SET
+  name = EXCLUDED.name;
+
 INSERT INTO namespace_ingress_events SELECT * FROM ingress_events_staging;
 COMMIT;
 EOF
