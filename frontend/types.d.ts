@@ -232,6 +232,7 @@ type Pod = {
     age: string
     context: string
     namespace: string
+    timestamp: string
 }
 
 type Ingress = {

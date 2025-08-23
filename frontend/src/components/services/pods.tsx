@@ -1,6 +1,7 @@
 import { ServiceStatus } from "@/interfaces"
 import Pulse from "../root/pulse"
 import podStatus from "@/utils/fetch/pod/status"
+import timeDiffFromNow from "@/utils/formatDate"
 
 type PodProps = {
     pod: Pod
@@ -36,14 +37,15 @@ function Pod({pod}: PodProps) {
         : pod.restarts !== '0'
             ? ServiceStatus.DOWN
             : ServiceStatus.DEGRADED
-
+    const timestamp = timeDiffFromNow(pod.timestamp)
     return (
         <div>
             <h1 className="text-superlight text-[0.8rem] flex justify-between items-center">{pod.name}<Pulse status={status} /></h1>
             <div className="flex gap-2">
-                <h1 className="text-extralight text-[0.8rem]">Ready: {pod.ready}</h1>
-                <h1 className="text-extralight text-[0.8rem]">Restarts: {pod.restarts}</h1>
-                <h1 className="text-extralight text-[0.8rem]">Age: {pod.age}</h1>
+                <h1 className="text-extralight text-[0.6rem]">{pod.ready} ✓</h1>
+                <h1 className="text-extralight text-[0.6rem]">{pod.restarts} ↻</h1>
+                <h1 className="text-extralight text-[0.6rem]">{pod.age} 👴🏻</h1>
+                <h1 className="text-extralight text-[0.6rem]">{timestamp} 🕒</h1>
             </div>
         </div>
     )

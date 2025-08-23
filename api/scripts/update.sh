@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# Conflicts are ignored in staging statements since these are from the current
+# script run, and therefore unlikely to require an update (except for pods since
+# they change more often).
+
 echo "🐝 Updating BeeKeeper."
 
 export PGPASSWORD=$DB_PASSWORD
@@ -22,14 +26,14 @@ kubectl config get-contexts | sed 's/^\*//' | tail -n +2 | while read -r line; d
     authinfo=$(echo $line | awk '{print $4}')
     namespace=$(echo $line | awk '{print $5}')
     context_short_name=$(echo $name | sed 's/^do-ams3-//')
-    $PSQL "INSERT INTO contexts_staging (name, cluster, authinfo, namespace) VALUES ('$context_short_name', '$cluster', '$authinfo', '$namespace');"
+    $PSQL "INSERT INTO contexts_staging (name, cluster, authinfo, namespace) VALUES ('$context_short_name', '$cluster', '$authinfo', '$namespace') ON CONFLICT DO NOTHING;"
 
     kubectl config use-context "$name"
     kubectl get ns | tail -n +2 | while read -r line; do
         namespace_name=$(echo $line | awk '{print $1}')
         namespace_status=$(echo $line | awk '{print $2}')
         age=$(echo $line | awk '{print $3}')
-        $PSQL "INSERT INTO namespaces_staging (context, name, status, service_status, age) VALUES ('$context_short_name', '$namespace_name', '$namespace_status', 'operational', '$age');"
+        $PSQL "INSERT INTO namespaces_staging (context, name, status, service_status, age) VALUES ('$context_short_name', '$namespace_name', '$namespace_status', 'operational', '$age') ON CONFLICT DO NOTHING;"
     
         kubectl get pods -n $namespace_name | tail -n +2 | while read -r line; do
             pod_name=$(echo $line | awk '{print $1}')
@@ -55,8 +59,8 @@ kubectl config get-contexts | sed 's/^\*//' | tail -n +2 | while read -r line; d
             address=$(echo $line | awk '{print $4}')
             ports=$(echo $line | awk '{print $5 $6}')
             age=$(echo $line | awk '{print $7}')
-            $PSQL "INSERT INTO ingress_staging (context, namespace, name, class, hosts, address, ports, age) VALUES ('$context_short_name', '$namespace_name', '$ingress_name', '$class', '$hosts', '$address', '$ports', '$age');"
-            $PSQL "INSERT INTO domains_staging (name, url, context, namespace) VALUES ('$ingress_name', '$hosts', '$context_short_name', '$namespace_name');"
+            $PSQL "INSERT INTO ingress_staging (context, namespace, name, class, hosts, address, ports, age) VALUES ('$context_short_name', '$namespace_name', '$ingress_name', '$class', '$hosts', '$address', '$ports', '$age') ON CONFLICT DO NOTHING;"
+            $PSQL "INSERT INTO domains_staging (name, url, context, namespace) VALUES ('$ingress_name', '$hosts', '$context_short_name', '$namespace_name') ON CONFLICT DO NOTHING;"
         done
 
         for ingress in $(kubectl get ingress -n beehive -o name); do
@@ -65,7 +69,7 @@ kubectl config get-contexts | sed 's/^\*//' | tail -n +2 | while read -r line; d
             if [ -n "$events" ]; then
                 echo "🚩 Events found:"
                 echo "$events"
-                $PSQL "INSERT INTO ingress_events_staging (context, namespace, name, events) VALUES ('$context_short_name', '$namespace_name', '$ingress', '$events');"
+                $PSQL "INSERT INTO ingress_events_staging (context, namespace, name, events) VALUES ('$context_short_name', '$namespace_name', '$ingress', '$events') ON CONFLICT DO NOTHING;"
             else
                 echo "🐝 No events"
             fi
