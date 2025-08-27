@@ -12,7 +12,6 @@ fastify.register(cors, {
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD']
 })
 
-// Configures the port for the server, uses environment variable if defined, otherwise defaults to 8080
 const port = Number(process.env.PORT) || 8080
 
 fastify.register(apiRoutes, { prefix: "/api" })
