@@ -7,7 +7,7 @@ const { version } = require('../package.json')
 
 const config = {
     url: {
-        API: NEXT_PUBLIC_API_URL || 'https://beekeeper-api.login.no/api',
+        API: NEXT_PUBLIC_API_URL || 'https://api.beekeeper.login.no/api',
         CDN_URL: CDN_URL || 'https://cdn.login.no'
     },
     version
