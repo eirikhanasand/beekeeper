@@ -15,7 +15,9 @@ export default async function discordAlert(description: string) {
             ]
         }
 
-        if (CRITICAL_ROLE) data.content = `🚨 <@&${CRITICAL_ROLE}> 🚨`
+        if (CRITICAL_ROLE) {
+            data.content = `🚨 <@&${CRITICAL_ROLE}> 🚨`
+        }
 
         const response = await fetch(WEBHOOK_URL ?? '', {
             method: 'POST',
