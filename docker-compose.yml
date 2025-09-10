@@ -1,7 +1,7 @@
 services:
   postgres:
     image: postgres:15
-    container_name: database
+    container_name: beekeeper_database
     restart: always
     environment:
       POSTGRES_USER: ${DB_USER:-beekeeper}
@@ -17,8 +17,8 @@ services:
       interval: 5s
       retries: 5
 
-  api:
-    container_name: api 
+  beekeeper_api:
+    container_name: beekeeper_api 
     image: beekeeper-api
     build:
       context: ./api
@@ -49,8 +49,8 @@ services:
       interval: 5s
       retries: 5
 
-  frontend:
-    container_name: frontend
+  beekeeper_frontend:
+    container_name: beekeeper_frontend
     image: beekeeper-frontend
     build:
       context: ./frontend
@@ -63,7 +63,7 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      - api
+      - beekeeper_api
     environment:
       # DigitalOcean
       DOCTL_TOKEN: ${DOCTL_TOKEN}
