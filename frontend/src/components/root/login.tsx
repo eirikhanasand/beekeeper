@@ -12,16 +12,16 @@ export default function Login() {
     const [errorMessage, setErrorMessage] = useState("")
 
     useEffect(() => {
-            (async () => {
-                try {
-                    const response = await fetch(loginUrl, { method: 'HEAD' })
-                    if (!response.ok) {
-                        setLoginUnavailable(true)
-                    }
-                } catch (error) {
+        (async () => {
+            try {
+                const response = await fetch(loginUrl, { method: 'HEAD' })
+                if (!response.ok) {
                     setLoginUnavailable(true)
                 }
-            })()
+            } catch (error) {
+                setLoginUnavailable(true)
+            }
+        })()
     }, [loginUrl])
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -84,8 +84,8 @@ export default function Login() {
 
     return (
         <div>
-            <Link 
-                href={`${API_URL}/login`} 
+            <Link
+                href={`${API_URL}/login`}
                 className='bg-login text-dark px-5 rounded-xl cursor-pointer'
             >
                 Login
