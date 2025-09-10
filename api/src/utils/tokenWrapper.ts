@@ -1,7 +1,7 @@
-import { FastifyReply, FastifyRequest } from "fastify"
+import { FastifyReply, FastifyRequest } from 'fastify'
 import config from '@constants'
 
-const { USERINFO_URL } = config
+const { USERINFO_URL, BTG_TOKEN } = config
 
 export default async function tokenWrapper(req: FastifyRequest, res: FastifyReply): Promise<{ valid: boolean, error?: string }> {
     const authHeader = req.headers['authorization']
@@ -22,9 +22,22 @@ export default async function tokenWrapper(req: FastifyRequest, res: FastifyRepl
             }
         })
 
+        if (userInfoRes.status === 503 && token && token.length > 1000) {
+            if (token === BTG_TOKEN) {
+                return {
+                    valid: true
+                }
+            } else {
+                return {
+                    valid: false,
+                    error: 'Unauthorized'
+                }
+            }
+        }
+
         if (!userInfoRes.ok) {
-            return { 
-                valid: false, 
+            return {
+                valid: false,
                 error: 'Unauthorized'
             }
         }
@@ -32,13 +45,13 @@ export default async function tokenWrapper(req: FastifyRequest, res: FastifyRepl
         // const userInfo = await userInfoRes.json()
         // console.log(userInfo)
 
-        return { 
+        return {
             valid: true
         }
     } catch (err) {
         res.log.error(err)
-        return res.status(500).send({ 
-            valid: false, 
+        return res.status(500).send({
+            valid: false,
             error: 'Internal server error'
         })
     }

@@ -19,6 +19,9 @@ type ENV = {
     BEEKEEPER_URL: string
     AUTHENTIK_TOKEN: string
     DEFAULT_RESULTS_PER_PAGE: string
+    BTG_TOKEN: string
+    CRITICAL_ROLE: string
+    WEBHOOK_URL: string
 }
 
 dotenv.config({path: '../.env'})
@@ -41,7 +44,10 @@ const {
     BASE_URL,
     BEEKEEPER_URL,
     AUTHENTIK_TOKEN,
-    DEFAULT_RESULTS_PER_PAGE
+    DEFAULT_RESULTS_PER_PAGE,
+    BTG_TOKEN,
+    CRITICAL_ROLE,
+    WEBHOOK_URL
 } = process.env as unknown as ENV
 if (!DOCTL_TOKEN
     || !PRIVATE_TOKEN
@@ -55,6 +61,8 @@ if (!DOCTL_TOKEN
     || !BASE_URL
     || !BEEKEEPER_URL
     || !AUTHENTIK_TOKEN
+    || !BTG_TOKEN
+    || !WEBHOOK_URL
 ) {
     throw new Error("Missing one or more environment variables.")
 }
@@ -85,6 +93,9 @@ const config = {
     BEEKEEPER_URL,
     USER_ENDPOINT,
     AUTHENTIK_TOKEN,
+    BTG_TOKEN,
+    CRITICAL_ROLE,
+    WEBHOOK_URL,
     DEFAULT_RESULTS_PER_PAGE: Number(DEFAULT_RESULTS_PER_PAGE) || 50
 }
 

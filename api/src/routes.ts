@@ -4,6 +4,7 @@ import getUsers from './handlers/user/getUsers.js'
 import getIndex from './handlers/index/getIndex.js'
 import getLogin from './handlers/login/getLogin.js'
 import getToken from './handlers/login/getToken.js'
+import getTokenBTG from './handlers/login/getTokenBTG.js'
 import getHealth from './handlers/index/getHealth.js'
 import getVersion from './handlers/index/getVersion.js'
 import getContexts from './handlers/context/get.js'
@@ -111,6 +112,7 @@ export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPlug
     fastify.get('/user/:email', getUser)
     fastify.get('/users', getUsers)
     fastify.get('/token', getToken)
+    fastify.get('/token/btg', getTokenBTG)
 
     // login
     fastify.get('/login', getLogin)

@@ -5,8 +5,7 @@ import { cookies } from 'next/headers'
 import Note from '@/components/services/note'
 import getMessages from '@/utils/fetch/message/get'
 import Message from '@/components/services/message'
-
-const API_URL = process.env.NEXT_PUBLIC_BROWSER_API
+import Login from '@/components/root/login'
 
 export default async function Home() {
     const Cookies = await cookies()
@@ -28,12 +27,7 @@ export default async function Home() {
                             <h1 className='text-2xl text-login font-semibold'>
                                 BeeKeeper
                             </h1>
-                            <Link 
-                                href={`${API_URL}/login`} 
-                                className='bg-login text-dark px-5 rounded-xl cursor-pointer'
-                            >
-                                Login
-                            </Link>
+                            <Login />
                         </div>
                     </div>
                 </div>
