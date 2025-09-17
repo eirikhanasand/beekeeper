@@ -1,7 +1,3 @@
-import dotenv from 'dotenv'
-
-dotenv.config()
-
 const { NEXT_PUBLIC_API_URL, CDN_URL } = process.env
 const { version } = require('../package.json')
 

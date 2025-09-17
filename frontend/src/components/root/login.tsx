@@ -94,7 +94,7 @@ export default function Login() {
         <div>
             <Link
                 href={loginUrl}
-                className='bg-login text-dark px-5 py-2 rounded-xl cursor-pointer'
+                className='bg-login text-dark px-5 py-1 rounded-xl cursor-pointer'
             >
                 Login
             </Link>
