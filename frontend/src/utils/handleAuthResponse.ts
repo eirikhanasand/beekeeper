@@ -3,8 +3,18 @@ import { setCookie } from "./cookies"
 export default async function handleAuthResponse() {
     const url = window.location.href
     const query = new URLSearchParams(new URL(url).search)
-    const userInfo = query.get("access_token")
-    if (!userInfo) {
+    const token = query.get("access_token")
+    const btg = query.get('btg')
+    if (!token) {
+        return
+    }
+
+    if (btg) {
+        window.location.href = 'dashboard'
+        return
+    }
+
+    if (!token) {
         return
     }
 

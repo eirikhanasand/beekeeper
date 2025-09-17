@@ -5,6 +5,7 @@ import pathIsAllowedWhileUnauthenticated from './utils/pathIsAllowedWhileUnauthe
 export async function middleware(req: NextRequest) {
     const tokenCookie = req.cookies.get('access_token')
     const groupCookie = req.cookies.get('groups')
+
     if (!pathIsAllowedWhileUnauthenticated(req.nextUrl.pathname)) {
         if (!tokenCookie || !groupCookie) {
             return NextResponse.redirect(new URL('/', req.url))
@@ -22,6 +23,7 @@ export async function middleware(req: NextRequest) {
             return NextResponse.redirect(new URL('/logout', req.url))
         }
     }
+
     const theme = req.cookies.get('theme')?.value || 'dark'
     const res = NextResponse.next()
     res.headers.set('x-theme', theme)

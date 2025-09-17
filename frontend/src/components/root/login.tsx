@@ -2,23 +2,26 @@
 
 import Link from "next/link"
 import { useState, useEffect } from "react"
-import { setCookie } from "@/utils/cookies"
+import { removeCookie, setCookie } from "@/utils/cookies"
 
 const API_URL = process.env.NEXT_PUBLIC_BROWSER_API
+const loginUrl = `${process.env.NEXT_PUBLIC_BROWSER_API}/login`
 
 export default function Login() {
-    const loginUrl = `${API_URL}/login`
     const [loginUnavailable, setLoginUnavailable] = useState(false)
-    const [errorMessage, setErrorMessage] = useState("")
+    const [errorMessage, setErrorMessage] = useState('')
 
     useEffect(() => {
         (async () => {
             try {
-                const response = await fetch(loginUrl, { method: 'HEAD' })
+                const response = await fetch('/api/authentik-health')
                 if (!response.ok) {
                     setLoginUnavailable(true)
                 }
+
+                removeCookie('btg_name')
             } catch (error) {
+                console.log(error)
                 setLoginUnavailable(true)
             }
         })()
@@ -45,8 +48,13 @@ export default function Login() {
             setCookie("name", name, 1)
             setCookie("access_token", token, 1)
             setCookie("groups", "tekkom", 1)
+            document.location.href = `login?access_token=${token}&btg=true`
         } catch (error) {
-            setErrorMessage(error instanceof Error ? error.message : "Unknown error! Please contact TekKom")
+            setErrorMessage(error instanceof Error
+                ? error.message.includes('Unauthorized')
+                    ? 'Unauthorized'
+                    : error.message
+                : 'Unknown error! Please contact TekKom')
         }
     }
 
@@ -85,7 +93,7 @@ export default function Login() {
     return (
         <div>
             <Link
-                href={`${API_URL}/login`}
+                href={loginUrl}
                 className='bg-login text-dark px-5 rounded-xl cursor-pointer'
             >
                 Login
