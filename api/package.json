@@ -4,7 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "tsc && tsc-alias && node dist/src/index.js",
+    "dev": "tsx --watch src/index.ts",
     "build": "tsc && tsc-alias",
     "start": "node dist/src/index.js"
   },
@@ -15,8 +15,9 @@
   "dependencies": {
     "@fastify/cors": "^11.1.0",
     "dotenv": "^17.2.2",
-    "fastify": "^5.6.0",
-    "pg": "^8.16.3"
+    "fastify": "^5.6.1",
+    "pg": "^8.16.3",
+    "tsx": "^4.20.5"
   },
   "devDependencies": {
     "@types/pg": "^8.15.5",

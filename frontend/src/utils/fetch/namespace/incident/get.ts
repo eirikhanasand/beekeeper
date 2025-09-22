@@ -22,7 +22,7 @@ export default async function getIncidents(location: 'server' | 'client', contex
         const incidents = await response.json()
         return incidents
     } catch (error) {
-        console.error(error)
+        console.log(error)
         return []
     }
 }

@@ -46,7 +46,7 @@ export default async function runCommand(req: FastifyRequest, res: FastifyReply)
 
         exec(fullCommand, (error, stdout, stderr) => {
             if (error) {
-                console.error(`Execution error: ${error.message}`)
+                console.log(`Execution error: ${error.message}`)
                 return res.status(500).send({ error: "Failed to execute command." })
             }
             if (stderr) {
@@ -59,7 +59,7 @@ export default async function runCommand(req: FastifyRequest, res: FastifyReply)
 
         return res.send({ message: `Successfully ran command ${id}: ${command}.` })
     } catch (error) {
-        console.error(`Database error: ${JSON.stringify(error)}`)
+        console.log(`Database error: ${JSON.stringify(error)}`)
         return res.status(500).send({ error: "Internal Server Error" })
     }
 }

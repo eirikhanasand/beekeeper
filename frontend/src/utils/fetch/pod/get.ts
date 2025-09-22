@@ -22,7 +22,7 @@ export default async function getPods(location: 'server' | 'client'): Promise<Po
         const services = await response.json()
         return services
     } catch (error) {
-        console.error(error)
+        console.log(error)
         return []
     }
 }

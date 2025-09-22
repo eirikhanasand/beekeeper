@@ -40,7 +40,7 @@ export default async function postLocalCommand({ router, token, context, name, n
     
         return response.status
     } catch (error) {
-        console.error(error)
+        console.log(error)
         return 400
     }
 }

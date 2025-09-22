@@ -22,7 +22,7 @@ export default async function getNamespaces(location: 'server' | 'client'): Prom
         const services = await response.json()
         return services
     } catch (error) {
-        console.error(error)
+        console.log(error)
         return []
     }
 }

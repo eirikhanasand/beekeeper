@@ -2,8 +2,7 @@ import cors from '@fastify/cors'
 import Fastify from 'fastify'
 import apiRoutes from './routes.js'
 import getIndexHandler from './handlers/index/getIndex.js'
-import run from '@db'
-import config from '@constants'
+import fp from '@utils/fp.js'
 
 const fastify = Fastify({
     logger: true
@@ -16,12 +15,11 @@ fastify.register(cors, {
 
 const port = Number(process.env.PORT) || 8080
 
+fastify.decorate('cachedData', {})
+fastify.decorate('cacheStatus', '0.0')
+fastify.register(fp)
 fastify.register(apiRoutes, { prefix: "/api" })
 fastify.get('/', getIndexHandler)
-
-setInterval(async() => {
-    await run('REFRESH MATERIALIZED VIEW CONCURRENTLY local_log_namespace_context_counts;')
-}, config.ONE_MINUTE)
 
 async function start() {
     try {

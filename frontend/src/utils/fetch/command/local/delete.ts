@@ -22,7 +22,7 @@ export default async function deleteLocalCommand({ token, id }: DeleteLocalComma
     
         return response.status
     } catch (error) {
-        console.error(error)
+        console.log(error)
         return 400
     }
 }

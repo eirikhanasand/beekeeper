@@ -34,7 +34,7 @@ export default async function postLocalCommand(req: FastifyRequest, res: Fastify
 
         return res.send({ message: `Successfully added local command ${name} for namespace ${namespace} in context ${context}.` })
     } catch (error) {
-        console.error(`Database error: ${JSON.stringify(error)}`)
+        console.log(`Database error: ${JSON.stringify(error)}`)
         return res.status(500).send({ error: "Internal Server Error" })
     }
 }

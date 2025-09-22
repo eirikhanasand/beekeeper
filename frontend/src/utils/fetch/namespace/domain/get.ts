@@ -22,7 +22,7 @@ export default async function getDomains(location: 'server' | 'client', context:
         const domains = await response.json()
         return domains
     } catch (error) {
-        console.error(error)
+        console.log(error)
         return []
     }
 }

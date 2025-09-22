@@ -23,7 +23,7 @@ export default async function getIngress(location: 'server' | 'client', context:
         const services = await response.json()
         return services
     } catch (error) {
-        console.error(error)
+        console.log(error)
         return []
     }
 }

@@ -29,7 +29,7 @@ export default async function putMessage(message: MessageWithoutTimestamp, token
         debug({ detailed: { message: `Request to ${url} succeeded`, data } })
         return { status: response.status, message: data }
     } catch (error) {
-        console.error(error)
+        console.log(error)
         return { status: 400, message: "Something went wrong." }
     }
 }

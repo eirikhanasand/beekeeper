@@ -41,7 +41,7 @@ export default async function putLocalCommand({ router, token, id, context, name
     
         return response.status
     } catch (error) {
-        console.error(error)
+        console.log(error)
         return 400
     }
 }

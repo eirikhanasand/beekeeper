@@ -3,11 +3,11 @@ import run from "@db"
 
 export default async function getGlobalCommands(_: FastifyRequest, res: FastifyReply) {
     try {
-        const commands = await run(`SELECT * FROM global_commands`, [])
+        const commands = await run(`SELECT * FROM global_commands`)
 
         return res.send(commands.rows)
     } catch (error) {
-        console.error(`Database error: ${JSON.stringify(error)}`)
+        console.log(`Database error: ${JSON.stringify(error)}`)
         return res.status(500).send({ error: "Internal Server Error" })
     }
 }

@@ -38,7 +38,7 @@ export default async function postGlobalCommand({ router, token, name, command, 
     
         return response.status
     } catch (error) {
-        console.error(error)
+        console.log(error)
         return 400
     }
 }

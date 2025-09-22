@@ -26,7 +26,7 @@ export default async function postNamespaceIncident(req: FastifyRequest, res: Fa
 
         return res.send({ message: `Successfully added incident ${name} with url ${url} at time ${timestamp} for namespace ${namespace} in context ${context}.` })
     } catch (error) {
-        console.error(`Database error: ${JSON.stringify(error)}`)
+        console.log(`Database error: ${JSON.stringify(error)}`)
         return res.status(500).send({ error: "Internal Server Error" })
     }
 }

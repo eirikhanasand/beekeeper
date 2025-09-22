@@ -21,7 +21,7 @@ export default async function getLocalCommands(location: 'server' | 'client', se
         const commands = await response.json()
         return commands.filter((command: LocalCommand) => command.namespace.toLowerCase() === service)
     } catch (error) {
-        console.error(error)
+        console.log(error)
         return []
     }
 }

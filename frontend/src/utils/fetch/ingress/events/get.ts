@@ -30,7 +30,7 @@ export default async function getIngressEvents({location, context, namespace, na
         const services = await response.json()
         return services
     } catch (error) {
-        console.error(error)
+        console.log(error)
         return []
     }
 }

@@ -21,7 +21,7 @@ export default async function getGlobalCommands(location: 'server' | 'client'): 
         const commands = await response.json()
         return commands
     } catch (error) {
-        console.error(error)
+        console.log(error)
         return []
     }
 }

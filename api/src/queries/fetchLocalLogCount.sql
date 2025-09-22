@@ -1,6 +1,6 @@
 WITH fast_count AS (
-    SELECT cnt::BIGINT AS count
-    FROM local_log_namespace_context_counts
+    SELECT COUNT(*)::BIGINT AS count
+    FROM local_log
     WHERE (namespace = $1::TEXT)
       AND (context = $3::TEXT)
 ),
@@ -9,7 +9,7 @@ full_count AS (
     FROM local_log
     WHERE (namespace = $1::TEXT)
       AND (context = $3::TEXT)
-      AND ($2::TEXT IS NULL OR event ILIKE '%' || $2::TEXT || '%' OR name ILIKE '%' || $2::TEXT || '%')
+      AND ($2::TEXT IS NULL OR event ILIKE '%' || $2::TEXT || '%')
 )
 SELECT 
     CASE 

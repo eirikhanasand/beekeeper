@@ -1,6 +1,5 @@
 import React from 'react'
 import LoggedOutServices from '@/components/root/loggedOutServices'
-import Link from 'next/link'
 import { cookies } from 'next/headers'
 import Note from '@/components/services/note'
 import getMessages from '@/utils/fetch/message/get'

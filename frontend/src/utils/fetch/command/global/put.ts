@@ -39,7 +39,7 @@ export default async function putGlobalCommand({ router, token, id, name, comman
     
         return response.status
     } catch (error) {
-        console.error(error)
+        console.log(error)
         return 400
     }
 }

@@ -20,7 +20,7 @@ export default async function postDomain(domain: DomainWithoutID): Promise<Resul
         const { message } = await response.json()
         return {status: 200, message}
     } catch (error) {
-        console.error(error)
+        console.log(error)
         return { status: 500, message: "Something went wrong." }
     }
 }

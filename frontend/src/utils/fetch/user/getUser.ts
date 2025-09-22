@@ -23,7 +23,7 @@ export default async function getAuthor(location: 'server' | 'client', email: st
         const user = await response.json()
         return user
     } catch (error) {
-        console.error(error)
+        console.log(error)
         return null
     }
 }

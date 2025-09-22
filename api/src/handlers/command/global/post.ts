@@ -25,7 +25,7 @@ export default async function postGlobalCommand(req: FastifyRequest, res: Fastif
 
         return res.send({ message: `Successfully added global command: ${name}.` })
     } catch (error) {
-        console.error(`Database error: ${JSON.stringify(error)}`)
+        console.log(`Database error: ${JSON.stringify(error)}`)
         return res.status(500).send({ error: "Internal Server Error" })
     }
 }

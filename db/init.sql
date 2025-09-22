@@ -166,15 +166,6 @@ CREATE TABLE IF NOT EXISTS namespace_ingress_events (
 -- Heavy operations, more RAM required
 SET maintenance_work_mem = '1GB';
 
--- View for local log count
-CREATE MATERIALIZED VIEW local_log_namespace_context_counts AS
-SELECT 
-    namespace,
-    context,
-    COUNT(*) AS cnt
-FROM local_log
-GROUP BY namespace, context;
-
 -- Index for local log context + namespace combination
 CREATE UNIQUE INDEX local_log_namespace_context_counts_unique_idx
 ON local_log_namespace_context_counts (namespace, context);
