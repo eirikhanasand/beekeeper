@@ -43,6 +43,8 @@ services:
       REDIRECT_URI: ${REDIRECT_URI}
       BEEKEEPER_URL: ${BEEKEEPER_URL}
       AUTHENTIK_TOKEN: ${AUTHENTIK_TOKEN}
+      BTG_TOKEN: ${BTG_TOKEN}
+      WEBHOOK_URL: ${WEBHOOK_URL}
 
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://localhost:8080/api"]

@@ -65,7 +65,8 @@ const config = {
     BTG_TOKEN: env.BTG_TOKEN,
     CRITICAL_ROLE: env.CRITICAL_ROLE,
     WEBHOOK_URL: env.WEBHOOK_URL,
-    DEFAULT_RESULTS_PER_PAGE: Number(env.DEFAULT_RESULTS_PER_PAGE) || 50
+    DEFAULT_RESULTS_PER_PAGE: Number(env.DEFAULT_RESULTS_PER_PAGE) || 50,
+    ONE_MINUTE: 60000
 }
 
 export default config

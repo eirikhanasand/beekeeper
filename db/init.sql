@@ -160,3 +160,46 @@ CREATE TABLE IF NOT EXISTS namespace_ingress_events (
     name TEXT NOT NULL,
     events TEXT NOT NULL
 );
+
+-- --- Local log optimizations ---
+
+-- Heavy operations, more RAM required
+SET maintenance_work_mem = '1GB';
+
+-- View for local log count
+CREATE MATERIALIZED VIEW local_log_namespace_context_counts AS
+SELECT 
+    namespace,
+    context,
+    COUNT(*) AS cnt
+FROM local_log
+GROUP BY namespace, context;
+
+-- Index for local log context + namespace combination
+CREATE UNIQUE INDEX local_log_namespace_context_counts_unique_idx
+ON local_log_namespace_context_counts (namespace, context);
+
+-- Indexes to speed up local log refresh query
+CREATE INDEX ON local_log (LOWER(namespace));
+CREATE INDEX ON local_log (LOWER(context));
+
+-- Index for namespace equality
+CREATE INDEX IF NOT EXISTS idx_local_log_namespace ON local_log(namespace);
+
+-- Trigram indexes for ILIKE searches
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+
+-- Index on context
+CREATE INDEX IF NOT EXISTS idx_local_log_context_trgm
+ON local_log USING gin (context gin_trgm_ops);
+
+-- Index on name
+CREATE INDEX IF NOT EXISTS idx_local_log_name_trgm
+ON local_log USING gin (name gin_trgm_ops);
+
+-- Index on event
+CREATE INDEX IF NOT EXISTS idx_local_log_event_trgm
+ON local_log USING gin (event gin_trgm_ops);
+
+-- Lowers RAM
+SET maintenance_work_mem = '4MB';

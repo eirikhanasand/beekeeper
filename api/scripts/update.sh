@@ -10,8 +10,33 @@ export PGPASSWORD=$DB_PASSWORD
 
 PSQL="psql -h $DB_HOST -U $DB_USER -d $DB -t -c"
 PSQL_MULTILINE="psql -h $DB_HOST -U $DB_USER -d $DB -t"
+PSQL_MULTILINE_COMMAND="psql -h $DB_HOST -U $DB_USER -d $DB"
 
-$PSQL "TRUNCATE contexts_staging, namespaces_staging, pods_staging, ingress_staging, domains_staging, ingress_events_staging;"
+$PSQL_MULTILINE_COMMAND <<EOF
+DO \$do\$
+DECLARE
+    tbl text;
+    tables text[] := ARRAY[
+        'contexts_staging',
+        'namespaces_staging',
+        'pods_staging',
+        'ingress_staging',
+        'domains_staging',
+        'ingress_events_staging'
+    ];
+BEGIN
+    FOREACH tbl IN ARRAY tables LOOP
+        IF EXISTS (
+            SELECT 1 
+            FROM information_schema.tables 
+            WHERE table_schema = 'public' AND table_name = tbl
+        ) THEN
+            EXECUTE format('TRUNCATE TABLE %I;', tbl);
+        END IF;
+    END LOOP;
+END
+\$do\$;
+EOF
 
 $PSQL "CREATE TABLE IF NOT EXISTS contexts_staging (LIKE contexts INCLUDING ALL);"
 $PSQL "CREATE TABLE IF NOT EXISTS namespaces_staging (LIKE namespaces INCLUDING ALL);"
