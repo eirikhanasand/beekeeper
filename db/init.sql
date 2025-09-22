@@ -201,5 +201,9 @@ ON local_log USING gin (name gin_trgm_ops);
 CREATE INDEX IF NOT EXISTS idx_local_log_event_trgm
 ON local_log USING gin (event gin_trgm_ops);
 
+-- Index on context + namespace + timestamp
+CREATE INDEX IF NOT EXISTS idx_local_log_namespace_context_ts
+ON local_log (namespace, context, timestamp DESC);
+
 -- Lowers RAM
 SET maintenance_work_mem = '4MB';

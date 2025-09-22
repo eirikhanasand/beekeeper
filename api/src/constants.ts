@@ -66,7 +66,8 @@ const config = {
     CRITICAL_ROLE: env.CRITICAL_ROLE,
     WEBHOOK_URL: env.WEBHOOK_URL,
     DEFAULT_RESULTS_PER_PAGE: Number(env.DEFAULT_RESULTS_PER_PAGE) || 50,
-    ONE_MINUTE: 60000
+    ONE_MINUTE: 60000,
+    DEFAULT_CLUSTER: 'infra-prod-cluster'
 }
 
 export default config
