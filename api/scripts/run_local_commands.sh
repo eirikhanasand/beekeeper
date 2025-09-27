@@ -23,7 +23,6 @@ echo "$commands" | while IFS='|' read -r context name namespace command; do
 
     echo "$output"
 
-    # add custom logic for end user (if output contains i.g. 'abc' its failed)
     if [ $exit_code -ne 0 ]; then
         status="down"
     elif echo "$output" | grep -qE "Error|error|failed|BackOff|Insufficient"; then
