@@ -1,5 +1,6 @@
 import pg from 'pg'
 import config from '@constants'
+import checkMaxConnections from '@utils/maxConnections.js'
 
 const {
     DB,
@@ -24,15 +25,22 @@ const pool = new Pool({
 })
 
 export default async function run(query: string, params?: (string | number | null)[]) {
-    const client = await pool.connect()
-    try {
-        return await client.query(query, params)
-    } catch (error) {
-        console.log('Query failed:', query)
-        console.log('Params:', params)
-        console.log(error)
-        throw error
-    } finally {
-        client.release()
+    while (true) {
+        try {
+            const client = await pool.connect()
+            try {
+                checkMaxConnections()
+                return await client.query(query, params ?? [])
+            } finally {
+                client.release()
+            }
+        } catch (error) {
+            console.log(`Pool currently unavailable, retrying in ${config.CACHE_TTL / 1000}s...`)
+            await sleep(config.CACHE_TTL)
+        }
     }
+}
+
+function sleep(ms: number) {
+    return new Promise(res => setTimeout(res, ms));
 }
