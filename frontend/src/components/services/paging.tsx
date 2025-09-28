@@ -5,6 +5,7 @@ import { Dispatch, RefObject, SetStateAction, useEffect, useRef, useState } from
 type PagingProps = {
     page: number
     setPage: Dispatch<SetStateAction<number>>
+    pages: number
     items: (LocalLog | GlobalLog)[]
     setItems: Dispatch<SetStateAction<(LocalLog | GlobalLog)[]>>
     namespace: string
@@ -25,12 +26,14 @@ type InputButtonsProps = {
 export default function Paging({
     page,
     setPage,
+    pages: Pages,
     items,
     setItems,
     customStyle,
     namespace,
     context
 }: PagingProps) {
+    console.log(page, items.length)
     const unClickableButtonStyle = 'bg-light rounded-md p-1 px-3 hover:bg-extralight h-[2rem] min-w-[2rem]'
     const buttonStyle = 'bg-light rounded-md p-1 px-3 hover:bg-extralight grid place-items-center cursor-pointer'
     const activeButtonStyle = 'bg-login hover:bg-orange-500 rounded-md p-1 px-3 grid place-items-center h-[2rem] text-white'
@@ -40,7 +43,7 @@ export default function Paging({
     const isGlobal = path.includes('global')
     const [search, setSearch] = useState("")
     const [error, setError] = useState('')
-    const [pages, setPages] = useState(1)
+    const [pages, setPages] = useState(Pages)
     const searchParams = useSearchParams()
     const [resultsPerPage, setResultsPerPage] = useState(
         () => Number(searchParams.get('resultsPerPage')) || 50
@@ -119,12 +122,10 @@ export default function Paging({
                         >
                             50
                         </h1>
-                        {
-                            pages * resultsPerPage >= 100
-                                ? <h1
-                                    onClick={() => setResultsPerPage(100)}
-                                    className={resultsPerPage === 100 ? activeButtonStyle : buttonStyle}
-                                >100</h1> : <></>}
+                        <h1
+                            onClick={() => setResultsPerPage(100)}
+                            className={resultsPerPage === 100 ? activeButtonStyle : buttonStyle}
+                        >100</h1>
                     </div>
                 </div>
             </div>

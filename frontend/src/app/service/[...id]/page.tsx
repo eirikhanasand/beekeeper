@@ -32,6 +32,7 @@ export default async function Service({params}: {params: Promise<{ id: string[] 
         context
     })
     const logs = response.results
+    const pages = response.pages
     const globalCommands = await Promise.all((await getGlobalCommands('server')).map(async(command) => ({
         ...command, author: await getAuthor('server', command.author) || "Unknown User"
     }))) as GlobalCommandWithUser[]
@@ -62,7 +63,7 @@ export default async function Service({params}: {params: Promise<{ id: string[] 
                             command={command}
                         />
                     </div>
-                    <Logs logs={filteredLogs} />
+                    <Logs logs={filteredLogs} pages={pages} />
                     <div className="w-full flex-shrink-0">
                         <MonitoredCommands 
                             globalCommands={filteredGlobalCommands}

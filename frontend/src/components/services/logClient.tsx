@@ -6,11 +6,12 @@ import Paging from "./paging"
 
 type LogProps = {
     logs: (LocalLog | GlobalLog)[]
+    pages: number
     namespace: string
     context: string
 }
 
-export default function LogClient({logs, namespace, context}: LogProps) {
+export default function LogClient({logs, pages, namespace, context}: LogProps) {
     const [page, setPage] = useState(1)
     const [items, setItems] = useState(logs)
 
@@ -19,6 +20,7 @@ export default function LogClient({logs, namespace, context}: LogProps) {
             <Paging
                 page={page}
                 setPage={setPage}
+                pages={pages}
                 items={items}
                 setItems={setItems}
                 namespace={namespace}
