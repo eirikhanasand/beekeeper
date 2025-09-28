@@ -32,7 +32,7 @@ export default async function putGlobalCommand(req: FastifyRequest, res: Fastify
 
         return res.send({ message: `Successfully edited global command ${id}: ${name}.` })
     } catch (error) {
-        console.log(`Database error: ${JSON.stringify(error)}`)
+        console.log(`Database error in putGlobalCommand: ${JSON.stringify(error)}`)
         return res.status(500).send({ error: "Internal Server Error" })
     }
 }

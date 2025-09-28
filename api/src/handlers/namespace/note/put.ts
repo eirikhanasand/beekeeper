@@ -33,7 +33,7 @@ export default async function putNamespaceNote(req: FastifyRequest, res: Fastify
 
         return res.send({ message: `Successfully updated note with id ${id}.` })
     } catch (error) {
-        console.log(`Database error: ${JSON.stringify(error)}`)
+        console.log(`Database error in putNamespaceNote: ${JSON.stringify(error)}`)
         return res.status(500).send({ error: "Internal Server Error" })
     }
 }

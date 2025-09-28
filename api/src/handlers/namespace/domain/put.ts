@@ -32,7 +32,7 @@ export default async function putNamespaceDomain(req: FastifyRequest, res: Fasti
 
         return res.send({ message: `Successfully updated id ${id} name ${name} with url ${url} for namespace ${namespace} in context ${context}.` })
     } catch (error) {
-        console.log(`Database error: ${JSON.stringify(error)}`)
+        console.log(`Database error in putNamespaceDomain: ${JSON.stringify(error)}`)
         return res.status(500).send({ error: "Internal Server Error" })
     }
 }

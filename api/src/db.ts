@@ -1,6 +1,6 @@
 import pg from 'pg'
 import config from '@constants'
-import checkMaxConnections from '@utils/maxConnections.js'
+import sleep from '@utils/sleep.js'
 
 const {
     DB,
@@ -29,7 +29,6 @@ export default async function run(query: string, params?: (string | number | nul
         try {
             const client = await pool.connect()
             try {
-                checkMaxConnections()
                 return await client.query(query, params ?? [])
             } finally {
                 client.release()
@@ -39,8 +38,4 @@ export default async function run(query: string, params?: (string | number | nul
             await sleep(config.CACHE_TTL)
         }
     }
-}
-
-function sleep(ms: number) {
-    return new Promise(res => setTimeout(res, ms));
 }

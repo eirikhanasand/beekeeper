@@ -3,6 +3,7 @@ import Fastify from 'fastify'
 import apiRoutes from './routes.js'
 import getIndexHandler from './handlers/index/getIndex.js'
 import fp from '@utils/fp.js'
+import checkMaxConnections from '@utils/maxConnections.js'
 
 const fastify = Fastify({
     logger: true
@@ -16,7 +17,7 @@ fastify.register(cors, {
 const port = Number(process.env.PORT) || 8080
 
 fastify.decorate('cachedData', {})
-fastify.decorate('cacheStatus', '0.0')
+fastify.decorate('cacheStatus', 0.0)
 fastify.register(fp)
 fastify.register(apiRoutes, { prefix: "/api" })
 fastify.get('/', getIndexHandler)
@@ -30,4 +31,5 @@ async function start() {
     }
 }
 
+checkMaxConnections()
 start()

@@ -32,7 +32,7 @@ export default async function putMessage(req: FastifyRequest, res: FastifyReply)
 
         return res.send({ message: `Successfully updated message with id ${id}.` })
     } catch (error) {
-        console.log(`Database error: ${JSON.stringify(error)}`)
+        console.log(`Database error in putMessage: ${JSON.stringify(error)}`)
         return res.status(500).send({ error: "Internal Server Error" })
     }
 }

@@ -43,16 +43,30 @@ export default async function getLog(this: FastifyInstance, req: FastifyRequest,
         let shouldBeCached = false
         const formattedContext = await getContext(context ?? 'prod')
         const isLocal = log === 'local'
-        const logQueryFile = isLocal ? 'fetchLocalLog.sql' : 'fetchGlobalLog.sql'
-        const logCountQueryFile = isLocal ? 'fetchLocalLogCount.sql' : 'fetchGlobalLogCount.sql'
+        const logQueryFile = isLocal 
+            ? search
+                ? 'fetchLocalLog.sql'
+                : 'fetchLocalLogNoSearch.sql'
+            : 'fetchGlobalLog.sql'
+        const logCountQueryFile = isLocal 
+            ? search 
+                ? 'fetchLocalLogCount.sql' 
+                : 'fetchLocalLogCountNoSearch.sql' 
+            : 'fetchGlobalLogCount.sql'
         const logQueryParameters = isLocal
-        ? [Page, resultsPerPage, namespace, search || null, formattedContext]
-        : [Page, resultsPerPage, search || null]
-        const logCountQueryParameters = isLocal ? [namespace, search || null, formattedContext] : [search || null]
+            ? search
+                ? [Page, resultsPerPage, namespace, search || null, formattedContext]
+                : [Page, resultsPerPage, namespace, formattedContext]
+            : [Page, resultsPerPage, search || null]
+        const logCountQueryParameters = isLocal 
+            ? search 
+                ? [namespace, search || null, formattedContext] 
+                : [namespace, formattedContext] 
+            : [search || null]
         const indexedPage = Page - 1
-        const pageIsCached = resultsPerPage === 50 
+        const pageIsCached = resultsPerPage === 50
             ? indexedPage < 10
-            : resultsPerPage === 100 
+            : resultsPerPage === 100
                 ? indexedPage < 5
                 : indexedPage < 20
 
@@ -80,6 +94,7 @@ export default async function getLog(this: FastifyInstance, req: FastifyRequest,
                     } else {
                         cachedPage = cachedNamespace[indexedPage]
                     }
+
                     return res.send(cachedPage)
                 }
             }
@@ -105,7 +120,7 @@ export default async function getLog(this: FastifyInstance, req: FastifyRequest,
             }
 
             if (shouldBeCached) {
-                return res.send({...data, cacheStatus: this.cacheStatus})
+                return res.send({ ...data, cacheStatus: this.cacheStatus })
             }
 
             return res.send(data)
@@ -119,12 +134,12 @@ export default async function getLog(this: FastifyInstance, req: FastifyRequest,
         }
 
         if (shouldBeCached) {
-            return res.send({...data, cacheStatus: this.cacheStatus})
+            return res.send({ ...data, cacheStatus: this.cacheStatus })
         }
 
         return res.send(data)
     } catch (error) {
-        console.log(`Database error: ${JSON.stringify(error)}`)
+        console.log(`Database error in getLog: ${JSON.stringify(error)}`)
         return res.status(500).send({ error: "Internal Server Error" })
     }
 }

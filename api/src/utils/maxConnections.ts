@@ -1,7 +1,13 @@
 import config from '@constants'
 import run from '@db'
 
-export default async function checkMaxConnections() {
+export default function checkMaxConnectionsCron() {
+    setTimeout(() => {
+        checkMaxConnections()
+    }, 5000)
+}
+
+export async function checkMaxConnections() {
     try {
         const result = await run("SELECT count(*) FROM pg_stat_activity WHERE state='active';")
         const active = Number(result.rows[0].count)

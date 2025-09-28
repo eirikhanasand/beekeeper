@@ -32,7 +32,7 @@ export default async function postContext(req: FastifyRequest, res: FastifyReply
 
         return res.send({ message: `Successfully added context ${name} to contexts.` })
     } catch (error) {
-        console.log(`Database error: ${JSON.stringify(error)}`)
+        console.log(`Database error in postContext: ${JSON.stringify(error)}`)
         return res.status(500).send({ error: "Internal Server Error" })
     }
 }

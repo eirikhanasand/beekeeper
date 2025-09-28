@@ -59,7 +59,7 @@ export default async function runCommand(req: FastifyRequest, res: FastifyReply)
 
         return res.send({ message: `Successfully ran command ${id}: ${command}.` })
     } catch (error) {
-        console.log(`Database error: ${JSON.stringify(error)}`)
+        console.log(`Database error in runCommand: ${JSON.stringify(error)}`)
         return res.status(500).send({ error: "Internal Server Error" })
     }
 }

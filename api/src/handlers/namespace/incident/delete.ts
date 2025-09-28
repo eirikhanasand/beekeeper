@@ -14,7 +14,7 @@ export default async function deleteNamespaceIncident(req: FastifyRequest, res: 
 
         return res.send(result.rows)
     } catch (error) {
-        console.log(`Database error: ${JSON.stringify(error)}`)
+        console.log(`Database error in deleteNamespaceIncident: ${JSON.stringify(error)}`)
         return res.status(500).send({ error: "Internal Server Error" })
     }
 }

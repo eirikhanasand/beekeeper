@@ -32,7 +32,7 @@ export default async function postNamespace(req: FastifyRequest, res: FastifyRep
 
         return res.send({ message: `Successfully added namespace ${name}.` })
     } catch (error) {
-        console.log(`Database error: ${JSON.stringify(error)}`)
+        console.log(`Database error in postNamespace: ${JSON.stringify(error)}`)
         return res.status(500).send({ error: "Internal Server Error" })
     }
 }

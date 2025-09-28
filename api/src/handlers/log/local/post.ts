@@ -34,7 +34,7 @@ export default async function postLocalLog(req: FastifyRequest, res: FastifyRepl
 
         return res.send({ message: `Successfully added event ${event} to the log for namespace ${name} in context ${context}.` })
     } catch (error) {
-        console.log(`Database error: ${JSON.stringify(error)}`)
+        console.log(`Database error in postLocalLog: ${JSON.stringify(error)}`)
         return res.status(500).send({ error: "Internal Server Error" })
     }
 }

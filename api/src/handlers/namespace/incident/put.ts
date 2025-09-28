@@ -33,7 +33,7 @@ export default async function putNamespaceIncident(req: FastifyRequest, res: Fas
 
         return res.send({ message: `Successfully updated incident with id ${id}, name ${name} and timestamp ${timestamp} with url ${url} for namespace ${namespace} in context ${context}.` })
     } catch (error) {
-        console.log(`Database error: ${JSON.stringify(error)}`)
+        console.log(`Database error in putNamespaceIncident: ${JSON.stringify(error)}`)
         return res.status(500).send({ error: "Internal Server Error" })
     }
 }
