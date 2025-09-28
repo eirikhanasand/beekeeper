@@ -23,8 +23,18 @@ export default async function Domains() {
             : domain.url.includes(',')
                 ? `https://${domain.url.split(',')[0]}`
                 : `https://${domain.url}`
-        const response = await fetch(fetchAbleDomain)
-        return { ...domain, status: response.status }
+
+        const controller = new AbortController()
+        const timeoutId = setTimeout(() => controller.abort(), 3000)
+
+        try {
+            const response = await fetch(fetchAbleDomain, { signal: controller.signal })
+            return { ...domain, status: response.status }
+        } catch (err: any) {
+            return { ...domain, status: 503, error: err.message }
+        } finally {
+            clearTimeout(timeoutId)
+        }
     }))
 
     return (

@@ -85,7 +85,7 @@ export default function Login() {
                         Login
                     </button>
                 </form>
-                <p className="text-red-500 text-center py-2 bg-normal rounded-xl">{errorMessage}</p>
+                {errorMessage && <p className="text-red-500 text-center py-2 bg-normal rounded-xl">{errorMessage}</p>}
             </div>
         )
     }

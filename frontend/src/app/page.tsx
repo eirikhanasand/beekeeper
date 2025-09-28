@@ -30,7 +30,7 @@ export default async function Home() {
                         </div>
                     </div>
                 </div>
-                <div className='inline-flex flex-col w-full rounded-xl col-span-3 overflow-hidden h-full flex gap-2 bg-darker p-2'>
+                <div className='flex flex-col w-full rounded-xl col-span-3 overflow-hidden h-full gap-2 bg-darker p-2'>
                     <h1 className='text-almostbright'>Latest service messages</h1>
                     <div className="flex flex-col h-full overflow-auto noscroll gap-2">
                         {messages.map((message) => <Message 
