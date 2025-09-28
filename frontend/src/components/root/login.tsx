@@ -2,7 +2,8 @@
 
 import Link from "next/link"
 import { useState, useEffect } from "react"
-import { removeCookie, setCookie } from "@/utils/cookies"
+import { getCookie, removeCookie, setCookie } from "@/utils/cookies"
+import config from '@/constants'
 
 const API_URL = process.env.NEXT_PUBLIC_BROWSER_API
 const loginUrl = `${process.env.NEXT_PUBLIC_BROWSER_API}/login`
@@ -10,6 +11,13 @@ const loginUrl = `${process.env.NEXT_PUBLIC_BROWSER_API}/login`
 export default function Login() {
     const [loginUnavailable, setLoginUnavailable] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
+
+    useEffect(() => {
+        const isAuthenticated = getCookie('access_token')
+        if (isAuthenticated) {
+            window.location.href = config.url.BASE_PATH
+        }
+    }, [])
 
     useEffect(() => {
         (async () => {

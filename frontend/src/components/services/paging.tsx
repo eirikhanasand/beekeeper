@@ -1,15 +1,12 @@
 import getLogs from '@/utils/fetch/log/get'
-import { ReadonlyURLSearchParams, usePathname, useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Dispatch, RefObject, SetStateAction, useEffect, useRef, useState } from 'react'
 
 type PagingProps = {
     page: number
     setPage: Dispatch<SetStateAction<number>>
-    resultsPerPage: number
     items: (LocalLog | GlobalLog)[]
     setItems: Dispatch<SetStateAction<(LocalLog | GlobalLog)[]>>
-    setResultsPerPage: Dispatch<SetStateAction<number>>
-    searchParams: ReadonlyURLSearchParams
     namespace: string
     context: string
     customStyle?: string
@@ -28,11 +25,8 @@ type InputButtonsProps = {
 export default function Paging({
     page,
     setPage,
-    resultsPerPage,
     items,
     setItems,
-    setResultsPerPage,
-    searchParams,
     customStyle,
     namespace,
     context
@@ -47,18 +41,24 @@ export default function Paging({
     const [search, setSearch] = useState("")
     const [error, setError] = useState('')
     const [pages, setPages] = useState(1)
+    const searchParams = useSearchParams()
+    const [resultsPerPage, setResultsPerPage] = useState(
+        () => Number(searchParams.get('resultsPerPage')) || 50
+    )
 
     useEffect(() => {
         const params = new URLSearchParams(searchParams)
         if (page <= pages) {
             params.set('page', String(page))
+            params.set('resultsPerPage', String(resultsPerPage))
             router.replace(`?${params.toString()}`)
         } else {
             params.set('page', String(1))
+            params.set('resultsPerPage', String(50))
             router.replace(`?${params.toString()}`)
             window.location.reload()
         }
-    }, [page])
+    }, [page, resultsPerPage])
 
     useEffect(() => {
         (async () => {
@@ -86,7 +86,7 @@ export default function Paging({
     return (
         <div className='w-full flex gap-2 items-center px-[3px] pt-1'>
             <input
-                className={`${buttonStyle} flex-1`}
+                className={`${buttonStyle} flex-1 min-w-0 transition-all duration-200`}
                 placeholder='Search...'
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}
@@ -101,7 +101,7 @@ export default function Paging({
                 unClickableButtonStyle={unClickableButtonStyle}
                 containerRef={containerRef}
             />
-            <div className={`flex w-fit h-fit justify-between items-center overflow-hidden ${customStyle}`}>
+            <div className={`flex min-w-fit h-fit justify-between items-center overflow-hidden ${customStyle}`}>
                 <div className='flex justify-between gap-2 cursor-pointer select-none'>
                     <h1 className={`${unClickableButtonStyle} min-w-fit ${items.length >= 100 ? 'text-sm' : ''} flex items-center`}>
                         Page {page} / {pages}
@@ -120,9 +120,9 @@ export default function Paging({
                             50
                         </h1>
                         {
-                            items.length >= 100
+                            pages * resultsPerPage >= 100
                                 ? <h1
-                                    onClick={() => setResultsPerPage(50)}
+                                    onClick={() => setResultsPerPage(100)}
                                     className={resultsPerPage === 100 ? activeButtonStyle : buttonStyle}
                                 >100</h1> : <></>}
                     </div>

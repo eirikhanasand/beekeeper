@@ -1,6 +1,10 @@
+import config from '@/constants'
 import getContexts from "./fetch/context/get"
 
-export default async function formattedContexts() {
+export default function formattedContexts(name: string): Promise<string>;
+export default function formattedContexts(): Promise<string[]>;
+
+export default async function formattedContexts(name?: string): Promise<string | string[]> {
     const contexts = await getContexts('server')
     const formattedContexts = contexts.map((service) => {
         const name = service.name.split('-')[1]
@@ -8,5 +12,7 @@ export default async function formattedContexts() {
         return formattedName
     })
 
-    return formattedContexts
+    const namedContext = formattedContexts.find((context) => context.includes(name || config.DEFAULT_CLUSTER)) || config.DEFAULT_CLUSTER
+
+    return name ? namedContext : formattedContexts
 }

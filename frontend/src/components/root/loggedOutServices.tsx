@@ -1,19 +1,12 @@
 import getNamespaces from "@/utils/fetch/namespace/get"
-import getLogs from "@/utils/fetch/log/get"
 import Pulse from "./pulse"
 import worstAndBestServiceStatus from "../services/worstAndBestServiceStatus"
 import serviceStatus from "../services/serviceStatus"
+import config from '@/constants'
 
 export default async function LoggedOutServices() {
     const services = await getNamespaces('server')
-    const { meta } = await worstAndBestServiceStatus()
-    const response = await getLogs({
-        location: 'server', 
-        path: 'local', 
-        page: 1,
-        context: 'prod'
-    })
-    const logs = response.results as LocalLog[]
+    const { meta } = await worstAndBestServiceStatus(config.DEFAULT_CLUSTER, true)
     const filteredServices = services.filter(service => {
         return service.context.includes('prod')
     })
@@ -41,7 +34,7 @@ export default async function LoggedOutServices() {
                 </div>
                 <div className="h-full bg-darker rounded-xl overflow-auto max-h-full noscroll">
                     {filteredServices.map(async(service) => {
-                        const status = await serviceStatus(logs, service)
+                        const status = await serviceStatus(config.DEFAULT_CLUSTER, 'server', service)
 
                         return (
                             <div key={service.name} className={serviceStyle}>

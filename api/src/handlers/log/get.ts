@@ -50,15 +50,41 @@ export default async function getLog(this: FastifyInstance, req: FastifyRequest,
         : [Page, resultsPerPage, search || null]
         const logCountQueryParameters = isLocal ? [namespace, search || null, formattedContext] : [search || null]
         const indexedPage = Page - 1
-        
-        if (formattedContext && namespace && (indexedPage) < 10 && !search) {
+        const pageIsCached = resultsPerPage === 50 
+            ? indexedPage < 10
+            : resultsPerPage === 100 
+                ? indexedPage < 5
+                : indexedPage < 20
+
+        if (formattedContext && namespace && pageIsCached && !search) {
             const cacheLength = Object.keys(this.cachedData).length
             if (cacheLength > 0) {
-                const cachedPage = this.cachedData[formattedContext]?.[namespace]?.[indexedPage]
-                return res.send(cachedPage)
-            } else {
-                shouldBeCached = true
+                const cachedNamespace = this.cachedData[formattedContext]?.[namespace]
+                if (cachedNamespace) {
+                    let cachedPage
+
+                    if (resultsPerPage === 25) {
+                        const parentPage = Math.floor(indexedPage / 2)
+                        const cachedParentPage = cachedNamespace[parentPage]
+                        if (cachedParentPage) {
+                            cachedPage = (indexedPage % 2 === 0)
+                                ? cachedParentPage.slice(0, 25)
+                                : cachedParentPage.slice(25, 50)
+                        }
+                    } else if (resultsPerPage === 100) {
+                        const firstPageIndex = indexedPage * 2
+                        const secondPageIndex = firstPageIndex + 1
+                        const firstPage = cachedNamespace[firstPageIndex] || []
+                        const secondPage = cachedNamespace[secondPageIndex] || []
+                        cachedPage = [...firstPage, ...secondPage]
+                    } else {
+                        cachedPage = cachedNamespace[indexedPage]
+                    }
+                    return res.send(cachedPage)
+                }
             }
+
+            shouldBeCached = true
         }
 
         const logQuery = (await loadSQL(logQueryFile))

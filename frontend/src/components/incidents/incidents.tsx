@@ -17,6 +17,7 @@ export default async function Incidents() {
     const incident = Cookies.get('incident')?.value || ""
     const incidentURL = Cookies.get('incidentURL')?.value || ""
     const incidentTimestamp = Cookies.get('incidentTimestamp')?.value || ""
+
     return (
         <div className="bg-light w-full rounded-lg py-1 text-start px-2 cursor-pointer">
             <IncidentsClient

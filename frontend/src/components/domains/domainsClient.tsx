@@ -8,11 +8,11 @@ import { usePathname } from "next/navigation"
 
 type DomainsClientProps = {
     namespace: string
-    domains: DomainsWithStatus[]
+    domains: Domain[]
 }
 
 export default function DomainsClient({ namespace, domains: Domains }: DomainsClientProps) {
-    const [domains, setDomains] = useState(Domains)
+    const [domains, setDomains] = useState<DomainsWithStatus[]>([])
     const timerRef = useRef(3000)
     const [timeLeft, setTimeLeft] = useState(timerRef.current / 1000)
     const path = usePathname()
@@ -32,22 +32,22 @@ export default function DomainsClient({ namespace, domains: Domains }: DomainsCl
 
         return () => clearInterval(countdown)
     }, [])
-
+    
     useEffect(() => {
-        setInterval(async () => {
-            const domainsWithStatus = await Promise.all(domains.map(async (domain) => {
+        const intervalId = setInterval(async () => {
+            const domainsWithStatus = await Promise.all(Domains.map(async (domain) => {
                 const fetchAbleDomain = domain.url.includes('http')
                     ? domain.url
                     : domain.url.includes(',')
                         ? `https://${domain.url.split(',')[0]}`
                         : `https://${domain.url}`
                 const response = await fetch(`/api/proxy?url=${fetchAbleDomain}`)
-                console.log('fetching', response.status)
                 return { ...domain, status: response.status }
             }))
             setDomains(domainsWithStatus)
-            setTimeLeft(timerRef.current / 1000)
         }, 3000)
+
+        return () => clearInterval(intervalId)
     }, [])
 
     return (
@@ -60,14 +60,14 @@ export default function DomainsClient({ namespace, domains: Domains }: DomainsCl
                 </div>
             </div>
             {(domains.length > 0 || allowEdit) && <div className="h-[1px] bg-superlight w-full" />}
-            {domains.toReversed().map((domain) => {
+            {domains.toReversed().map((domain, index) => {
                 const formattedDomain = domain.name.includes('-')
                     ? `${domain.name.split('-')[1][0].toUpperCase()}${domain.name.split('-')[1].slice(1)}`
                     : domain.name
                 return (
                     <Link
                         href={domain.url}
-                        key={domain.name}
+                        key={index}
                         className="bg-darker w-full rounded-lg cursor-pointer text-almostbright py-1 px-2"
                     >
                         <div className='flex justify-between items-center'>

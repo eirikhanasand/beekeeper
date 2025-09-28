@@ -31,6 +31,9 @@ export default async function Ingresses() {
         return { ...ingress, events }
     }))
 
+    if (!ingresses.length) {
+        return <></>
+    }
 
     return (
         <div className="bg-light rounded-lg w-full px-2">

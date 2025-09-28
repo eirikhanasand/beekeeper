@@ -1,7 +1,6 @@
 import Link from "next/link"
 import Pulse from "./pulse"
 import getSegmentedPathname from "@/utils/pathname"
-import getLogs from "@/utils/fetch/log/get"
 import serviceStatus from "../services/serviceStatus"
 
 type ServicesProps = {
@@ -12,13 +11,6 @@ type ServicesProps = {
 export default async function ProdOrDev({ services, path }: ServicesProps) {
     const segmentedPathname = getSegmentedPathname(path)
     const context = segmentedPathname[1] && segmentedPathname[1] !== 'message' ? segmentedPathname[1] : 'prod'
-    const response = await getLogs({
-        location: 'server', 
-        path: 'local', 
-        page: 1,
-        context
-    })
-    const logs = response.results as LocalLog[]
     const filteredServices = services.filter(service => {
         return service.context.includes(context)
     })
@@ -31,14 +23,13 @@ export default async function ProdOrDev({ services, path }: ServicesProps) {
                     service={service} 
                     segmentedPathname={segmentedPathname}
                     context={context}
-                    localLog={logs}
                 />
             )}
         </div>
     )
 }
 
-async function Service({ context, service, segmentedPathname, localLog }: ServiceProps) {
+async function Service({ context, service, segmentedPathname }: ServiceProps) {
     const currentService = segmentedPathname.includes("service") 
         ? segmentedPathname[2]
         : ''
@@ -52,7 +43,7 @@ async function Service({ context, service, segmentedPathname, localLog }: Servic
         } hover:*:fill-login hover:text-login font-medium justify-between
     `
 
-    const status = await serviceStatus(localLog, service)
+    const status = await serviceStatus(context, 'server', service)
 
     return (
         <Link

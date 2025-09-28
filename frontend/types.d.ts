@@ -2,7 +2,6 @@ type ServiceProps = {
     service: ServiceAsList
     segmentedPathname: string[]
     context: string
-    localLog: Log[]
 }
 
 type Editing = {
