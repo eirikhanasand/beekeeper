@@ -10,7 +10,7 @@ export default async function Global() {
     const segmentedPathname = getSegmentedPathname(path)
     const context = segmentedPathname[1] || 'prod'
     const isGlobal = path.includes('global')
-    const { meta } = await worstAndBestServiceStatus()
+    const { meta } = await worstAndBestServiceStatus('prod', true)
 
     return (
         <Link 

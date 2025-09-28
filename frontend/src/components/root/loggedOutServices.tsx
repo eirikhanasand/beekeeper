@@ -6,7 +6,7 @@ import config from '@/constants'
 
 export default async function LoggedOutServices() {
     const services = await getNamespaces('server')
-    const { meta } = await worstAndBestServiceStatus(config.DEFAULT_CLUSTER, true)
+    const { meta } = await worstAndBestServiceStatus('prod', true)
     const filteredServices = services.filter(service => {
         return service.context.includes('prod')
     })
@@ -34,7 +34,7 @@ export default async function LoggedOutServices() {
                 </div>
                 <div className="h-full bg-darker rounded-xl overflow-auto max-h-full noscroll">
                     {filteredServices.map(async(service) => {
-                        const status = await serviceStatus(config.DEFAULT_CLUSTER, 'server', service)
+                        const status = await serviceStatus('prod', 'server', service)
 
                         return (
                             <div key={service.name} className={serviceStyle}>
