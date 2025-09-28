@@ -17,6 +17,8 @@ const requiredEnvironmentVariables = [
     'AUTHENTIK_TOKEN',
     'BTG_TOKEN',
     'WEBHOOK_URL',
+    'CRITICAL_ROLE',
+    'CRITICAL_SQL_ROLE'
 ]
 
 const missingVariables = requiredEnvironmentVariables.filter(
@@ -64,9 +66,11 @@ const config = {
     AUTHENTIK_TOKEN: env.AUTHENTIK_TOKEN,
     BTG_TOKEN: env.BTG_TOKEN,
     CRITICAL_ROLE: env.CRITICAL_ROLE,
+    CRITICAL_SQL_ROLE: env.CRITICAL_SQL_ROLE,
     WEBHOOK_URL: env.WEBHOOK_URL,
     DEFAULT_RESULTS_PER_PAGE: Number(env.DEFAULT_RESULTS_PER_PAGE) || 50,
-    DEFAULT_CLUSTER: 'infra-prod-cluster'
+    DEFAULT_CLUSTER: 'infra-prod-cluster',
+    CACHE_TTL: 60000
 }
 
 export default config

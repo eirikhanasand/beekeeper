@@ -10,33 +10,13 @@ export PGPASSWORD=$DB_PASSWORD
 
 PSQL="psql -h $DB_HOST -U $DB_USER -d $DB -t -c"
 PSQL_MULTILINE="psql -h $DB_HOST -U $DB_USER -d $DB -t"
-PSQL_MULTILINE_COMMAND="psql -h $DB_HOST -U $DB_USER -d $DB"
 
-$PSQL_MULTILINE_COMMAND <<EOF
-DO \$do\$
-DECLARE
-    tbl text;
-    tables text[] := ARRAY[
-        'contexts_staging',
-        'namespaces_staging',
-        'pods_staging',
-        'ingress_staging',
-        'domains_staging',
-        'ingress_events_staging'
-    ];
-BEGIN
-    FOREACH tbl IN ARRAY tables LOOP
-        IF EXISTS (
-            SELECT 1 
-            FROM information_schema.tables 
-            WHERE table_schema = 'public' AND table_name = tbl
-        ) THEN
-            EXECUTE format('TRUNCATE TABLE %I;', tbl);
-        END IF;
-    END LOOP;
-END
-\$do\$;
-EOF
+$PSQL "DROP TABLE IF EXISTS contexts_staging;"
+$PSQL "DROP TABLE IF EXISTS namespaces_staging;"
+$PSQL "DROP TABLE IF EXISTS pods_staging;"
+$PSQL "DROP TABLE IF EXISTS ingress_staging;"
+$PSQL "DROP TABLE IF EXISTS domains_staging;"
+$PSQL "DROP TABLE IF EXISTS ingress_events_staging;"
 
 $PSQL "CREATE TABLE IF NOT EXISTS contexts_staging (LIKE contexts INCLUDING ALL);"
 $PSQL "CREATE TABLE IF NOT EXISTS namespaces_staging (LIKE namespaces INCLUDING ALL);"
@@ -59,7 +39,7 @@ kubectl config get-contexts | sed 's/^\*//' | tail -n +2 | while read -r line; d
         namespace_status=$(echo $line | awk '{print $2}')
         age=$(echo $line | awk '{print $3}')
         $PSQL "INSERT INTO namespaces_staging (context, name, status, service_status, age) VALUES ('$context_short_name', '$namespace_name', '$namespace_status', 'operational', '$age') ON CONFLICT DO NOTHING;"
-    
+
         kubectl get pods -n $namespace_name | tail -n +2 | while read -r line; do
             pod_name=$(echo $line | awk '{print $1}')
             ready=$(echo $line | awk '{print $2}')

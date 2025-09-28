@@ -45,6 +45,8 @@ services:
       AUTHENTIK_TOKEN: ${AUTHENTIK_TOKEN}
       BTG_TOKEN: ${BTG_TOKEN}
       WEBHOOK_URL: ${WEBHOOK_URL}
+      CRITICAL_SQL_ROLE: ${CRITICAL_SQL_ROLE}
+      CRITICAL_ROLE: ${CRITICAL_ROLE}
 
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://localhost:8080/api"]

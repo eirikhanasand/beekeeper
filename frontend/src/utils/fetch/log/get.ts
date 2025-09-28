@@ -32,8 +32,9 @@ export default async function getLogs({
 }: LogParams): Promise<Log> {
     const baseUrl = `${location === 'server' ? config.url.API : API_URL}/log/${path}`
     const params = new URLSearchParams({ page: String(page) })
+    const isGlobal = namespace === 'global'
     resultsPerPage && params.set('resultsPerPage', String(resultsPerPage))
-    namespace && params.set('namespace', namespace)
+    !isGlobal && namespace && params.set('namespace', namespace)
     context && params.set('context', context)
     search && params.set('search', search)
     const url = `${baseUrl}?${params.toString()}`

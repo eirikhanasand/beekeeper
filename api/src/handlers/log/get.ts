@@ -51,7 +51,7 @@ export default async function getLog(this: FastifyInstance, req: FastifyRequest,
         const logCountQueryParameters = isLocal ? [namespace, search || null, formattedContext] : [search || null]
         const indexedPage = Page - 1
         
-        if (formattedContext && namespace && (indexedPage) < 10) {
+        if (formattedContext && namespace && (indexedPage) < 10 && !search) {
             const cacheLength = Object.keys(this.cachedData).length
             if (cacheLength > 0) {
                 const cachedPage = this.cachedData[formattedContext]?.[namespace]?.[indexedPage]

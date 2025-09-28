@@ -23,7 +23,7 @@ export default async function Service({params}: {params: Promise<{ id: string[] 
     const path = Headers.get('x-current-path') || ''
     const segmentedPathname = getSegmentedPathname(path)
     const context = segmentedPathname[1] || 'prod'
-    const namespace = segmentedPathname[2] || ''
+    const namespace = isGlobal ? '' : segmentedPathname[2] || ''
     const response = await getLogs({
         location: "server", 
         path: isGlobal ? "global" : "local", 
@@ -62,9 +62,7 @@ export default async function Service({params}: {params: Promise<{ id: string[] 
                             command={command}
                         />
                     </div>
-                    <div className="w-full flex-1 overflow-auto flex flex-col mb-2">
-                        <Logs logs={filteredLogs} />
-                    </div>
+                    <Logs logs={filteredLogs} />
                     <div className="w-full flex-shrink-0">
                         <MonitoredCommands 
                             globalCommands={filteredGlobalCommands}

@@ -44,8 +44,7 @@ function Pod({pod}: PodProps) {
             <div className="flex gap-2">
                 <h1 className="text-extralight text-[0.6rem]">{pod.ready} ✓</h1>
                 <h1 className="text-extralight text-[0.6rem]">{pod.restarts} ↻</h1>
-                <h1 className="text-extralight text-[0.6rem]">{pod.age} 👴🏻</h1>
-                <h1 className="text-extralight text-[0.6rem]">{timestamp} 🕒</h1>
+                <h1 className="text-extralight text-[0.6rem]">{pod.age} old - {timestamp} since checked</h1>
             </div>
         </div>
     )

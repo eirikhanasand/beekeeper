@@ -196,5 +196,12 @@ ON local_log USING gin (event gin_trgm_ops);
 CREATE INDEX IF NOT EXISTS idx_local_log_namespace_context_ts
 ON local_log (namespace, context, timestamp DESC);
 
+-- Index on event prefiltered by context and namespace
+CREATE INDEX IF NOT EXISTS idx_local_log_ns_ctx_event_trgm
+ON local_log USING gin ((namespace || '|' || context || '|' || event) gin_trgm_ops);
+
 -- Lowers RAM
 SET maintenance_work_mem = '4MB';
+
+-- Adds parallel workers
+SET max_parallel_workers_per_gather = 4;

@@ -30,7 +30,7 @@ COPY . .
 RUN npm run build
 
 # Adds script execution permissions
-RUN chmod +x /api/scripts/init.sh /api/scripts/run_local_commands.sh /api/scripts/run_global_commands.sh /api/scripts/update.sh
+RUN chmod +x /api/scripts/init.sh /api/scripts/run_local_commands.sh /api/scripts/run_global_commands.sh /api/scripts/update.sh /api/scripts/run_now.sh 
 
 # Runs commands every minute
 RUN echo "* * * * * /bin/sh /api/scripts/update.sh" >> /etc/crontabs/root

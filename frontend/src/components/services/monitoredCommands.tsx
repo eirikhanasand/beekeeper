@@ -136,7 +136,7 @@ function GlobalCommand({ command }: GlobalCommandProps) {
                     <h1 className="min-w-[1rem] text-superlight text-sm">{command.id}</h1>
                     <Field placeholder="Name" value={name} setValue={setName} editing={editing} />
                 </div>
-                <div className="flex flex-col grid place-items-end flex-1">
+                <div className="flex flex-col place-items-end flex-1">
                     <div className="flex items-center gap-2 w-full justify-end">
                         <Field className="text-superlight" placeholder="Reason" value={reason} setValue={setReason} editing={editing} />
                         <h1 className="text-superlight text-sm min-w-[8rem]">{new Date(command.timestamp).toLocaleString('no-NO')}</h1>
@@ -254,7 +254,7 @@ function LocalCommand({ command }: LocalCommandProps) {
                             </div >
                         </div>
                     </div>
-                    <div className={`flex flex-col grid place-items-end ${editing ? 'gap-2' : ''}`}>
+                    <div className={`flex flex-col place-items-end ${editing ? 'gap-2' : ''}`}>
                         <div className="flex items-center gap-2 text-almostbright">
                             {editing ? 
                                 <Field placeholder="Namespace" value={namespace} setValue={setNamespace} editing={editing} />
