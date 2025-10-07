@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify"
 import run from "@db"
+import debug from '@utils/debug.js'
 
 type PutMessageProps = {
     id: string
@@ -21,18 +22,18 @@ export default async function putMessage(req: FastifyRequest, res: FastifyReply)
     }
 
     try {
-        console.log(`Updating message: id=${id} status=${status}, content=${content}, author=${author}`)
+        debug({ basic: `Updating message: id=${id} status=${status}, content=${content}, author=${author}` })
 
         await run(
             `UPDATE messages
             SET title = $2, author = $3, status = $4, content = $5
-            WHERE id = $1;`, 
+            WHERE id = $1;`,
             [id, title, author, status, content]
         )
 
         return res.send({ message: `Successfully updated message with id ${id}.` })
     } catch (error) {
-        console.log(`Database error in putMessage: ${JSON.stringify(error)}`)
+        debug({ basic: `Database error in putMessage: ${JSON.stringify(error)}` })
         return res.status(500).send({ error: "Internal Server Error" })
     }
 }

@@ -3,8 +3,9 @@ import { exec } from "child_process"
 import run from "@db"
 import path from "path"
 import tokenWrapper from "../../utils/tokenWrapper.js"
+import debug from '@utils/debug.js'
 
-type PostCommandBody = { 
+type PostCommandBody = {
     id: string
     type: string
 }
@@ -37,29 +38,29 @@ export default async function runCommand(req: FastifyRequest, res: FastifyReply)
         }
     }
 
-    
     try {
-        console.log(`Running command ${id}: ${command}`)
+        debug({ detailed: `Running command ${id}: ${command}` })
 
         const scriptPath = path.resolve("../../../run_now.sh")
         const fullCommand = `${scriptPath} "${command}"`
 
         exec(fullCommand, (error, stdout, stderr) => {
             if (error) {
-                console.log(`Execution error: ${error.message}`)
+                debug({ basic: `Execution error: ${error.message}` })
                 return res.status(500).send({ error: "Failed to execute command." })
             }
+
             if (stderr) {
                 console.warn(`Command stderr: ${stderr}`)
             }
 
-            console.log(`Command output: ${stdout}`)
+            debug({ detailed: `Command output: ${stdout}` })
             return res.send({ message: `Successfully ran command ${id}.`, output: stdout })
         })
 
         return res.send({ message: `Successfully ran command ${id}: ${command}.` })
     } catch (error) {
-        console.log(`Database error in runCommand: ${JSON.stringify(error)}`)
+        debug({ basic: `Database error in runCommand: ${JSON.stringify(error)}` })
         return res.status(500).send({ error: "Internal Server Error" })
     }
 }

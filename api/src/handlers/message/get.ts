@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify"
 import run from "@db"
+import debug from '@utils/debug.js'
 
 export default async function getMessages(_: FastifyRequest, res: FastifyReply) {
     try {
@@ -7,7 +8,7 @@ export default async function getMessages(_: FastifyRequest, res: FastifyReply) 
 
         return res.send(result.rows)
     } catch (error) {
-        console.log(`Database error in getMessages: ${JSON.stringify(error)}`)
+        debug({ basic: `Database error in getMessages: ${JSON.stringify(error)}` })
         return res.status(500).send({ error: "Internal Server Error" })
     }
 }

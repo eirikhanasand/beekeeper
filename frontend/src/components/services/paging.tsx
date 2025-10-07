@@ -33,7 +33,6 @@ export default function Paging({
     namespace,
     context
 }: PagingProps) {
-    console.log(page, items.length)
     const unClickableButtonStyle = 'bg-light rounded-md p-1 px-3 hover:bg-extralight h-[2rem] min-w-[2rem]'
     const buttonStyle = 'bg-light rounded-md p-1 px-3 hover:bg-extralight grid place-items-center cursor-pointer'
     const activeButtonStyle = 'bg-login hover:bg-orange-500 rounded-md p-1 px-3 grid place-items-center h-[2rem] text-white'

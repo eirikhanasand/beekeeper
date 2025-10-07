@@ -1,8 +1,9 @@
 import { FastifyReply, FastifyRequest } from "fastify"
 import run from "@db"
 import tokenWrapper from "../../../utils/tokenWrapper.js"
+import debug from '@utils/debug.js'
 
-type PostGlobalLogBody = { 
+type PostGlobalLogBody = {
     name: string
     event: string
     status: string
@@ -21,17 +22,17 @@ export default async function postGlobalLog(req: FastifyRequest, res: FastifyRep
     }
 
     try {
-        console.log(`Adding global log: name=${name}, event=${event}, command=${command} status=${status}`)
+        debug({ basic: `Adding global log: name=${name}, event=${event}, command=${command} status=${status}` })
 
         await run(
             `INSERT INTO global_log (name, event, command, status) 
-             SELECT $1, $2, $3, $4;`, 
+             SELECT $1, $2, $3, $4;`,
             [name, event, command, status]
         )
 
         return res.send({ message: `Successfully added event ${event} to the global log with name ${name}.` })
     } catch (error) {
-        console.log(`Database error in postGlobalLog: ${JSON.stringify(error)}`)
+        debug({ basic: `Database error in postGlobalLog: ${JSON.stringify(error)}` })
         return res.status(500).send({ error: "Internal Server Error" })
     }
 }

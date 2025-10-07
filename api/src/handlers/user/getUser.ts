@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify"
 import config from '@constants'
+import debug from '@utils/debug.js'
 
 const { USER_ENDPOINT, AUTHENTIK_TOKEN } = config
 
@@ -31,7 +32,7 @@ export default async function getUser(req: FastifyRequest, res: FastifyReply) {
 
         return res.status(400).send({ error: 'User not found' })
     } catch (error) {
-        console.log(`Database error in getUser: ${JSON.stringify(error)}`)
+        debug({ basic: `Database error in getUser: ${JSON.stringify(error)}` })
         return res.status(500).send({ error: "Internal Server Error" })
     }
 }

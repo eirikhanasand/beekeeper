@@ -1,4 +1,5 @@
 import { setCookie } from "@/utils/cookies"
+import debug from '@/utils/debug'
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
 
 type PostLocalCommandProps = {
@@ -40,7 +41,7 @@ export default async function postLocalCommand({ router, token, context, name, n
     
         return response.status
     } catch (error) {
-        console.log(error)
+        debug({ basic: error })
         return 400
     }
 }

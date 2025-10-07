@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify"
 import run from "@db"
+import debug from '@utils/debug.js'
 
 export default async function getNamespaceNotes(req: FastifyRequest, res: FastifyReply) {
     const { context, namespace } = req.params as { context: string, namespace: string }
@@ -11,7 +12,7 @@ export default async function getNamespaceNotes(req: FastifyRequest, res: Fastif
 
         return res.send(result.rows)
     } catch (error) {
-        console.log(`Database error in getNamespaceNotes: ${JSON.stringify(error)}`)
+        debug({ basic: `Database error in getNamespaceNotes: ${JSON.stringify(error)}` })
         return res.status(500).send({ error: "Internal Server Error" })
     }
 }

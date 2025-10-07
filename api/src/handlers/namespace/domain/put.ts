@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify"
 import run from "@db"
+import debug from '@utils/debug.js'
 
 type PutNamespaceDomainProps = {
     id: string
@@ -21,18 +22,18 @@ export default async function putNamespaceDomain(req: FastifyRequest, res: Fasti
     }
 
     try {
-        console.log(`Updating domain: id=${id} name=${name} url=${url}, context=${context}, namespace=${namespace}`)
+        debug({ basic: `Updating domain: id=${id} name=${name} url=${url}, context=${context}, namespace=${namespace}` })
 
         await run(
             `UPDATE namespace_domains 
             SET context = $1, name = $2, namespace = $3, url = $4
-            WHERE id = $1;`, 
+            WHERE id = $1;`,
             [id, context, name, namespace, url]
         )
 
         return res.send({ message: `Successfully updated id ${id} name ${name} with url ${url} for namespace ${namespace} in context ${context}.` })
     } catch (error) {
-        console.log(`Database error in putNamespaceDomain: ${JSON.stringify(error)}`)
+        debug({ basic: `Database error in putNamespaceDomain: ${JSON.stringify(error)}` })
         return res.status(500).send({ error: "Internal Server Error" })
     }
 }

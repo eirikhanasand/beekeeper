@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify"
 import config from '@constants'
+import debug from '@utils/debug.js'
 
 const { TOKEN_URL, CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, USERINFO_URL, BEEKEEPER_URL } = config
 
@@ -21,7 +22,7 @@ export default async function getCallback(req: FastifyRequest, res: FastifyReply
     if (!code) {
         return res.status(400).send('No authorization code found.')
     }
-    
+
     try {
         // Exchanges callback code for access token
         const tokenResponse = await fetch(TOKEN_URL, {
@@ -37,7 +38,7 @@ export default async function getCallback(req: FastifyRequest, res: FastifyReply
         })
 
         const tokenResponseBody = await tokenResponse.text()
-     
+
         if (!tokenResponse.ok) {
             return res.status(500).send(`Failed to obtain token: ${tokenResponseBody}`)
         }
@@ -69,7 +70,7 @@ export default async function getCallback(req: FastifyRequest, res: FastifyReply
         return res.redirect(redirectUrl.toString())
     } catch (err: unknown) {
         const error = err as Error
-        console.log('Error during OAuth2 flow:', error.message)
+        debug({ basic: `Error during OAuth2 flow: ${error.message}` })
         return res.status(500).send('Authentication failed')
     }
 }

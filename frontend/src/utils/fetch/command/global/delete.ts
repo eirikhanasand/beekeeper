@@ -1,3 +1,5 @@
+import debug from '@/utils/debug'
+
 type DeleteGlobalCommandProps = {
     token: string
     id: string
@@ -5,7 +7,7 @@ type DeleteGlobalCommandProps = {
 
 const API_URL = process.env.NEXT_PUBLIC_BROWSER_API
 
-export default async function deleteGlobalCommand({ token, id }: DeleteGlobalCommandProps) {    
+export default async function deleteGlobalCommand({ token, id }: DeleteGlobalCommandProps) {
     try {
         const response = await fetch(`${API_URL}/commands/global/${id}`, {
             method: 'DELETE',
@@ -13,17 +15,17 @@ export default async function deleteGlobalCommand({ token, id }: DeleteGlobalCom
                 'Authorization': `Bearer ${token}`,
             }
         })
-    
+
         if (!response.ok) {
             const data = await response.json()
-    
+
             throw Error(data.error)
         }
-    
+
         const services = await response.json()
         return services
     } catch (error) {
-        console.log(error)
+        debug({ basic: error })
         return []
     }
 }

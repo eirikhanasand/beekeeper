@@ -1,7 +1,8 @@
 import { FastifyReply, FastifyRequest } from "fastify"
 import run from "@db"
+import debug from '@utils/debug.js'
 
-type PutLocalCommandProps = { 
+type PutLocalCommandProps = {
     id: string
     context: string
     name: string
@@ -23,18 +24,18 @@ export default async function putLocalCommand(req: FastifyRequest, res: FastifyR
     }
 
     try {
-        console.log(`Adding local command: id=${id} context=${context}, namespace=${name}, command=${command}, author=${author}, reason=${reason}`)
+        debug({ basic: `Adding local command: id=${id} context=${context}, namespace=${name}, command=${command}, author=${author}, reason=${reason}` })
 
         await run(
             `UPDATE local_commands 
             SET context = $1, name = $2, namespace = $3, command = $4, author = $5, reason = $6
-            WHERE id = $7;`, 
+            WHERE id = $7;`,
             [context, name, namespace, command, author, reason, id]
         )
 
         return res.send({ message: `Successfully added local command ${name} for namespace ${namespace} in context ${context}.` })
     } catch (error) {
-        console.log(`Database error in putLocalCommand: ${JSON.stringify(error)}`)
+        debug({ basic: `Database error in putLocalCommand: ${JSON.stringify(error)}` })
         return res.status(500).send({ error: "Internal Server Error" })
     }
 }

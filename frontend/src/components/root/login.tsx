@@ -4,6 +4,7 @@ import Link from "next/link"
 import { useState, useEffect } from "react"
 import { getCookie, removeCookie, setCookie } from "@/utils/cookies"
 import config from '@/constants'
+import debug from '@/utils/debug'
 
 const API_URL = process.env.NEXT_PUBLIC_BROWSER_API
 const loginUrl = `${process.env.NEXT_PUBLIC_BROWSER_API}/login`
@@ -29,7 +30,7 @@ export default function Login() {
 
                 removeCookie('btg_name')
             } catch (error) {
-                console.log(error)
+                debug({ basic: error })
                 setLoginUnavailable(true)
             }
         })()

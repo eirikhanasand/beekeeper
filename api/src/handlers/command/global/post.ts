@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify"
 import run from "@db"
 import tokenWrapper from "../../../utils/tokenWrapper.js"
+import debug from '@utils/debug.js'
 
 export default async function postGlobalCommand(req: FastifyRequest, res: FastifyReply) {
     const { name, command, author, reason } = req.body as { name: string, command: string, author: string, reason: string } || {}
@@ -14,18 +15,18 @@ export default async function postGlobalCommand(req: FastifyRequest, res: Fastif
     }
 
     try {
-        console.log(`Adding global command: name=${name} command=${command}, author=${author}, reason=${reason}`)
+        debug({ basic: `Adding global command: name=${name} command=${command}, author=${author}, reason=${reason}` })
 
         await run(
             `INSERT INTO global_commands (name, command, author, reason) 
              SELECT $1, $2, $3, $4
-             WHERE NOT EXISTS (SELECT 1 FROM global_commands WHERE command = $2);`, 
+             WHERE NOT EXISTS (SELECT 1 FROM global_commands WHERE command = $2);`,
             [name, command, author, reason]
         )
 
         return res.send({ message: `Successfully added global command: ${name}.` })
     } catch (error) {
-        console.log(`Database error in postGlobalCommand: ${JSON.stringify(error)}`)
+        debug({ basic: `Database error in postGlobalCommand: ${JSON.stringify(error)}` })
         return res.status(500).send({ error: "Internal Server Error" })
     }
 }

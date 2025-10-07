@@ -1,4 +1,5 @@
 import config from "@/constants"
+import debug from '@/utils/debug'
 
 const API_URL = process.env.NEXT_PUBLIC_BROWSER_API
 
@@ -21,7 +22,7 @@ export default async function getLocalCommands(location: 'server' | 'client', se
         const commands = await response.json()
         return commands.filter((command: LocalCommand) => command.namespace.toLowerCase() === service)
     } catch (error) {
-        console.log(error)
+        debug({ basic: error })
         return []
     }
 }

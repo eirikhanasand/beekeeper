@@ -1,11 +1,12 @@
 import { FastifyReply, FastifyRequest } from "fastify"
 import run from "@db"
 import tokenWrapper from "../../utils/tokenWrapper.js"
+import debug from '@utils/debug.js'
 
-type PostContextBody = { 
+type PostContextBody = {
     name: string
-    cluster: string 
-    authinfo: string 
+    cluster: string
+    authinfo: string
     namespace: string
 }
 
@@ -21,18 +22,18 @@ export default async function postContext(req: FastifyRequest, res: FastifyReply
     }
 
     try {
-        console.log(`Adding context: name=${name}, cluster=${cluster}, authinfo=${authinfo}, namespace=${namespace}`)
+        debug({ detailed: `Adding context: name=${name}, cluster=${cluster}, authinfo=${authinfo}, namespace=${namespace}` })
 
         await run(
             `INSERT INTO contexts (name, cluster, authinfo, namespace) 
              SELECT $1, $2, $3, $4
-             WHERE NOT EXISTS (SELECT 1 FROM contexts WHERE name = $1);`, 
+             WHERE NOT EXISTS (SELECT 1 FROM contexts WHERE name = $1);`,
             [name, cluster, authinfo, namespace]
         )
 
         return res.send({ message: `Successfully added context ${name} to contexts.` })
     } catch (error) {
-        console.log(`Database error in postContext: ${JSON.stringify(error)}`)
+        debug({ basic: `Database error in postContext: ${JSON.stringify(error)}` })
         return res.status(500).send({ error: "Internal Server Error" })
     }
 }

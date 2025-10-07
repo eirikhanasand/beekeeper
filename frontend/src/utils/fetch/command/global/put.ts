@@ -1,4 +1,5 @@
 import { setCookie } from "@/utils/cookies"
+import debug from '@/utils/debug'
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
 
 type PutGlobalCommandProps = {
@@ -13,7 +14,7 @@ type PutGlobalCommandProps = {
 
 const API_URL = process.env.NEXT_PUBLIC_BROWSER_API
 
-export default async function putGlobalCommand({ router, token, id, name, command, author, reason }: PutGlobalCommandProps): Promise<number> {    
+export default async function putGlobalCommand({ router, token, id, name, command, author, reason }: PutGlobalCommandProps): Promise<number> {
     try {
         const response = await fetch(`${API_URL}/commands/global`, {
             method: 'PUT',
@@ -23,7 +24,7 @@ export default async function putGlobalCommand({ router, token, id, name, comman
             },
             body: JSON.stringify({ id, name, command, author, reason })
         })
-    
+
         if (!response.ok) {
             if (response.status === 400) {
                 setCookie('command', command)
@@ -36,10 +37,10 @@ export default async function putGlobalCommand({ router, token, id, name, comman
                 throw Error(await response.text())
             }
         }
-    
+
         return response.status
     } catch (error) {
-        console.log(error)
+        debug({ basic: error })
         return 400
     }
 }

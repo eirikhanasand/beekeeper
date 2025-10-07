@@ -3,6 +3,7 @@ import run from "@db"
 import { loadSQL } from "@utils/loadSQL.js"
 import config from '@constants'
 import getContext from '@utils/getContext.js'
+import debug from '@utils/debug.js'
 
 const { DEFAULT_RESULTS_PER_PAGE } = config
 
@@ -43,25 +44,25 @@ export default async function getLog(this: FastifyInstance, req: FastifyRequest,
         let shouldBeCached = false
         const formattedContext = await getContext(context ?? 'prod')
         const isLocal = log === 'local'
-        const logQueryFile = isLocal 
+        const logQueryFile = isLocal
             ? search
                 ? 'fetchLocalLog.sql'
                 : 'fetchLocalLogNoSearch.sql'
             : 'fetchGlobalLog.sql'
-        const logCountQueryFile = isLocal 
-            ? search 
-                ? 'fetchLocalLogCount.sql' 
-                : 'fetchLocalLogCountNoSearch.sql' 
+        const logCountQueryFile = isLocal
+            ? search
+                ? 'fetchLocalLogCount.sql'
+                : 'fetchLocalLogCountNoSearch.sql'
             : 'fetchGlobalLogCount.sql'
         const logQueryParameters = isLocal
             ? search
                 ? [Page, resultsPerPage, namespace, search || null, formattedContext]
                 : [Page, resultsPerPage, namespace, formattedContext]
             : [Page, resultsPerPage, search || null]
-        const logCountQueryParameters = isLocal 
-            ? search 
-                ? [namespace, search || null, formattedContext] 
-                : [namespace, formattedContext] 
+        const logCountQueryParameters = isLocal
+            ? search
+                ? [namespace, search || null, formattedContext]
+                : [namespace, formattedContext]
             : [search || null]
         const indexedPage = Page - 1
         const pageIsCached = resultsPerPage === 50
@@ -70,45 +71,13 @@ export default async function getLog(this: FastifyInstance, req: FastifyRequest,
                 ? indexedPage < 5
                 : indexedPage < 20
 
-        if (formattedContext && namespace && pageIsCached && !search) {
-            const cacheLength = Object.keys(this.cachedData).length
-            if (cacheLength > 0) {
-                const cachedNamespace = this.cachedData[formattedContext]?.[namespace]
-                if (cachedNamespace) {
-                    let cachedPage
-
-                    if (resultsPerPage === 25) {
-                        const parentPage = Math.floor(indexedPage / 2)
-                        const cachedParentPage = cachedNamespace[parentPage]
-                        if (cachedParentPage) {
-                            cachedPage = (indexedPage % 2 === 0)
-                                ? cachedParentPage.slice(0, 25)
-                                : cachedParentPage.slice(25, 50)
-                        }
-                    } else if (resultsPerPage === 100) {
-                        const firstPageIndex = indexedPage * 2
-                        const secondPageIndex = firstPageIndex + 1
-                        const firstPage = cachedNamespace[firstPageIndex] || []
-                        const secondPage = cachedNamespace[secondPageIndex] || []
-                        cachedPage = [...firstPage, ...secondPage]
-                    } else {
-                        cachedPage = cachedNamespace[indexedPage]
-                    }
-
-                    return res.send(cachedPage)
-                }
-            }
-
-            shouldBeCached = true
-        }
-
         const logQuery = (await loadSQL(logQueryFile))
         const logCountQuery = (await loadSQL(logCountQueryFile))
         const result = await run(logQuery, logQueryParameters)
         const count = await run(logCountQuery, logCountQueryParameters)
         const pages = Math.ceil((Number(count.rows[0].count) || 1) / resultsPerPage)
         if (Page > pages) {
-            // console.error(`Page does not exist (${Page} / ${pages})`)
+            debug({ detailed: `Page does not exist (${Page} / ${pages})` })
             const data = {
                 namespace: namespace || 'global',
                 context: context || 'global',
@@ -117,10 +86,6 @@ export default async function getLog(this: FastifyInstance, req: FastifyRequest,
                 resultsPerPage,
                 error: `Page does not exist (${Page} / ${pages})`,
                 results: []
-            }
-
-            if (shouldBeCached) {
-                return res.send({ ...data, cacheStatus: this.cacheStatus })
             }
 
             return res.send(data)
@@ -133,13 +98,9 @@ export default async function getLog(this: FastifyInstance, req: FastifyRequest,
             results: result.rows
         }
 
-        if (shouldBeCached) {
-            return res.send({ ...data, cacheStatus: this.cacheStatus })
-        }
-
         return res.send(data)
     } catch (error) {
-        console.log(`Database error in getLog: ${JSON.stringify(error)}`)
+        debug({ basic: `Database error in getLog: ${JSON.stringify(error)}` })
         return res.status(500).send({ error: "Internal Server Error" })
     }
 }

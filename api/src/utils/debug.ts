@@ -1,4 +1,9 @@
-import { Debug } from "@/interfaces"
+export enum Debug {
+    PRODUCTION = 'production',
+    BASIC = 'basic',
+    DETAILED = 'detailed',
+    FULL = 'full'
+}
 
 type Log = {
     production?: { message: string, error: any }
@@ -23,9 +28,11 @@ export default function debug({ basic: Basic, detailed: Detailed, full: Full, pr
         console.log(`${Production.message}:`)
         console.error(Production.error)
     }
+
     if (level.includes(Debug.BASIC) && Basic) {
         console.log(Basic)
     }
+
     if (level.includes(Debug.DETAILED) && Detailed) {
         if (typeof Detailed === 'string') {
             console.log(Detailed)
@@ -33,6 +40,7 @@ export default function debug({ basic: Basic, detailed: Detailed, full: Full, pr
             console.log(`${Detailed.message}: ${JSON.stringify(Detailed.data)}`)
         }
     }
+
     if (level.includes(Debug.FULL) && Full) {
         if (typeof Full === 'string') {
             console.log(Full)

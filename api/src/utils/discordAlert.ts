@@ -1,4 +1,5 @@
 import config from "@constants"
+import debug from './debug.js';
 
 const { CRITICAL_ROLE, WEBHOOK_URL } = config
 
@@ -6,12 +7,12 @@ export default async function discordAlert(description: string) {
     try {
         let data: { content?: string; embeds: any[] } = {
             embeds: [
-            {
-                title: '🐝 BeeKeeper BTG Login 🐝',
-                description: description,
-                color: 0xff0000,
-                timestamp: new Date().toISOString()
-            }
+                {
+                    title: '🐝 BeeKeeper BTG Login 🐝',
+                    description: description,
+                    color: 0xff0000,
+                    timestamp: new Date().toISOString()
+                }
             ]
         }
 
@@ -33,6 +34,6 @@ export default async function discordAlert(description: string) {
 
         return response.status
     } catch (error) {
-        console.log(error)
+        debug({ basic: error })
     }
 }

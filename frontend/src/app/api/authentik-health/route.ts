@@ -1,4 +1,5 @@
 import config from '@/constants'
+import debug from '@/utils/debug'
 import { NextResponse } from 'next/server'
 
 export async function GET() {
@@ -13,7 +14,7 @@ export async function GET() {
 
         return NextResponse.json({ ok: true })
     } catch (error) {
-        console.log(error)
+        debug({ basic: error })
         return NextResponse.json(
             { ok: false, error: (error as Error).message },
             { status: 503 }

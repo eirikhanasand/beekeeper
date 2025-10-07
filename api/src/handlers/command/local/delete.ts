@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify"
 import run from "@db"
 import tokenWrapper from "../../../utils/tokenWrapper.js"
+import debug from '@utils/debug.js'
 
 export default async function deleteLocalCommand(req: FastifyRequest, res: FastifyReply) {
     const { id } = req.params as { id: string }
@@ -14,7 +15,7 @@ export default async function deleteLocalCommand(req: FastifyRequest, res: Fasti
 
         return res.send(result.rows)
     } catch (error) {
-        console.log(`Database error in deleteLocalCommand: ${JSON.stringify(error)}`)
+        debug({ basic: `Database error in deleteLocalCommand: ${JSON.stringify(error)}` })
         return res.status(500).send({ error: "Internal Server Error" })
     }
 }

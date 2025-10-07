@@ -1,4 +1,5 @@
 import config from "@/constants"
+import { debug } from 'console'
 
 const API_URL = process.env.NEXT_PUBLIC_BROWSER_API
 
@@ -13,17 +14,17 @@ export default async function getIngress(location: 'server' | 'client', context:
                 'Content-Type': 'application/json',
             },
         })
-    
+
         if (!response.ok) {
             const data = await response.json()
-    
+
             throw Error(data.error)
         }
-    
+
         const services = await response.json()
         return services
     } catch (error) {
-        console.log(error)
+        debug({ basic: error })
         return []
     }
 }

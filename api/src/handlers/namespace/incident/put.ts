@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify"
 import run from "@db"
+import debug from '@utils/debug.js'
 
 type PutNamespaceIncidentProps = {
     id: string
@@ -22,18 +23,18 @@ export default async function putNamespaceIncident(req: FastifyRequest, res: Fas
     }
 
     try {
-        console.log(`Updating incident: id=${id} name=${name} url=${url}, context=${context}, namespace=${namespace}`)
+        debug({ basic: `Updating incident: id=${id} name=${name} url=${url}, context=${context}, namespace=${namespace}` })
 
         await run(
             `UPDATE namespace_incidents
             SET context = $1, name = $2, namespace = $3, url = $4, timestamp = $5
-            WHERE id = $1;`, 
+            WHERE id = $1;`,
             [id, context, name, namespace, url, timestamp]
         )
 
         return res.send({ message: `Successfully updated incident with id ${id}, name ${name} and timestamp ${timestamp} with url ${url} for namespace ${namespace} in context ${context}.` })
     } catch (error) {
-        console.log(`Database error in putNamespaceIncident: ${JSON.stringify(error)}`)
+        debug({ basic: `Database error in putNamespaceIncident: ${JSON.stringify(error)}` })
         return res.status(500).send({ error: "Internal Server Error" })
     }
 }

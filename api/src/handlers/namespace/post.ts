@@ -2,11 +2,12 @@
 import { FastifyReply, FastifyRequest } from "fastify"
 import run from "@db"
 import tokenWrapper from "../../utils/tokenWrapper.js"
+import debug from '@utils/debug.js'
 
-type PostNamespaceProps = { 
-    name: string, 
-    status: string, 
-    service_status: string, 
+type PostNamespaceProps = {
+    name: string,
+    status: string,
+    service_status: string,
     age: string
 }
 
@@ -22,17 +23,17 @@ export default async function postNamespace(req: FastifyRequest, res: FastifyRep
     }
 
     try {
-        console.log(`Adding namespace: name=${name}, status=${status}, service_status=${service_status}, age=${age}`)
+        debug({ basic: `Adding namespace: name=${name}, status=${status}, service_status=${service_status}, age=${age}` })
 
         await run(
             `INSERT INTO namespaces (name, status, service_status, age) 
-             SELECT $1, $2, $3, $4;`, 
+             SELECT $1, $2, $3, $4;`,
             [name, status, service_status, age]
         )
 
         return res.send({ message: `Successfully added namespace ${name}.` })
     } catch (error) {
-        console.log(`Database error in postNamespace: ${JSON.stringify(error)}`)
+        debug({ basic: `Database error in postNamespace: ${JSON.stringify(error)}` })
         return res.status(500).send({ error: "Internal Server Error" })
     }
 }

@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify"
 import run from "@db"
+import debug from '@utils/debug.js'
 
 type PutGlobalCommandProps = {
     id: string
@@ -21,7 +22,7 @@ export default async function putGlobalCommand(req: FastifyRequest, res: Fastify
     }
 
     try {
-        console.log(`Editing global command: id=${id} name=${name} command=${command}, author=${author}, reason=${reason}`)
+        debug({ detailed: `Editing global command: id=${id} name=${name} command=${command}, author=${author}, reason=${reason}` })
 
         await run(
             `UPDATE global_commands 
@@ -32,7 +33,7 @@ export default async function putGlobalCommand(req: FastifyRequest, res: Fastify
 
         return res.send({ message: `Successfully edited global command ${id}: ${name}.` })
     } catch (error) {
-        console.log(`Database error in putGlobalCommand: ${JSON.stringify(error)}`)
+        debug({ basic: `Database error in putGlobalCommand: ${JSON.stringify(error)}` })
         return res.status(500).send({ error: "Internal Server Error" })
     }
 }

@@ -1,4 +1,5 @@
 import config from "@/constants"
+import debug from '@/utils/debug'
 
 const API_URL = process.env.NEXT_PUBLIC_BROWSER_API
 
@@ -13,17 +14,17 @@ export default async function getAuthor(location: 'server' | 'client', email: st
                 'Content-Type': 'application/json',
             },
         })
-    
+
         if (!response.ok) {
             const data = await response.json()
-    
+
             throw Error(data.error)
         }
-    
+
         const user = await response.json()
         return user
     } catch (error) {
-        console.log(error)
+        debug({ basic: error })
         return null
     }
 }

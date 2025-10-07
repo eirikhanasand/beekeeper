@@ -1,4 +1,5 @@
 import { setCookie } from "@/utils/cookies"
+import debug from '@/utils/debug'
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
 
 type PutLocalCommandProps = {
@@ -41,7 +42,7 @@ export default async function putLocalCommand({ router, token, id, context, name
     
         return response.status
     } catch (error) {
-        console.log(error)
+        debug({ basic: error })
         return 400
     }
 }

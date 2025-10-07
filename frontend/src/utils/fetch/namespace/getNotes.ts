@@ -1,9 +1,10 @@
 import config from "@/constants"
+import debug from '@/utils/debug'
 
 const API_URL = process.env.NEXT_PUBLIC_BROWSER_API
 
 export default async function getNotes(location: 'server' | 'client', context: string, service: string): Promise<Domain[]> {
-    const url =  `${location === 'server' ? config.url.API : API_URL}/namespaces/notes/${context}/${service}`
+    const url = `${location === 'server' ? config.url.API : API_URL}/namespaces/notes/${context}/${service}`
 
     try {
         const response = await fetch(url, {
@@ -13,16 +14,16 @@ export default async function getNotes(location: 'server' | 'client', context: s
                 'Content-Type': 'application/json',
             },
         })
-        
+
         if (!response.ok) {
             const data = await response.text()
             throw Error(data)
         }
-    
+
         const domains = await response.json()
         return domains
     } catch (error) {
-        console.log(error)
+        debug({ basic: error })
         return []
     }
 }

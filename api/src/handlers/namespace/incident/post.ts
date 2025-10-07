@@ -1,7 +1,8 @@
 import { FastifyReply, FastifyRequest } from "fastify"
 import run from "@db"
+import debug from '@utils/debug.js'
 
-type PostNamespaceIncidentProps = { 
+type PostNamespaceIncidentProps = {
     name: string
     url: string
     context: string
@@ -16,17 +17,17 @@ export default async function postNamespaceIncident(req: FastifyRequest, res: Fa
     }
 
     try {
-        console.log(`Adding incident: name=${name} url=${url}, context=${context}, namespace=${namespace}, timestamp=${timestamp}`)
+        debug({ basic: `Adding incident: name=${name} url=${url}, context=${context}, namespace=${namespace}, timestamp=${timestamp}` })
 
         await run(
             `INSERT INTO namespace_incidents (context, name, namespace, url, timestamp)
-            SELECT $1, $2, $3, $4, $5;`, 
+            SELECT $1, $2, $3, $4, $5;`,
             [context, name, namespace, url, timestamp]
         )
 
         return res.send({ message: `Successfully added incident ${name} with url ${url} at time ${timestamp} for namespace ${namespace} in context ${context}.` })
     } catch (error) {
-        console.log(`Database error in postNamespaceIncident: ${JSON.stringify(error)}`)
+        debug({ basic: `Database error in postNamespaceIncident: ${JSON.stringify(error)}` })
         return res.status(500).send({ error: "Internal Server Error" })
     }
 }

@@ -1,7 +1,8 @@
 import { FastifyReply, FastifyRequest } from "fastify"
 import run from "@db"
+import debug from '@utils/debug.js'
 
-type PostNamespaceDomainsProps = { 
+type PostNamespaceDomainsProps = {
     name: string
     url: string
     context: string
@@ -15,17 +16,17 @@ export default async function postNamespaceDomains(req: FastifyRequest, res: Fas
     }
 
     try {
-        console.log(`Adding domain: name=${name} url=${url}, context=${context}, namespace=${namespace}`)
+        debug({ basic: `Adding domain: name=${name} url=${url}, context=${context}, namespace=${namespace}` })
 
         await run(
             `INSERT INTO namespace_domains (context, name, namespace, url)
-            SELECT $1, $2, $3, $4;`, 
+            SELECT $1, $2, $3, $4;`,
             [context, name, namespace, url]
         )
 
         return res.send({ message: `Successfully added name ${name} with url ${url} for namespace ${namespace} in context ${context}.` })
     } catch (error) {
-        console.log(`Database error in postNamespaceDomains: ${JSON.stringify(error)}`)
+        debug({ basic: `Database error in postNamespaceDomains: ${JSON.stringify(error)}` })
         return res.status(500).send({ error: "Internal Server Error" })
     }
 }

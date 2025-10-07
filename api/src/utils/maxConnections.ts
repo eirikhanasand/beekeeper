@@ -1,5 +1,6 @@
 import config from '@constants'
 import run from '@db'
+import debug from './debug.js'
 
 export default function checkMaxConnectionsCron() {
     setTimeout(() => {
@@ -29,7 +30,7 @@ export async function checkMaxConnections() {
                     }
                 ]
             }
-            
+
             if (active > SEVERE_THRESHOLD) {
                 data.content = `🚨 <@&${config.CRITICAL_DEVELOPMENT_ROLE}> 🚨`
             }
@@ -40,9 +41,9 @@ export async function checkMaxConnections() {
                 body: JSON.stringify(data)
             })
         } else {
-            console.log(`Active connections: ${active}`)
+            debug({ basic: `Active connections: ${active}` })
         }
     } catch (error) {
-        console.log(`checkMaxConnections error: ${error}`)
+        debug({ basic: `checkMaxConnections error: ${error}` })
     }
 }

@@ -1,8 +1,9 @@
 import { FastifyReply, FastifyRequest } from "fastify"
 import run from "@db"
 import tokenWrapper from "../../../utils/tokenWrapper.js"
+import debug from '@utils/debug.js'
 
-type PostLocalLogBody = { 
+type PostLocalLogBody = {
     context: string
     name: string
     event: string
@@ -24,17 +25,17 @@ export default async function postLocalLog(req: FastifyRequest, res: FastifyRepl
     }
 
     try {
-        console.log(`Adding to local log: context=${context} name=${name}, event=${event}, command=${command}, status=${status}, app=${app}, pod=${pod}`)
+        debug({ basic: `Adding to local log: context=${context} name=${name}, event=${event}, command=${command}, status=${status}, app=${app}, pod=${pod}` })
 
         await run(
             `INSERT INTO local_log (context, name, event, command, app, pod, status) 
-             SELECT $1, $2, $3, $4, $5, $6, $7;`, 
+             SELECT $1, $2, $3, $4, $5, $6, $7;`,
             [context, name, event, command, app || null, pod || null, status]
         )
 
         return res.send({ message: `Successfully added event ${event} to the log for namespace ${name} in context ${context}.` })
     } catch (error) {
-        console.log(`Database error in postLocalLog: ${JSON.stringify(error)}`)
+        debug({ basic: `Database error in postLocalLog: ${JSON.stringify(error)}` })
         return res.status(500).send({ error: "Internal Server Error" })
     }
 }

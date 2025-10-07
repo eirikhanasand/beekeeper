@@ -1,8 +1,9 @@
 import { FastifyReply, FastifyRequest } from "fastify"
 import run from "@db"
 import tokenWrapper from "../../../utils/tokenWrapper.js"
+import debug from '@utils/debug.js'
 
-type PostLocalCommandProps = { 
+type PostLocalCommandProps = {
     context: string
     name: string
     namespace: string
@@ -23,18 +24,18 @@ export default async function postLocalCommand(req: FastifyRequest, res: Fastify
     }
 
     try {
-        console.log(`Adding local command: context=${context}, namespace=${name}, command=${command}, author=${author}, reason=${reason}`)
+        debug({ basic: `Adding local command: context=${context}, namespace=${name}, command=${command}, author=${author}, reason=${reason}` })
 
         await run(
             `INSERT INTO local_commands (context, name, namespace, command, author, reason) 
              SELECT $1, $2, $3, $4, $5, $6
-             WHERE NOT EXISTS (SELECT 1 FROM local_commands WHERE context = $1 AND name = $3 AND command = $2);`, 
+             WHERE NOT EXISTS (SELECT 1 FROM local_commands WHERE context = $1 AND name = $3 AND command = $2);`,
             [context, name, namespace, command, author, reason]
         )
 
         return res.send({ message: `Successfully added local command ${name} for namespace ${namespace} in context ${context}.` })
     } catch (error) {
-        console.log(`Database error in postLocalCommand: ${JSON.stringify(error)}`)
+        debug({ basic: `Database error in postLocalCommand: ${JSON.stringify(error)}` })
         return res.status(500).send({ error: "Internal Server Error" })
     }
 }

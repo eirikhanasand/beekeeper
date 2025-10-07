@@ -1,8 +1,9 @@
 import { FastifyReply, FastifyRequest } from "fastify"
 import run from "@db"
 import tokenWrapper from "../../../utils/tokenWrapper.js"
+import debug from '@utils/debug.js'
 
-type PostNamespaceNoteProps = { 
+type PostNamespaceNoteProps = {
     context: string
     namespace: string
     status: string
@@ -22,17 +23,17 @@ export default async function postNamespaceNote(req: FastifyRequest, res: Fastif
     }
 
     try {
-        console.log(`Adding namespace note: context=${context} namespace=${namespace}, status=${status}, message=${message} author=${author}`)
+        debug({ basic: `Adding namespace note: context=${context} namespace=${namespace}, status=${status}, message=${message} author=${author}` })
 
         await run(
             `INSERT INTO namespace_notes (context, name, status, message) 
-             SELECT $1, $2, $3, $4;`, 
+             SELECT $1, $2, $3, $4;`,
             [context, namespace, status, message, author]
         )
 
         return res.send({ message: `Successfully added namespace note to notes.` })
     } catch (error) {
-        console.log(`Database error in postNamespaceNote: ${JSON.stringify(error)}`)
+        debug({ basic: `Database error in postNamespaceNote: ${JSON.stringify(error)}` })
         return res.status(500).send({ error: "Internal Server Error" })
     }
 }

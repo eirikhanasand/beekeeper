@@ -1,4 +1,5 @@
 import config from "@/constants"
+import debug from '@utils/debug'
 
 const API_URL = process.env.NEXT_PUBLIC_BROWSER_API
 
@@ -23,7 +24,7 @@ export default async function getContexts(location: 'server' | 'client'): Promis
         const services = await response.json()
         return services
     } catch (error) {
-        console.log(error)
+        debug({ basic: error })
         return []
     }
 }

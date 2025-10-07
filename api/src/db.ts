@@ -1,6 +1,7 @@
 import pg from 'pg'
 import config from '@constants'
 import sleep from '@utils/sleep.js'
+import debug from '@utils/debug.js'
 
 const {
     DB,
@@ -34,7 +35,7 @@ export default async function run(query: string, params?: (string | number | nul
                 client.release()
             }
         } catch (error) {
-            console.log(`Pool currently unavailable, retrying in ${config.CACHE_TTL / 1000}s...`)
+            debug({ basic: `Pool currently unavailable, retrying in ${config.CACHE_TTL / 1000}s...` })
             await sleep(config.CACHE_TTL)
         }
     }

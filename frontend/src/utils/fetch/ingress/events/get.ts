@@ -1,4 +1,5 @@
 import config from "@/constants"
+import debug from '@/utils/debug'
 
 type GetIngressEventsProps = {
     location: 'server' | 'client'
@@ -9,7 +10,7 @@ type GetIngressEventsProps = {
 
 const API_URL = process.env.NEXT_PUBLIC_BROWSER_API
 
-export default async function getIngressEvents({location, context, namespace, name}: GetIngressEventsProps): Promise<string[]> {
+export default async function getIngressEvents({ location, context, namespace, name }: GetIngressEventsProps): Promise<string[]> {
     const url = `${location === 'server' ? config.url.API : API_URL}/namespaces/ingress/events/${context}/${namespace}/${name}`
 
     try {
@@ -20,17 +21,17 @@ export default async function getIngressEvents({location, context, namespace, na
                 'Content-Type': 'application/json',
             },
         })
-    
+
         if (!response.ok) {
             const data = await response.json()
-    
+
             throw Error(data.error)
         }
-    
+
         const services = await response.json()
         return services
     } catch (error) {
-        console.log(error)
+        debug({ basic: error })
         return []
     }
 }
