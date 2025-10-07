@@ -23,7 +23,7 @@ export async function preloadFirstTenPagesOfLocalLogForEachNamespace(fastify: Fa
                 }
                 // console.log(`Progress: ${percentage}% (${completedTasks}/${totalTasks})`)
             }
-            await sleep(1000)
+            // await sleep(1000)
         }
     }
 
