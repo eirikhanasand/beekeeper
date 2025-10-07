@@ -9,6 +9,7 @@ export default fp(async (fastify) => {
         const start = Date.now()
         const newData = await preloadFirstTenPagesOfLocalLogForEachNamespace(fastify)
         const jsonString = JSON.stringify(newData)
+        console.log(jsonString)
         const bytes = new TextEncoder().encode(jsonString).length
         const megabytes = bytes / (1024 * 1024)
         console.log(`MB cached: ${megabytes}`)
