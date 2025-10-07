@@ -8,7 +8,7 @@ type Data = {
 export default async function alertSlowQuery(duration: number, name: string) {
     const lowerCaseName = name.toLowerCase()
     const firstUpperCaseName = `${name.slice(0, 1).toUpperCase()}${name.slice(1).toLowerCase()}`
-    if (duration > config.CACHE_TTL / 2 && config.WEBHOOK_URL) {
+    if (duration > config.WARN_SLOW_QUERY_MS / 2 && config.WEBHOOK_URL) {
         let data: Data = {
             embeds: [
                 {
@@ -20,7 +20,7 @@ export default async function alertSlowQuery(duration: number, name: string) {
             ]
         }
         
-        if (duration > (config.CACHE_TTL - 1)) {
+        if (duration > (config.WARN_SLOW_QUERY_MS - 1)) {
             data.content = `🚨 <@&${config.CRITICAL_DEVELOPMENT_ROLE}> 🚨`
         }
 
