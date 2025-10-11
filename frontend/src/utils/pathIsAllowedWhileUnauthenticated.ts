@@ -9,6 +9,7 @@ export default function pathIsAllowedWhileUnauthenticated(path: string) {
         || path.startsWith('/images/')
         || path.startsWith('/login')
         || path.startsWith('/logout')
+        || path.startsWith('/api/authentik-health')
         || path.startsWith('/_next/webpack-hmr')
     ) {
         return true
