@@ -35,8 +35,8 @@ export default async function run(query: string, params?: (string | number | nul
                 client.release()
             }
         } catch (error) {
-            debug({ basic: `Pool currently unavailable, retrying in ${config.CACHE_TTL / 1000}s...` })
-            await sleep(config.CACHE_TTL)
+            debug({ basic: `Pool currently unavailable, retrying in ${config.TIMEOUT_MS / 1000}s...` })
+            await sleep(config.TIMEOUT_MS)
         }
     }
 }

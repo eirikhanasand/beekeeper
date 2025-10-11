@@ -70,7 +70,8 @@ const config = {
     WEBHOOK_URL: env.WEBHOOK_URL,
     DEFAULT_RESULTS_PER_PAGE: Number(env.DEFAULT_RESULTS_PER_PAGE) || 50,
     DEFAULT_CLUSTER: 'infra-prod-cluster',
-    WARN_SLOW_QUERY_MS: 5000
+    WARN_SLOW_QUERY_MS: 5000,
+    TIMEOUT_MS: 30000
 }
 
 export default config
