@@ -9,7 +9,7 @@ const config = {
         BASE_PATH: '/service/prod/global',
     },
     version,
-    DEFAULT_CLUSTER: 'infra-prod-cluster'
+    DEFAULT_CLUSTER: 'infra-prod-cluster',
 }
 
 export default config

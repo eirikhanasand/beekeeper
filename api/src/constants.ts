@@ -18,7 +18,8 @@ const requiredEnvironmentVariables = [
     'BTG_TOKEN',
     'WEBHOOK_URL',
     'CRITICAL_ROLE',
-    'CRITICAL_DEVELOPMENT_ROLE'
+    'CRITICAL_DEVELOPMENT_ROLE',
+    'HEARTBEAT_REFERENCE'
 ]
 
 const missingVariables = requiredEnvironmentVariables.filter(
@@ -71,7 +72,9 @@ const config = {
     DEFAULT_RESULTS_PER_PAGE: Number(env.DEFAULT_RESULTS_PER_PAGE) || 50,
     DEFAULT_CLUSTER: 'infra-prod-cluster',
     WARN_SLOW_QUERY_MS: 5000,
-    TIMEOUT_MS: 30000
+    TIMEOUT_MS: 30000,
+    HEARTBEAT_URL: 'https://status.login.no/api/push/{reference}?status=up&msg=OK&ping={ping}',
+    HEARTBEAT_REFERENCE: env.HEARTBEAT_REFERENCE,
 }
 
 export default config

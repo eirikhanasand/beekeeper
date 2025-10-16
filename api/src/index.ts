@@ -2,7 +2,7 @@ import cors from '@fastify/cors'
 import Fastify from 'fastify'
 import apiRoutes from './routes.js'
 import getIndexHandler from './handlers/index/getIndex.js'
-import checkMaxConnections from '@utils/maxConnections.js'
+import cron from '@utils/cron.js'
 
 const fastify = Fastify({
     logger: true
@@ -27,5 +27,5 @@ async function start() {
     }
 }
 
-checkMaxConnections()
+cron()
 start()

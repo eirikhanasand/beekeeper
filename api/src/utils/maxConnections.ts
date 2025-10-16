@@ -8,7 +8,7 @@ export default function checkMaxConnectionsCron() {
     }, 5000)
 }
 
-export async function checkMaxConnections() {
+async function checkMaxConnections() {
     try {
         const result = await run("SELECT count(*) FROM pg_stat_activity WHERE state='active';")
         const active = Number(result.rows[0].count)

@@ -8,6 +8,7 @@
         "strict": true,
         "forceConsistentCasingInFileNames": true,
         "noEmit": true,
+        "allowImportingTsExtensions": true,
         "esModuleInterop": true,
         "module": "nodenext",
         "moduleResolution": "nodenext",
@@ -31,7 +32,7 @@
         "frontend/next-env.d.ts", 
         "**/*.ts", 
         "**/*.tsx", 
-        ".next/types/**/*.ts", 
+        ".next/types/**/*.ts", "src/utils/cron.mts", "src/utils/heartbeat.mts", "src/sidecar_constants.mts", 
     ],
     "exclude": ["node_modules"]
 }
