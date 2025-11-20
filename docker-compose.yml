@@ -2,6 +2,7 @@ services:
   beekeeper_frontend:
     container_name: beekeeper_frontend
     image: beekeeper-frontend
+    restart: always
     build:
       context: ./frontend
       dockerfile: Dockerfile
@@ -37,6 +38,7 @@ services:
   beekeeper_api:
     container_name: beekeeper_api 
     image: beekeeper-api
+    restart: always
     build:
       context: ./api
       dockerfile: Dockerfile
