@@ -1,7 +1,7 @@
 services:
   beekeeper_frontend:
     container_name: beekeeper_frontend
-    image: beekeeper-frontend
+    image: beekeeper_frontend
     restart: always
     build:
       context: ./frontend
@@ -37,7 +37,7 @@ services:
 
   beekeeper_api:
     container_name: beekeeper_api 
-    image: beekeeper-api
+    image: beekeeper_api
     restart: always
     build:
       context: ./api
