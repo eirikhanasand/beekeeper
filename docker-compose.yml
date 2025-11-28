@@ -1,7 +1,7 @@
 services:
-  beekeeper_frontend:
-    container_name: beekeeper_frontend
-    image: beekeeper_frontend
+  beekeeper:
+    container_name: beekeeper
+    image: beekeeper
     restart: always
     build:
       context: ./frontend
