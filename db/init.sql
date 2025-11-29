@@ -138,6 +138,18 @@ CREATE TABLE IF NOT EXISTS messages (
     timestamp TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
+-- Traffic logs
+CREATE TABLE IF NOT EXISTS traffic (
+    id SERIAL PRIMARY KEY,
+    ip TEXT NOT NULL,
+    user_agent TEXT NOT NULL,
+    domain TEXT NOT NULL,
+    path TEXT NOT NULL,
+    method TEXT NOT NULL,
+    referer TEXT NOT NULL,
+    timestamp TIMESTAMP NOT NULL
+);
+
 -- Namespace ingress
 CREATE TABLE IF NOT EXISTS namespace_ingress (
     id SERIAL PRIMARY KEY,
@@ -160,6 +172,12 @@ CREATE TABLE IF NOT EXISTS namespace_ingress_events (
     name TEXT NOT NULL,
     events TEXT NOT NULL
 );
+
+-- Indexes for traffic table
+CREATE INDEX IF NOT EXISTS idx_traffic_timestamp ON traffic (timestamp DESC);
+CREATE INDEX IF NOT EXISTS idx_traffic_domain ON traffic (domain);
+CREATE INDEX IF NOT EXISTS idx_traffic_path ON traffic (path);
+CREATE INDEX IF NOT EXISTS idx_traffic_ip ON traffic (ip);
 
 -- --- Local log optimizations ---
 

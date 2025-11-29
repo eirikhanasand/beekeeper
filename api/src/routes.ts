@@ -33,6 +33,7 @@ import postMessage from './handlers/message/post.js'
 import postPod from './handlers/pod/post.js'
 import postLocalLog from './handlers/log/local/post.js'
 import postGlobalLog from './handlers/log/global/post.js'
+import postTraffic from './handlers/traffic/post.js'
 
 import putLocalCommand from './handlers/command/local/put.js'
 import putGlobalCommand from './handlers/command/global/put.js'
@@ -88,6 +89,9 @@ export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPlug
 
     fastify.post('/log/global', postGlobalLog)
     fastify.post('/log/local', postLocalLog)
+
+    // traffic
+    fastify.post('/traffic', postTraffic)
 
     // command 
     fastify.get('/commands/local', getLocalCommands)
