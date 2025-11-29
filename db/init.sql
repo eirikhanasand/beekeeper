@@ -176,7 +176,6 @@ CREATE TABLE IF NOT EXISTS namespace_ingress_events (
 CREATE INDEX IF NOT EXISTS idx_traffic_timestamp ON traffic (timestamp DESC);
 CREATE INDEX IF NOT EXISTS idx_traffic_domain ON traffic (domain);
 CREATE INDEX IF NOT EXISTS idx_traffic_path ON traffic (path);
-CREATE INDEX IF NOT EXISTS idx_traffic_ip ON traffic (ip);
 
 -- --- Local log optimizations ---
 
