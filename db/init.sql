@@ -146,6 +146,7 @@ CREATE TABLE IF NOT EXISTS traffic (
     path TEXT NOT NULL,
     method TEXT NOT NULL,
     referer TEXT NOT NULL,
+    request_time TEXT,
     timestamp TIMESTAMP NOT NULL
 );
 
