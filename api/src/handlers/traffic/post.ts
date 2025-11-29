@@ -33,9 +33,9 @@ export default async function postTraffic(req: FastifyRequest, res: FastifyReply
         const ts = new Date(timestamp * 1000).toISOString()
 
         await run(
-            `INSERT INTO traffic (ip, user_agent, domain, path, method, referer, timestamp) 
-             VALUES ($1, $2, $3, $4, $5, $6, $7);`,
-            [ip, user_agent, domain, path, method, referer, ts]
+            `INSERT INTO traffic (user_agent, domain, path, method, referer, timestamp) 
+             VALUES ($1, $2, $3, $4, $5, $6);`,
+            [user_agent, domain, path, method, referer, ts]
         )
 
         return res.send({ message: "Traffic logged successfully." })

@@ -141,7 +141,6 @@ CREATE TABLE IF NOT EXISTS messages (
 -- Traffic logs
 CREATE TABLE IF NOT EXISTS traffic (
     id SERIAL PRIMARY KEY,
-    ip TEXT NOT NULL,
     user_agent TEXT NOT NULL,
     domain TEXT NOT NULL,
     path TEXT NOT NULL,
